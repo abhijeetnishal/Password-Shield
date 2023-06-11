@@ -1,4 +1,4 @@
-import userSchema from '../models/userModels'
+import db from '../models/dbConnect'
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
@@ -7,6 +7,8 @@ import { Request, Response } from 'express';
 import dotenv from 'dotenv'
 dotenv.config();
 
+// import createUserSchema from '../models/userModels';
+// createUserSchema();
 /*
 1. Take user data: {first name, last name, email, phone(optional), password}
 2. Now implement input validation.
@@ -20,6 +22,8 @@ const register = async (req: Request, res: Response)=>{
 
     //using try catch for error handling
     try{
+        //connect the DB
+        db.connect;
         //validate input
         if(!userName || !email || !password){
             //Bad request (400)
@@ -31,9 +35,14 @@ const register = async (req: Request, res: Response)=>{
             res.status(400).json('Invalid Email Address');
         }
         else{
-            const emailExist = await userSchema.findOne({email: email});
+            // Execute a SELECT query to check if the email exists
+            const result = await db.client.query('SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)', [email]);
+
+            // The result.rows[0].exists value will be true if the email exists, false otherwise
+            const emailExists = await result.rows[0].exists;
+
             //check if user already registered or not
-            if(emailExist){
+            if(emailExists){
                 //request could not be completed due to a conflict with the current state of the target resource
                 res.status(409).json('Email Already Registered');
             }
@@ -42,11 +51,11 @@ const register = async (req: Request, res: Response)=>{
                 const hashedPassword = await bcrypt.hash(password, 10);
 
                 //create a user data in DB
-                const userData = await userSchema.create({
-                    userName: userName,
-                    email: email,
-                    password: hashedPassword
-                });
+                await db.client.query(
+                    'INSERT INTO users (userName, email, password) VALUES ($1, $2, $3)',
+                    [userName, email, hashedPassword]               
+                )
+
                 //created(201)
                 res.status(201).json("User Registered Successfully");
             }
@@ -71,44 +80,59 @@ const login = async (req: Request, res: Response)=>{
     const {email, password} = req.body;
 
     try{
+        //connect the DB
+        db.connect;
+
         //validate input
         if(!email || !password){
             //Bad request (400)
-            return res.status(400).json('Enter Required Input Fields');
+            res.status(400).json('Enter Required Input Fields');
         }
         //validate email
         else if(!validator.isEmail(email)){
             //400 - Bad request
-            return res.status(400).json({message:'Invalid Email Address'});
+            res.status(400).json({message:'Invalid Email Address'});
         }
         else{
-            const emailExist = await userSchema.findOne({email: email});
+            // Execute a SELECT query to check if the email exists
+            const result = await db.client.query('SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)', [email]);
+
+            // The result.rows[0].exists value will be true if the email exists, false otherwise
+            const emailExists = await result.rows[0].exists;
+
             //check if user registered or not
-            if(!emailExist){
-                return res.status(404).json({message:'Email Not Registered'});
+            if(!emailExists){
+                res.status(404).json({message:'Email Not Registered'});
             }
             else{
+                // Execute a SELECT query to get the password of the user with the given email
+                const result = await db.client.query('SELECT password FROM users WHERE email = $1', [email]);
+
+                // Return the password if a matching user is found, otherwise return null
+                const dbPassword = await result.rows[0]?.password || null;
+
                 //compare the password saved in DB and entered by user.
-                const matchPassword = await bcrypt.compare(password, emailExist.password);
+                const matchPassword = await bcrypt.compare(password, dbPassword);
 
                 //if password doesn't match
                 if(!matchPassword){
                     //401 - unauthorised
-                    return res.status(401).json({message:'Incorrect password'});
+                    res.status(401).json({message:'Incorrect password'});
                 }
                 else{
-                    const user = emailExist;
-                    const { userName, email, password } = user;
+                    // Execute a SELECT query to get the id of the user with the given email
+                    const result = await db.client.query('SELECT id FROM users WHERE email = $1', [email]);
+
+                    const userId = await result.rows[0]?.id || null;
                     //create a jwt token
-                    const token = jwt.sign({email, id:user._id}, process.env.secretKey);
+                    const token = jwt.sign({id: userId}, process.env.secretKey);
                     
                     //create cookie for server.
-                    return res.cookie('auth_cookie',
-                    {   id: user._id,
-                        userName: userName,
+                    res.cookie('auth_cookie',
+                    {   id: userId,
                         email: email,
                         token: token
-                    }, ).status(200).json({id: user._id, userName: userName, email: email, message:'User logged-in successfully'});
+                    }, { httpOnly: true }).status(200).json({id: userId, email: email, message:'User logged-in successfully'});
                 }
             }
         }
@@ -121,7 +145,7 @@ const login = async (req: Request, res: Response)=>{
 
 //Clear the cookie to logout
 const logout = (req: Request, res: Response)=>{
-    res.clearCookie('auth_cookie').json('logout');
+    res.clearCookie('auth_cookie').json('user logged out');
 }
 
 export default {

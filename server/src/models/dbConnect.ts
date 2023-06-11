@@ -1,14 +1,16 @@
 import { Client } from "pg";
 
-//Create a new PostgreSQL client instance using the connection configuration:
-const client = new Client(`postgres://${process.env.user}:${process.env.password}@${process.env.host}/${process.env.database}`);
+//Create a new PostgreSQL client instance:
+const connectionString = `postgres://${process.env.user}:${process.env.password}@${process.env.host}/${process.env.database}`;
+//const prodConnection = { connectionString: process.env.DB_URL_PROD, ssl: true};
+const client = new Client(connectionString);
 
 //Connect to the PostgreSQL server
-client.connect((err) => {
+const connect = client.connect((err) => {
     if(err)
       console.error('Error connecting to PostgreSQL: ', err.stack);
     else 
       console.log('Connected to PostgreSQL database');
 });
 
-export default client;
+export default { client, connect };

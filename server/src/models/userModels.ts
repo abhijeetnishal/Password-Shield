@@ -1,30 +1,24 @@
-//Require mongoose in the userModel file:
-import mongoose from 'mongoose';
+import db from "./dbConnect";
 
-//Create a constant (UserSchema) and assign it the mongoose schema:
-const UserSchema = new mongoose.Schema({
-    //Specify how the fields should work by adding some mongoose option:
-    userName:{
-        type: String,
-        require: true,
-        unique: false
-    },
+const createUserSchema = async()=> {
+    try {
+        //Connect to the PostgreSQL server
+        db.connect;
 
-    email: {
-        type: String,
-        required: true, 
-        unique: true,
-    },
+        // Create the user schema
+        await db.client.query(
+            `CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            );`
+        );
+        console.log('User schema created successfully!');
+    } 
+    catch (error) {
+      console.error('Error creating user schema:', error);
+    }
+}
 
-    password: {
-        type: String,
-        required: true, 
-        unique: false,
-    },
-}, {timestamps: true})
-
-//Finally, export UserSchema with the following code:
-export default mongoose.model("User", UserSchema);
-
-//The code above is saying: "create a user table or collection if there is no table with that name already".
-//You have completed the model for the user. The user collection is now ready to receive the data that is to be passed to it.
+export default createUserSchema;

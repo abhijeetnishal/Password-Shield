@@ -1,34 +1,23 @@
-//Require mongoose in the userModel file:
-import mongoose from "mongoose";
+import db from "./dbConnect";
 
-//Create a constant (UserSchema) and assign it the mongoose schema:
-const passwordSchema = new mongoose.Schema({
-    //Specify how the fields should work by adding some mongoose option:
-    websiteName: {
-        type: String,
-        require: true,
-        unique: false
-    },
+const createPasswordSchema = async()=> {
+    try {
+        //Connect to the PostgreSQL server
+        db.connect;
 
-    password: {
-        type: String,
-        required: true,
-        unique: false,
-    },
+        // Create the user schema
+        await db.client.query(
+            `CREATE TABLE IF NOT EXISTS passwords (
+                id SERIAL PRIMARY KEY,
+                websiteName VARCHAR(255) NOT NULL,
+                password VARCHAR(255) NOT NULL
+            );`
+        );
+        console.log('Password schema created successfully!');
+    } 
+    catch (error) {
+      console.error('Error creating password schema:', error);
+    } 
+}
 
-    iv: {
-        type: String,
-        required: false,
-    },
-
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    }
-}, {timestamps: true})
-
-//mongodb generates userId to use further operation Crud of user with that id.
-
-//Finally, export UserSchema with the following code:
-export default mongoose.model("password", passwordSchema);
+export default createPasswordSchema;

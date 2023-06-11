@@ -21,11 +21,10 @@ const port = process.env.port || 8080;
 //This will allow the user in the frontend to consume the APIs that you have created without any problem.
 app.use(cors({credentials:true, origin: ['http://localhost:3000','https://mypasswordmanager.vercel.app']}));
 
-import client from './models/dbConnect';
 
 //user Router  
-// import userRouter from './routes/authRoutes';
-// app.use('/auth/',userRouter)
+import userRouter from './routes/authRoutes';
+app.use('/auth/',userRouter)
 
 // import passwordRouter from './routes/passwordRoutes';
 // app.use('/passwords', passwordRouter);
