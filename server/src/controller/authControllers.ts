@@ -7,8 +7,6 @@ import { Request, Response } from 'express';
 import dotenv from 'dotenv'
 dotenv.config();
 
-// import createUserSchema from '../models/userModels';
-// createUserSchema();
 /*
 1. Take user data: {first name, last name, email, phone(optional), password}
 2. Now implement input validation.
@@ -36,10 +34,11 @@ const register = async (req: Request, res: Response)=>{
         }
         else{
             // Execute a SELECT query to check if the email exists
-            const result = await db.client.query('SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)', [email]);
+            //The rows property typically represents the result of the query, containing the returned rows from the database.
+            const {rows} = await db.client.query('SELECT email FROM users WHERE email = $1', [email]);
 
-            // The result.rows[0].exists value will be true if the email exists, false otherwise
-            const emailExists = await result.rows[0].exists;
+            //check if rows length is zero or not, if zero means no data is present
+            const emailExists = rows.length;
 
             //check if user already registered or not
             if(emailExists){
@@ -52,7 +51,7 @@ const register = async (req: Request, res: Response)=>{
 
                 //create a user data in DB
                 await db.client.query(
-                    'INSERT INTO users (userName, email, password) VALUES ($1, $2, $3)',
+                    'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)',
                     [userName, email, hashedPassword]               
                 )
 
@@ -95,10 +94,10 @@ const login = async (req: Request, res: Response)=>{
         }
         else{
             // Execute a SELECT query to check if the email exists
-            const result = await db.client.query('SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)', [email]);
+            const {rows} = await db.client.query('SELECT email FROM users WHERE email = $1', [email]);
 
             // The result.rows[0].exists value will be true if the email exists, false otherwise
-            const emailExists = await result.rows[0].exists;
+            const emailExists = rows.length;
 
             //check if user registered or not
             if(!emailExists){
@@ -121,18 +120,18 @@ const login = async (req: Request, res: Response)=>{
                 }
                 else{
                     // Execute a SELECT query to get the id of the user with the given email
-                    const result = await db.client.query('SELECT id FROM users WHERE email = $1', [email]);
+                    const result = await db.client.query('SELECT _id FROM users WHERE email = $1', [email]);
 
-                    const userId = await result.rows[0]?.id || null;
+                    const userId = await result.rows[0]?._id || null;
                     //create a jwt token
                     const token = jwt.sign({id: userId}, process.env.secretKey);
                     
                     //create cookie for server.
                     res.cookie('auth_cookie',
-                    {   id: userId,
+                    {   _id: userId,
                         email: email,
                         token: token
-                    }, { httpOnly: true }).status(200).json({id: userId, email: email, message:'User logged-in successfully'});
+                    }, { httpOnly: true }).status(200).json({_id: userId, email: email, message:'User logged-in successfully'});
                 }
             }
         }

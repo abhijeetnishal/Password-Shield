@@ -18,7 +18,7 @@ const isAuthenticated = async(req: Request, res: Response, next: NextFunction)=>
     }
     catch(error){
         //console.log(error);
-        return res.status(401).json({message: 'user not authenticated'});
+        return res.status(401).json({message: 'Internal server error'});
     }
 }
 
