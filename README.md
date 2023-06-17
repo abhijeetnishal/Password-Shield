@@ -49,19 +49,14 @@ The project utilizes the following technologies:
   ```bash
      git clone https://github.com/abhijeetnishal/PasswordManager.git
   ```
-  3. Navigate to the Server directory and add your keys in .env file:
-  ```env
-     DB_URL = 'your-mongoDB-URL'
-     SecretKey = "your-secret-key"
-     privatekey = "your-private-key"
-  ```
+  3. Navigate to the Server directory using command "cd server" and create a .env file and copy contents of .env.example file to .env file and add all secret keys to setup postgres database and backend.
   4. Install dependencies in server directory of project:
   ```bash
      npm install
   ```
   5. Start the server using comand:
   ```bash
-     npm run dev
+     npm start
   ```
   6. Now navigate to client directory of project using commands:
   ```bash
@@ -74,7 +69,7 @@ The project utilizes the following technologies:
   ```
   8. Start the application using command:
   ```bash
-     npm start
+     npm run dev
   ```
   9. Open http://localhost:3000 in your browser to see the application.
 
