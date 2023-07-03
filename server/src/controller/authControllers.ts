@@ -1,5 +1,5 @@
 import db from '../models/dbConnect'
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';

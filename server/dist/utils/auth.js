@@ -29,7 +29,7 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
     catch (error) {
         //console.log(error);
-        return res.status(401).json({ message: 'user not authenticated' });
+        return res.status(401).json({ message: 'Internal server error' });
     }
 });
 exports.default = isAuthenticated;

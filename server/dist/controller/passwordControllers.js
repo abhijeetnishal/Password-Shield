@@ -12,16 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const passwordModel_1 = __importDefault(require("../models/passwordModel"));
+const express_1 = require("express");
 const encryptDecrypt_1 = __importDefault(require("../utils/encryptDecrypt"));
+const auth_1 = __importDefault(require("../utils/auth"));
+const dbConnect_1 = __importDefault(require("../models/dbConnect"));
 const getAllPasswords = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //get user Id whose data need to get
     const userId = req.params.id;
     try {
-        //find all data with that user Id 
-        //display only website name and password only
-        const data = yield passwordModel_1.default.find({ userId: userId }).select({ websiteName: 1, password: 1, _id: 0 });
-        res.status(200).json(data);
+        if (auth_1.default) {
+            const { rows } = yield dbConnect_1.default.client.query(`SELECT * FROM passwords WHERE createdBy = $1`, [userId]);
+            if (rows.length === 0)
+                res.status(404).json('passwords not found');
+            else
+                res.status(200).json(rows);
+        }
+        else {
+            express_1.response.status(403).json('user not authenticated');
+        }
     }
     catch (error) {
         //display error
@@ -30,18 +38,24 @@ const getAllPasswords = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 const decryptPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    //get the password Id from req to decrypt
+    const id = req.params.id;
     try {
-        //get the password Id from req to decrypt
-        const data = yield passwordModel_1.default.findOne({ _id: req.params.id });
-        if (data === null)
-            res.status(404).json('Not Found');
+        if (auth_1.default) {
+            const { rows } = yield dbConnect_1.default.client.query(`SELECT * FROM passwords WHERE _id = $1`, [id]);
+            if (rows.length === 0)
+                res.status(404).json('Not Found');
+            else {
+                const websiteName = rows[0].websitename;
+                const password = rows[0].password;
+                const id = rows[0]._id;
+                const iv = rows[0].iv;
+                const decryptedPassword = encryptDecrypt_1.default.decrypt(password, iv);
+                res.status(200).json({ websiteName, decryptedPassword, id });
+            }
+        }
         else {
-            const websiteName = data.websiteName;
-            const password = data.password;
-            const id = data._id;
-            const iv = data.iv;
-            const decryptedPassword = encryptDecrypt_1.default.decrypt(password, iv);
-            res.status(200).json({ websiteName, decryptedPassword, id });
+            express_1.response.status(403).json('user not authenticated');
         }
     }
     catch (error) {
@@ -58,21 +72,26 @@ const createPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.status(400).json('Enter Required Input Fields');
         }
         else {
-            //get user Id from cookies
-            const userId = req.cookies.auth_cookie.id;
-            //encrypt the password before storing to db
-            const data = encryptDecrypt_1.default.encrypt(password);
-            const encryptedPassword = data.encryptedData;
-            const base64data = data.base64data;
-            //store password in DB
-            const newPassword = new passwordModel_1.default({
-                websiteName: websiteName,
-                password: encryptedPassword,
-                iv: base64data,
-                userId: userId
-            });
-            yield newPassword.save();
-            res.status(201).json(newPassword);
+            if (auth_1.default) {
+                //get user Id from cookies
+                const userId = req.cookies.auth_cookie._id;
+                //encrypt the password before storing to db
+                const data = encryptDecrypt_1.default.encrypt(password);
+                const encryptedPassword = data.encryptedData;
+                const base64data = data.base64data;
+                //store password in DB
+                const newPassword = {
+                    websiteName: websiteName,
+                    password: encryptedPassword,
+                    iv: base64data,
+                };
+                const result = yield dbConnect_1.default.client.query(`INSERT INTO passwords(websiteName, password, iv, createdBy) 
+                    VALUES($1, $2, $3, $4)`, [websiteName, encryptedPassword, base64data, userId]);
+                res.status(201).json(newPassword);
+            }
+            else {
+                res.status(403).json('user not authenticated');
+            }
         }
     }
     catch (error) {
@@ -84,26 +103,37 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
     const passwordId = req.params.id;
     const { websiteName, password } = req.body;
     try {
-        if (websiteName === '' || password === '') {
-            //Bad request (400)
-            res.status(400).json('Enter Required Input Fields');
+        if (auth_1.default) {
+            if (websiteName === '' || password === '') {
+                //Bad request (400)
+                res.status(400).json('Enter Required Input Fields');
+            }
+            else {
+                const { rows } = yield dbConnect_1.default.client.query(`SELECT * FROM passwords WHERE _id = $1`, [passwordId]);
+                if (rows.length === 0) {
+                    res.status(404).json('not found');
+                }
+                else {
+                    //get user Id from cookies
+                    const userId = req.cookies.auth_cookie.id;
+                    //encrypt the password before storing to db
+                    const data = encryptDecrypt_1.default.encrypt(password);
+                    const encryptedPassword = data.encryptedData;
+                    const base64data = data.base64data;
+                    const newPassword = {
+                        websiteName: websiteName,
+                        password: encryptedPassword,
+                        iv: base64data,
+                        userId: userId
+                    };
+                    //update password in DB
+                    yield dbConnect_1.default.client.query(`UPDATE passwords SET websitename = $1, password = $2, iv = $3 WHERE _id = $4`, [websiteName, encryptedPassword, base64data, passwordId]);
+                    res.status(200).json(newPassword);
+                }
+            }
         }
         else {
-            //get user Id from cookies
-            const userId = req.cookies.auth_cookie.id;
-            //encrypt the password before storing to db
-            const data = encryptDecrypt_1.default.encrypt(password);
-            const encryptedPassword = data.encryptedData;
-            const base64data = data.base64data;
-            const newPassword = {
-                websiteName: websiteName,
-                password: encryptedPassword,
-                iv: base64data,
-                userId: userId
-            };
-            //update password in DB
-            yield passwordModel_1.default.findByIdAndUpdate(passwordId, newPassword, { new: true });
-            res.status(200).json(newPassword);
+            res.status(403).json('user not authenticated');
         }
     }
     catch (error) {
@@ -115,9 +145,20 @@ const deletePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
     //get password Id
     const passwordId = req.params.id;
     try {
-        //delete password with id
-        const password = yield passwordModel_1.default.findByIdAndRemove(passwordId);
-        res.status(200).json('Password Deleted');
+        if (auth_1.default) {
+            const { rows } = yield dbConnect_1.default.client.query(`SELECT * FROM passwords WHERE _id = $1`, [passwordId]);
+            if (rows.length === 0) {
+                res.status(404).json('not found');
+            }
+            else {
+                //delete password with id
+                yield dbConnect_1.default.client.query(`DELETE FROM passwords WHERE _id = $1`, [passwordId]);
+                res.status(200).json('Password Deleted With id: ' + passwordId);
+            }
+        }
+        else {
+            res.status(403).json('user not authenticated');
+        }
     }
     catch (error) {
         console.log(error);

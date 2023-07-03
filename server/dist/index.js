@@ -18,14 +18,14 @@ dotenv_1.default.config();
 //Define port
 const port = process.env.port || 8080;
 //This will allow the user in the frontend to consume the APIs that you have created without any problem.
-app.use((0, cors_1.default)({ credentials: true, origin: ['http://localhost:3000', 'https://mypasswordmanager.vercel.app'] }));
-//import database connection file
-const dbConnect_1 = __importDefault(require("../src/models/dbConnect"));
-//execute database connection 
-(0, dbConnect_1.default)();
+app.use((0, cors_1.default)({ credentials: true, origin: ['http://localhost:3000'] }));
+//schema router - hit this endpoint once to create schemas
+const schemaRoute_1 = __importDefault(require("./routes/schemaRoute"));
+app.use(schemaRoute_1.default);
 //user Router  
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-app.use('/auth/', authRoutes_1.default);
+app.use('/auth', authRoutes_1.default);
+//password router
 const passwordRoutes_1 = __importDefault(require("./routes/passwordRoutes"));
 app.use('/passwords', passwordRoutes_1.default);
 //get request when server is live
