@@ -21,7 +21,6 @@ const port = process.env.port || 8080;
 //This will allow the user in the frontend to consume the APIs that you have created without any problem.
 app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 
-
 //schema router - hit this endpoint once to create schemas
 import schemaRouter from './routes/schemaRoute';
 app.use(schemaRouter);
@@ -35,7 +34,7 @@ import passwordRouter from './routes/passwordRoutes';
 app.use('/passwords', passwordRouter);
 
 //get request when server is live
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (res: Response) => {
     res.status(200).json('Server is Live');
 })
 
