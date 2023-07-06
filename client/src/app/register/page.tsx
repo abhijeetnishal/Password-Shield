@@ -18,7 +18,7 @@ const Register = () => {
     setIsLoading(true);
     setBtnClick(true);
     e.preventDefault();
-    const response = await fetch('https://passwordmanagerserver.vercel.app/api/auth/register',{
+    const response = await fetch(process.env.server_url + 'auth/register',{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

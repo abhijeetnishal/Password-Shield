@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
-
-import dotenv from 'dotenv';
 import { NextFunction, Request, Response } from "express";
+import dotenv from 'dotenv';
 dotenv.config();
 
 const isAuthenticated = async(req: Request, res: Response, next: NextFunction)=>{
