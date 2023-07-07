@@ -124,7 +124,7 @@ const login = async (req: Request, res: Response)=>{
 
                     const userId = await result.rows[0]?._id || null;
                     //create a jwt token
-                    const token = jwt.sign({id: userId}, `${process.env.secretKey}`);
+                    const token = jwt.sign({id: userId}, process.env.secretKey);
                     
                     //create cookie for server.
                     res.cookie('auth_cookie',

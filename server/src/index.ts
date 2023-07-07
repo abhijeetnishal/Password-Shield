@@ -1,7 +1,10 @@
 import express, { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import cors from 'cors';
+
+//configure env
+dotenv.config();
 
 //create an express instance
 const app = express();
@@ -11,9 +14,6 @@ app.use(express.json());
 
 //The cookie-parser middleware is used to parse cookies from incoming requests, making them available in the req.cookies object.
 app.use(cookieParser());
-
-//configure env
-dotenv.config();
 
 //Define port
 const port = process.env.port || 8080;
