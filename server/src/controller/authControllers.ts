@@ -4,7 +4,7 @@ import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 dotenv.config();
 
 /*
@@ -124,7 +124,7 @@ const login = async (req: Request, res: Response)=>{
 
                     const userId = await result.rows[0]?._id || null;
                     //create a jwt token
-                    const token = jwt.sign({id: userId}, process.env.secretKey);
+                    const token = jwt.sign({id: userId}, "" + process.env.secretKey);
                     
                     //create cookie for server.
                     res.cookie('auth_cookie',
