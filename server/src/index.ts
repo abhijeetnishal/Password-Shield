@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
+import express, { Response } from 'express';
 import cookieParser from 'cookie-parser';
-import * as dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import cors from 'cors';
 
 //configure env
@@ -22,15 +22,15 @@ const port = process.env.port || 8080;
 app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 
 //schema router - hit this endpoint once to create schemas
-import schemaRouter from './routes/schemaRoute';
+import schemaRouter from './routers/schemaRoute';
 app.use(schemaRouter);
 
 //user Router  
-import userRouter from './routes/authRoutes';
+import userRouter from './routers/authRoutes';
 app.use('/auth', userRouter)
 
 //password router
-import passwordRouter from './routes/passwordRoutes';
+import passwordRouter from './routers/passwordRoutes';
 app.use('/passwords', passwordRouter);
 
 //get request when server is live

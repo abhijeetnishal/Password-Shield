@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import db from "./dbConnect";
+import db from "../config/dbConnect";
 
 const createSchemas = async(req: Request, res: Response)=> {
     try {
         //Connect to the PostgreSQL server
         db.connect;
 
-        // Create the user schema
+        // Create the schemas
         await db.client.query(
             `
             CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

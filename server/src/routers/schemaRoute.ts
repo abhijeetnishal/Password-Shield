@@ -5,9 +5,10 @@ import express from 'express'
 //It is used to define routes for a specific endpoint.
 const schemaRouter = express.Router();
 
+//import schemas
 import createSchemas from '../models/schemas';
 
-//create endpoint for creating schemas.
+//create an endpoint for creating schemas.
 schemaRouter.post('/schema', createSchemas);
 
 export default schemaRouter;

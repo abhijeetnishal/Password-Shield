@@ -1,11 +1,8 @@
-import db from '../models/dbConnect'
+import db from '../config/dbConnect'
 import bcrypt from 'bcryptjs';
 import validator from 'validator';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-
-import * as dotenv from 'dotenv'
-dotenv.config();
 
 /*
 1. Take user data: {first name, last name, email, phone(optional), password}
@@ -124,7 +121,7 @@ const login = async (req: Request, res: Response)=>{
 
                     const userId = await result.rows[0]?._id || null;
                     //create a jwt token
-                    const token = jwt.sign({id: userId}, "" + process.env.secretKey);
+                    const token = jwt.sign({id: userId}, process.env.secretKey);
                     
                     //create cookie for server.
                     res.cookie('auth_cookie',

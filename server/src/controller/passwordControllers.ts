@@ -1,8 +1,8 @@
 import { Request, Response, response } from "express";
-import encryptDecrypt from "../utils/encryptDecrypt";
-import isAuthenticated from "../utils/auth";
-import db from "../models/dbConnect";
-import redisConnect from "../models/redisConnect";
+import encryptDecrypt from "../middlewares/encryptDecrypt";
+import isAuthenticated from "../middlewares/auth";
+import db from "../config/dbConnect";
+import redisConnect from "../config/redisConnect";
 
 const getAllPasswords = async (req: Request, res: Response)=>{
     //get user Id whose data need to get

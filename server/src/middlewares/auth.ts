@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
-import dotenv from 'dotenv';
-dotenv.config();
 
 const isAuthenticated = async(req: Request, res: Response, next: NextFunction)=>{
     try{
         //get token from cookie 
         const token = req.cookies.auth_cookie.token;
+
+        //check user is authenticated or not
         const isAuth = jwt.verify(token, process.env.secretKey);
         if(isAuth){
             next();
