@@ -14,12 +14,10 @@ const getAllPasswords = async (req: Request, res: Response)=>{
             const client = await redisConnect();
 
             //check if value is present in Redis or not get(key)
-            const DataCached = await client.get('cached_data');
+            const cachedData = await client.get('cached_data');
             
             //if value is present(cache hit)
-            if(DataCached){
-                //parse the value from string to (arr of obj)
-                const cachedData = JSON.parse(DataCached);
+            if(cachedData){
                 
                 //return the cached data instead from DB
                 return res.status(200).json(cachedData);
@@ -35,11 +33,11 @@ const getAllPasswords = async (req: Request, res: Response)=>{
                     return res.status(404).json('passwords not found')
                 else{
                     //store the data in Redis(key, value) with options
-                    await client.set('cached_data', JSON.stringify(rows), {
+                    await client.set('cached_data', rows, {
                         //set expiration time: meaning that the key will automatically expire and be deleted from the database after 7200 seconds.
-                        EX: 7200,
+                        ex: 7200,
                         //not exist: ensures that the key is only set if it does not already exist in the database. 
-                        NX: true
+                        nx: true
                     });
                     
                     //return the data
@@ -95,9 +93,9 @@ const decryptPassword = async (req: Request, res: Response)=>{
                     //store the data in Redis(key, value)
                     client.set(id, decryptedPassword, {
                         //set expiration time: meaning that the key will automatically expire and be deleted from the database after 300 seconds.
-                        EX: 300,
+                        ex: 300,
                         //not exist: ensures that the key is only set if it does not already exist in the database. 
-                        NX: true
+                        nx: true
                     });
 
                     //return the password
