@@ -1,4 +1,4 @@
-import express, { Response } from 'express';
+import express, { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -34,7 +34,7 @@ import passwordRouter from './routers/passwordRoutes';
 app.use('/passwords', passwordRouter);
 
 //get request when server is live
-app.get('/', (res: Response) => {
+app.get('/', (req: Request, res: Response) => {
     res.status(200).json('Server is Live');
 })
 
