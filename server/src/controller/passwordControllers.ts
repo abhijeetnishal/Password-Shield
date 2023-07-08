@@ -14,11 +14,13 @@ const getAllPasswords = async (req: Request, res: Response)=>{
             const client = await redisConnect();
 
             //check if value is present in Redis or not get(key)
-            const cachedData = await client.get('cached_data');
+            const dataCached = await client.get('cached_data');
             
             //if value is present(cache hit)
-            if(cachedData){
-                
+            if(dataCached){
+                //parse the value from string to (arr of obj)
+                const cachedData = JSON.parse(dataCached);
+
                 //return the cached data instead from DB
                 return res.status(200).json(cachedData);
             }
@@ -33,11 +35,11 @@ const getAllPasswords = async (req: Request, res: Response)=>{
                     return res.status(404).json('passwords not found')
                 else{
                     //store the data in Redis(key, value) with options
-                    await client.set('cached_data', rows, {
+                    await client.set('cached_data', JSON.stringify(rows), {
                         //set expiration time: meaning that the key will automatically expire and be deleted from the database after 7200 seconds.
-                        ex: 7200,
+                        EX: 7200,
                         //not exist: ensures that the key is only set if it does not already exist in the database. 
-                        nx: true
+                        NX: true
                     });
                     
                     //return the data
@@ -93,9 +95,9 @@ const decryptPassword = async (req: Request, res: Response)=>{
                     //store the data in Redis(key, value)
                     client.set(id, decryptedPassword, {
                         //set expiration time: meaning that the key will automatically expire and be deleted from the database after 300 seconds.
-                        ex: 300,
+                        EX: 300,
                         //not exist: ensures that the key is only set if it does not already exist in the database. 
-                        nx: true
+                        NX: true
                     });
 
                     //return the password

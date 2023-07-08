@@ -1,14 +1,22 @@
-import { Redis } from "@upstash/redis"
+import { createClient } from "redis"
 
 // Create a Redis instance to connect redis
 const redisConnect = async()=>{
-    //create client using upstash Redis url and token
-    const client = new Redis({
-        url: process.env.UPSTASH_REDIS_REST_URL,
-        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    //create client using upstash Redis URL
+    const client = createClient ({
+        url : process.env.Redis_URL
+    });
+
+      //check for error
+      client.on("error", function(err) {
+          console.log(err);
       });
-      
+
+      //connect to Redis
+      await client.connect();
+      console.log('Redis connected successfully');
+
+      //return client to set and get the cache value
       return client;
 }
-
 export default redisConnect;
