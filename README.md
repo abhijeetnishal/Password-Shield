@@ -20,6 +20,7 @@ This project is a password manager application that allows users to securely sto
 - Add, edit and delete website password entries
 - Responsive design for mobile and desktop devices
 - Error handling and validation for forms
+- Caching with Redis
 
 <br>
 
@@ -33,6 +34,7 @@ The project utilizes the following technologies:
   - Express.js: A web application framework for Node.js.
   - PostgreSQL: A powerful open-source relational database management system.
   - TypeScript: A typed superset of JavaScript that compiles to plain JavaScript.
+  - Redis: An in-memory data structure store used as a cache and message broker.
     <br>
 
 - Frontend:
@@ -49,7 +51,7 @@ The project utilizes the following technologies:
   ```bash
      git clone https://github.com/abhijeetnishal/PasswordManager.git
   ```
-  3. Navigate to the Server directory using command "cd server" and create a .env file and copy contents of .env.example file to .env file and add all secret keys to setup postgres database and backend.
+  3. Navigate to the Server directory using command "cd server" and create a .env file and copy contents of .env.example file to .env file and add all secret keys to setup postgres database, Redis and backend.
   4. Install dependencies in server directory of project:
   ```bash
      npm install
