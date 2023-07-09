@@ -7,16 +7,16 @@ const redisConnect = async()=>{
         url : process.env.Redis_URL
     });
 
-      //check for error
-      client.on("error", function(err) {
-          console.log(err);
-      });
+    //check for error
+    client.on("error", function(err) {
+        console.log(err);
+    });
 
-      //connect to Redis
-      await client.connect();
-      console.log('Redis connected successfully');
+    //connect to Redis
+    await client.connect();
+    console.log('Redis connected successfully');
 
-      //return client to set and get the cache value
-      return client;
+    //return client to set and get the cache value
+    return client;
 }
 export default redisConnect;
