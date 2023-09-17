@@ -21,16 +21,16 @@ const Login = () => {
     setIsLoading(true);
     setBtnClick(true);
     e.preventDefault();
-    const response = await fetch('https://passwordmanagerserver.vercel.app/api/auth/login',{
+    const response = await fetch('https://password-shield-server.vercel.app/auth/login',{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
         email,
         password
-      }),
-      credentials: 'include',
+      })
     })
 
     if(response.ok) {

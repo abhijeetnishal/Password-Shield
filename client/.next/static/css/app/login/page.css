@@ -1,0 +1,142 @@
+/*!***********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[7].use[3]!./src/styles/loading.module.css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************/
+.loading_scanner__Lz7zx span {
+  color: transparent;
+  font-size: 1.4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading_scanner__Lz7zx span::before {
+  content: "Loading...";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  border-right: 4px solid #17FEFF;
+  overflow: hidden;
+  color: #17FEFF;
+  animation: loading_load91371__Iw_3_ 2s linear infinite;
+}
+
+@keyframes loading_load91371__Iw_3_ {
+  0%, 10%, 100% {
+    width: 0;
+  }
+
+  10%,20%,30%,40%,50%,60%,70%,80%,90%,100% {
+    border-right-color: transparent;
+  }
+
+  11%,21%,31%,41%,51%,61%,71%,81%,91% {
+    border-right-color: #17FEFF;
+  }
+
+  60%, 80% {
+    width: 100%;
+  }
+}
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[2].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[2].oneOf[7].use[3]!./src/styles/register.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+/* Import Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+.register_register__L44PG{
+  box-sizing: border-box;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  padding-bottom: calc(100vh + 200px);
+}
+.register_container__w4_dZ{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 18%;
+  left: 18%;
+  right: 12%;
+  min-width: 330px;
+  max-width: 430px;
+
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+.register_container__w4_dZ .register_form__NIZGo{
+  padding: 2rem;
+}
+.register_form__NIZGo header{
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+ .register_form__NIZGo input{
+   height: 60px;
+   width: 100%;
+   padding: 0 15px;
+   font-size: 17px;
+   margin-bottom: 1.3rem;
+   border: 1px solid #ddd;
+   border-radius: 6px;
+   outline: none;
+ }
+ .register_form__NIZGo input:focus{
+   box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+ }
+.register_form__NIZGo a{
+  font-size: 16px;
+  color: #009579;
+  text-decoration: none;
+}
+.register_form__NIZGo a:hover{
+  text-decoration: underline;
+}
+input.register_button__nhPK_{
+  color: #fff;
+  background: #009579;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 1.7rem;
+  cursor: pointer;
+  transition: 0.4s;
+}
+input.register_button__nhPK_:hover{
+  background: #006653;
+}
+.register_signup__F3MJX{
+  font-size: 17px;
+  text-align: center;
+  padding-top: 60px;
+}
+.register_signup__F3MJX label{
+  color: #009579;
+  cursor: pointer;
+}
+.register_signup__F3MJX label:hover{
+  text-decoration: underline;
+}
+.register_messageDiv___DgKh{
+  position:absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 30px;
+}
+.register_message__dYQeX{
+  text-align: center;
+  color: red;
+}
+@media screen and (min-width: 1024px) {
+  .register_register__L44PG{
+    padding-bottom: calc(100vh - 112px);
+  }
+  .register_container__w4_dZ{
+    left: 34%;
+  }
+}
