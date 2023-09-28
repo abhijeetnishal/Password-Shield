@@ -16,10 +16,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 //Define port
-const port = process.env.port || 8080;
+const port = process.env.Port || 8080;
 
 //This will allow the user in the frontend to consume the APIs that you have created without any problem.
-app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
+app.use(cors({ credentials: true, origin: ['http://localhost:3000', 'https://mypasswordmanager.vercel.app'] }));
 
 //schema router - hit this endpoint once to create schemas
 import schemaRouter from './routers/schemaRoute';

@@ -1,0 +1,26 @@
+.footer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 30px;
+    padding-bottom: 50px;
+}
+.github-link{
+    padding-right: 20px;
+}
+.linkedin-link{
+    padding-left: 20px;
+}
+.github-icon{
+    width: 25px;
+}
+.linkedin-icon{
+    width: 25px;
+}
+
+@media screen and (max-width: 480px){
+    .footer{
+        width: 480px;
+    }
+}
