@@ -17,30 +17,30 @@ const Register = () => {
     setIsLoading(true);
     setBtnClick(true);
     e.preventDefault();
-    const response = await fetch('http://localhost:4000/api/auth/register',{
+    const response = await fetch(`${process.env.REACT_APP_HOST_URL}/auth/register`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        username,
-        email,
-        password
-      })
+        userName: username,
+        email: email,
+        password: password
+      }),
+      credentials: 'include'
     })
-    console.log(response.status);
+
     const data = await response.json();
-    console.log(data);
-    if(data) {
-        console.log(data);
-        setMessage(data);
-        setRedirect(true);
-        setBtnClick(true);
+   
+    if(response.status === 201) {
+      setMessage(data);
+      setRedirect(true);
+      setBtnClick(true);
     }
     else{
       setIsLoading(false);
       setBtnClick(true);
-      setMessage(data.message);
+      setMessage(data);
     }
   }
 

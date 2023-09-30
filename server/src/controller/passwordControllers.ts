@@ -9,12 +9,12 @@ const getAllPasswords = async (req: Request, res: Response) => {
     const userId = req.params.id;
 
     try {
-        if (isAuthenticated) {
+        if(isAuthenticated) {
             //get client from redisConnect.ts file
             const client = await redisConnect();
 
             //check if value is present in Redis or not get(key)
-            const dataCached = await client.get('cached_data');
+            const dataCached = await client.get(`cached_data_${userId}`);
 
             //if value is present(cache hit)
             if (dataCached) {
@@ -32,12 +32,12 @@ const getAllPasswords = async (req: Request, res: Response) => {
                 );
                 //check if data contains any value or not 
                 if (rows.length === 0)
-                    return res.status(404).json('passwords not found')
+                    return res.status(200).json({});
                 else {
                     //store the data in Redis(key, value) with options
-                    await client.set('cached_data', JSON.stringify(rows), {
+                    await client.set(`cached_data_${userId}`, JSON.stringify(rows), {
                         //set expiration time: meaning that the key will automatically expire and be deleted from the database after 7200 seconds.
-                        EX: 7200,
+                        EX: 300,
                         //not exist: ensures that the key is only set if it does not already exist in the database. 
                         NX: true
                     });
@@ -74,12 +74,13 @@ const decryptPassword = async (req: Request, res: Response) => {
             else {
                 const password = rows[0].password;
                 const iv = rows[0].iv;
+                const id = rows[0]._id;
 
                 //decrypt the password
                 const decryptedPassword = encryptDecrypt.decrypt(password, iv);
 
                 //return the password
-                res.status(200).json(decryptedPassword);
+                res.status(200).json({decryptedPassword, id});
             }
         }
         else {
@@ -106,6 +107,12 @@ const createPassword = async (req: Request, res: Response) => {
                 //get user Id from cookies
                 const userId = req.cookies.auth_cookie._id;
 
+                //get client from redisConnect.ts file
+                const client = await redisConnect();
+
+                //invalidate cache
+                client.del(`cached_data_${userId}`);
+
                 //encrypt the password before storing to db
                 const data = encryptDecrypt.encrypt(password);
                 const encryptedPassword = data.encryptedData;
@@ -122,12 +129,6 @@ const createPassword = async (req: Request, res: Response) => {
                     `INSERT INTO passwords(websiteName, password, iv, createdBy) 
                     VALUES($1, $2, $3, $4)`, [websiteName, encryptedPassword, base64data, userId]
                 );
-
-                //get client from redisConnect.ts file
-                const client = await redisConnect();
-
-                //invalidate cache
-                client.del('cached_data');
 
                 res.status(201).json(newPassword);
             }
@@ -164,6 +165,12 @@ const updatePassword = async (req: Request, res: Response) => {
                     //get user Id from cookies
                     const userId = req.cookies.auth_cookie.id;
 
+                    //get client from redisConnect.ts file
+                    const client = await redisConnect();
+
+                    //invalidate cache
+                    client.del(`cached_data_${userId}`);
+
                     //encrypt the password before storing to db
                     const data = encryptDecrypt.encrypt(password);
                     const encryptedPassword = data.encryptedData;
@@ -182,12 +189,6 @@ const updatePassword = async (req: Request, res: Response) => {
                         [websiteName, encryptedPassword, base64data, passwordId]
                     )
 
-                    //get client from redisConnect.ts file
-                    const client = await redisConnect();
-
-                    //invalidate cache
-                    client.del('cached_data');
-
                     res.status(200).json(newPassword);
                 }
             }
@@ -205,6 +206,8 @@ const updatePassword = async (req: Request, res: Response) => {
 const deletePassword = async (req: Request, res: Response) => {
     //get password Id
     const passwordId = req.params.id;
+    //get user Id from cookies
+    const userId = req.cookies.auth_cookie.id;
 
     try {
         if (isAuthenticated) {
@@ -216,16 +219,16 @@ const deletePassword = async (req: Request, res: Response) => {
                 res.status(404).json('not found');
             }
             else {
-                //delete password with id
-                await db.client.query(
-                    `DELETE FROM passwords WHERE _id = $1`, [passwordId]
-                );
-
                 //get client from redisConnect.ts file
                 const client = await redisConnect();
 
                 //invalidate cache
-                client.del('cached_data');
+                client.del(`cached_data_${userId}`);
+
+                //delete password with id
+                await db.client.query(
+                    `DELETE FROM passwords WHERE _id = $1`, [passwordId]
+                );
 
                 res.status(200).json('Password Deleted With id: ' + passwordId);
             }

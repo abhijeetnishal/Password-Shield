@@ -18,7 +18,7 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/login' element={<Login />} />
           <Route path="/create" element={<ProtectedRoute> <CreatePassword /> </ProtectedRoute>}/>
-          <Route path="/view/:id" element={<ProtectedRoute> <PasswordPage /> </ProtectedRoute>} />
+          <Route path="/view" element={<ProtectedRoute> <PasswordPage /> </ProtectedRoute>} />
           <Route path='*' element={<ErrorPage/>} />
         </Routes>
         <Footer/>

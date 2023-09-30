@@ -117,18 +117,20 @@ const login = async (req: Request, res: Response)=>{
                 }
                 else{
                     // Execute a SELECT query to get the id of the user with the given email
-                    const result = await db.client.query('SELECT _id FROM users WHERE email = $1', [email]);
+                    const { rows } = await db.client.query('SELECT * FROM users WHERE email = $1', [email]);
 
-                    const userId = await result.rows[0]?._id || null;
+                    const userId =  rows[0]._id;
+
+                    const userName = rows[0].username;
+
                     //create a jwt token
                     const token = jwt.sign({id: userId}, process.env.secretKey);
                     
                     //create cookie for server.
                     res.cookie('auth_cookie',
                     {   _id: userId,
-                        email: email,
                         token: token
-                    }, { httpOnly: true }).status(200).json({_id: userId, email: email, message:'User logged-in successfully'});
+                    }, { httpOnly: true }).status(200).json({_id: userId, userName: userName, message:'User logged-in successfully'});
                 }
             }
         }

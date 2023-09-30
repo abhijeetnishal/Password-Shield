@@ -14,7 +14,7 @@ import deleteBtn from '../../assets/deleteBtnblue.png'
 const PasswordPage = () => {
     const cookies = new Cookies();
     const cookieValue = cookies.get('myCookie');
-    const userId = cookieValue.id;
+    const userId = cookieValue._id;
 
     const [data, setData] = useState(null);
     const [decryptedPassword, setDecryptedPassword] = useState(null);
@@ -36,17 +36,25 @@ const PasswordPage = () => {
 
     const [containerHeight, setContainerHeight] = useState(0);
 
-
     useEffect(() => {
         // declare the async data fetching function
         setIsLoading(true);
         const fetchData = async () => {
             // get the data from the api
-            const response = await fetch(`http://localhost:4000/passwords/all/${userId}`);
+            const response = await fetch(`${process.env.REACT_APP_HOST_URL}/passwords/all/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            });
+
             // convert the data to json
             const data = await response.json();
             setData(data);
+
             setDataLength(data.length);
+
             const height = data.length * 140; // Assuming each item is 50px tall
             setContainerHeight(height);
             //console.log(data);
@@ -62,21 +70,18 @@ const PasswordPage = () => {
 
     async function decrypt(passwordId){
         //showHidebtn();
-        const response = await fetch(`http://localhost:4000/passwords/specific/${passwordId}`,{
+        const response = await fetch(`${process.env.REACT_APP_HOST_URL}/passwords/specific/${passwordId}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
         });
-        response.json().then(data => ({
-            data: data,
-        })
-        ).then((res) => {
-            const data = res.data;
-            //console.log(data);
-            setDecryptedPassword(data); 
-        })
+        
+        const data = await response.json();
+        // console.log(data);
+        setDecryptedPassword(data); 
+
     }
 
     useEffect(() => {
@@ -89,7 +94,7 @@ const PasswordPage = () => {
             //console.log(updateData);
             const fetchData = async () => {
                 // get the data from the api
-                const response = await fetch(`http://localhost:4000/passwords/${editId}`,{
+                const response = await fetch(`${process.env.REACT_APP_HOST_URL}/passwords/${editId}`,{
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -171,7 +176,7 @@ const PasswordPage = () => {
                                 <div className='namePasswordDecryptContainer'>
                                     <div className='namePasswordContainer'>
                                         <div className='subWebsiteNameContainer'>
-                                            {mainData.websiteName}
+                                            {mainData.websitename}
                                         </div>
                                         <div className='subPasswordContainer'>
                                             Password: {(decryptedPassword && decryptedPassword.id===mainData._id) ? decryptedPassword.decryptedPassword : '***********'}

@@ -11,7 +11,7 @@ const CreatePassword = (props) => {
 
     async function addFunc(){
       if(websiteName && password){
-        const response = await fetch('http://localhost:4000/passwords',{
+        const response = await fetch(`${process.env.REACT_APP_HOST_URL}/passwords`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

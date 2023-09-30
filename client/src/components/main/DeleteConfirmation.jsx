@@ -6,12 +6,12 @@ const DeleteConfirmation = (props) => {
   const {passwordId ,item , onClose} = props;
 
   async function handleConfirmationDelete(){
-    const response = await fetch(`http://localhost:4000/passwords/${passwordId}`,{
-        method: 'DELETE',
-        headers:{
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+    const response = await fetch(`${process.env.REACT_APP_HOST_URL}/passwords/${passwordId}`,{
+          method: 'DELETE',
+          headers:{
+              'Content-Type': 'application/json',
+          },
+          credentials: 'include',
         });
 
     response.json().then(data => ({

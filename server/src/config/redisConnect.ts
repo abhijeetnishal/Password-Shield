@@ -14,7 +14,6 @@ const redisConnect = async()=>{
 
     //connect to Redis
     await client.connect();
-    console.log('Redis connected successfully');
 
     //return client to set and get the cache value
     return client;

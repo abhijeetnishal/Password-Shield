@@ -20,7 +20,7 @@ const Login = () => {
     setIsLoading(true);
     setBtnClick(true);
     e.preventDefault();
-    const response = await fetch('http://localhost:4000/api/auth/login',{
+    const response = await fetch(`${process.env.REACT_APP_HOST_URL}/auth/login`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -29,15 +29,14 @@ const Login = () => {
         email,
         password
       }),
-      credentials: 'include',
+      credentials: 'include'
     })
 
     if(response.ok) {
       await response.json().then(userInfo => {
+      
         cookies.set('myCookie', userInfo, { path: '/' }); 
         const cookieValue = cookies.get('myCookie');
-
-        window.localStorage.setItem("userID", userInfo.id);
 
         setMessage(userInfo.username);
 
@@ -71,7 +70,7 @@ const Login = () => {
   }
 
   if(redirect){
-    return <Navigate to={`/view/${userId}`} />
+    return <Navigate to={`/view`} />
   }
   
   return (

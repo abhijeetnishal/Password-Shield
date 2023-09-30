@@ -8,16 +8,6 @@ import {Link} from 'react-router-dom'
 
 const LandingPage = () => {
 
-  const startServer = async ()=>{
-    await fetch('http://localhost:4000/',{
-      method: 'GET',
-      headers: {
-          'Content-Type': 'application/json',
-      }
-    });
-  }
-  startServer();
-
   return (
     <div className='landingPage'>
       <div className='getStarted'>
