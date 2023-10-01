@@ -10,6 +10,9 @@
     "add-build": "git add dist",
     "test": "jest"
   },
+  "engines": {
+    "node": ">=14 <20"
+  },
   "pre-commit": [
     "ts.check",
     "build",
