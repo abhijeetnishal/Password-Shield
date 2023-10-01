@@ -14,14 +14,10 @@ const DeleteConfirmation = (props) => {
           credentials: 'include',
         });
 
-    response.json().then(data => ({
-        data: data,
-        status: response.status
-    })
-    ).then(res => {
-        //console.log(res.status, res.data);
-        window.location.reload(false);
-    })
+    const data = await response.json();
+    //console.log(data);
+    window.location.reload(false);
+
 }
 
   return (

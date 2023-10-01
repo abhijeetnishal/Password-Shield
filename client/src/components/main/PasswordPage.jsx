@@ -6,7 +6,8 @@ import '../../styles/PasswordPage.css'
 import EditPassword from './EditPassword'
 import CreatePassword from '../main/CreatePassword'
 import commonWebsiteSymbolImg from '../../assets/commonWebsiteSymbol.png' 
-import decryptBtnImg from '../../assets/decryptBtn.png'
+import eye from '../../assets/eye-image.png';
+import cutEye from '../../assets/cut-eye-image.png';
 import editBtnImg from '../../assets/editBtnImg.png'
 import deleteBtn from '../../assets/deleteBtnblue.png'
 
@@ -35,6 +36,8 @@ const PasswordPage = () => {
     const [dataLength, setDataLength] = useState(0);
 
     const [containerHeight, setContainerHeight] = useState(0);
+
+    const [isPasswordEyeBtnClicked, setIsPasswordEyeBtnClicked] = useState(false);
 
     useEffect(() => {
         // declare the async data fetching function
@@ -69,6 +72,7 @@ const PasswordPage = () => {
     }, []);
 
     async function decrypt(passwordId){
+        setIsPasswordEyeBtnClicked(!isPasswordEyeBtnClicked);
         //showHidebtn();
         const response = await fetch(`${process.env.REACT_APP_HOST_URL}/passwords/specific/${passwordId}`,{
             method: 'GET',
@@ -179,11 +183,14 @@ const PasswordPage = () => {
                                             {mainData.websitename}
                                         </div>
                                         <div className='subPasswordContainer'>
-                                            Password: {(decryptedPassword && decryptedPassword.id===mainData._id) ? decryptedPassword.decryptedPassword : '***********'}
+                                            Password: {(isPasswordEyeBtnClicked && decryptedPassword && decryptedPassword.id === mainData._id) ? decryptedPassword.decryptedPassword : '***********'}
                                         </div>
                                     </div>
-                                    <button className='decryptBtn' onClick={()=> decrypt(mainData._id)}>
-                                        <img className='decryptBtnImg' src={decryptBtnImg} alt="" />
+                                    <button onClick={()=> decrypt(mainData._id)} className='decryptBtn'>
+                                        {
+                                            isPasswordEyeBtnClicked ? (<img src={cutEye} alt=''  className='decryptBtnImg'/> )
+                                            : (<img src={eye} alt='' className='decryptBtnImg'/> )
+                                        }
                                     </button>
                                 </div>
                             </div>

@@ -163,7 +163,7 @@ const updatePassword = async (req: Request, res: Response) => {
                 }
                 else {
                     //get user Id from cookies
-                    const userId = req.cookies.auth_cookie.id;
+                    const userId = req.cookies.auth_cookie._id;
 
                     //get client from redisConnect.ts file
                     const client = await redisConnect();
@@ -207,7 +207,7 @@ const deletePassword = async (req: Request, res: Response) => {
     //get password Id
     const passwordId = req.params.id;
     //get user Id from cookies
-    const userId = req.cookies.auth_cookie.id;
+    const userId = req.cookies.auth_cookie._id;
 
     try {
         if (isAuthenticated) {

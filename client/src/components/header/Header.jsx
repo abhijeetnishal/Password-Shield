@@ -36,9 +36,9 @@ const Header = () => {
         <div className="noAuthNavbar">
           <img className="headerLock" src={headerLock} alt="" />
           <Link className="keySafeIcon" to="/">Key Safe</Link>
-          <div className="headerLoginBtn">
+          <button className="headerLoginBtn">
             <Link className="headerLoginIcon" to="/login">Login</Link>
-          </div>
+          </button>
         </div>
       ) : (
         <div className="noAuthNavbar">
@@ -49,9 +49,9 @@ const Header = () => {
               <img className="profilePhoto" src={profilePhoto} alt="" />
               <div className="userName">  {userName} </div>
             </div>
-            <div className="headerLoginBtn">
+            <button className="headerLoginBtn">
               <Link to='/' className="headerLogoutIcon" onClick={logout}>Logout</Link>
-            </div>
+            </button>
           </div>
         </div>
       )}
