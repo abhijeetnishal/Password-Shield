@@ -38,8 +38,7 @@ The project utilizes the following technologies:
     <br>
 
 - Frontend:
-  - Next.js: A React framework for building server-side rendered and statically generated web applications.
-  - TypeScript: A typed superset of JavaScript that compiles to plain JavaScript.
+  - React.js: A JavaScript library for building ui components.
 
 <br>
 
