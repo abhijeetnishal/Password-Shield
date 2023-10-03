@@ -130,7 +130,7 @@ const login = async (req: Request, res: Response)=>{
                     res.cookie('auth_cookie',
                     {   _id: userId,
                         token: token
-                    }, { sameSite: 'none', secure: true } ).status(200).json({_id: userId, userName: userName, message:'User logged-in successfully'});
+                    }, ).status(200).json({_id: userId, userName: userName, message:'User logged-in successfully'});
                 }
             }
         }
