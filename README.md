@@ -66,25 +66,27 @@ To setup the application locally, follow these steps:
       npm start
    ```
 
-6. Now navigate to client directory of project using commands:
+6. create a Table (schema) by making a **_POST_** request to API endpoint **_http://localhost:8080/schema_** API endpoint using Postman or other API testing tools.
+
+7. Now navigate to client directory of project using commands:
 
    ```bash
       cd ../client
    ```
 
-7. Install dependencies in client directory of project:
+8. Install dependencies in client directory of project:
 
    ```bash
       npm install
    ```
 
-8. Start the application using command:
+9. Start the application using command:
 
    ```bash
       npm start
    ```
 
-9. Open http://localhost:3000 in your browser to see the application.
+10. Open http://localhost:3000 in your browser to see the application.
 
 <br>
 
