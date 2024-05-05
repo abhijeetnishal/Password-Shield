@@ -1,5 +1,5 @@
 {
-  "name": "typescriptrestapi",
+  "name": "password_manager_server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,11 +7,7 @@
     "start": "nodemon src/index.ts",
     "build": "rimraf dist && tsc",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist",
-    "test": "jest"
-  },
-  "engines": {
-    "node": ">=14 <20"
+    "add-build": "git add dist"
   },
   "pre-commit": [
     "ts.check",
@@ -21,15 +17,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/node": "^20.3.3",
-    "jest": "^29.6.2",
-    "nodemon": "^2.0.22",
-    "pre-commit": "^1.2.2",
-    "rimraf": "^5.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
-  },
-  "dependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
@@ -38,17 +27,21 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/pg": "^8.10.2",
     "@types/validator": "^13.7.17",
+    "nodemon": "^2.0.22",
+    "pre-commit": "^1.2.2",
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "npm": "^9.7.1",
     "pg": "^8.11.0",
-    "redis": "^4.6.7",
     "simple-update-notifier": "^1.1.0",
-    "ts-jest": "^29.1.1",
     "validator": "^13.9.0"
   }
 }

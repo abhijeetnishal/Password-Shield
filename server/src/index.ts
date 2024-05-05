@@ -18,8 +18,24 @@ app.use(cookieParser());
 //Define port
 const port = process.env.Port || 8080;
 
-//This will allow the user in the frontend to consume the APIs that you have created without any problem.
-app.use(cors({ credentials: true, origin: ['http://localhost:3000', 'https://mypasswordmanager.vercel.app'] }));
+// Check environment
+const isProduction = process.env.NODE_ENV === "production";
+
+// CORS Configuration
+const corsOptions = {
+  origin: isProduction ? process.env.CLIENT_URL : "*",
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  preflightContinue: false,
+  optionsSuccessStatus: 200,
+};
+
+// This will allow the user in the frontend to consume the APIs that you have created without any problem.
+app.use(cors(corsOptions));
+
+// Disable X-Powered-By Header
+app.disable("x-powered-by");
+
+app.set("trust proxy", true);
 
 //schema router - hit this endpoint once to create schemas
 import schemaRouter from './routers/schemaRoute';
