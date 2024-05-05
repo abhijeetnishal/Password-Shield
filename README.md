@@ -81,7 +81,7 @@ To setup the application locally, follow these steps:
 8. Start the application using command:
 
    ```bash
-      npm run dev
+      npm start
    ```
 
 9. Open http://localhost:3000 in your browser to see the application.
