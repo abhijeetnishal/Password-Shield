@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
-import cors from 'cors';
+import express, { Request, Response } from "express";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import cors from "cors";
 
 //configure env
 dotenv.config();
@@ -23,7 +23,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 // CORS Configuration
 const corsOptions = {
-  origin: isProduction ? process.env.CLIENT_URL : "*",
+  origin: isProduction ? process.env.CLIENT_PROD_URL : "*",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   preflightContinue: false,
   optionsSuccessStatus: 200,
@@ -38,22 +38,22 @@ app.disable("x-powered-by");
 app.set("trust proxy", true);
 
 //schema router - hit this endpoint once to create schemas
-import schemaRouter from './routers/schemaRoute';
+import schemaRouter from "./routers/schemaRoute";
 app.use(schemaRouter);
 
-//user Router  
-import userRouter from './routers/authRoutes';
-app.use('/auth', userRouter)
+//user Router
+import userRouter from "./routers/authRoutes";
+app.use("/auth", userRouter);
 
 //password router
-import passwordRouter from './routers/passwordRoutes';
-app.use('/passwords', passwordRouter);
+import passwordRouter from "./routers/passwordRoutes";
+app.use("/passwords", passwordRouter);
 
 //get request when server is live
-app.get('/', (req: Request, res: Response) => {
-    res.status(200).json('Server is Live');
-})
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json("Server is Live");
+});
 
 app.listen(port, () => {
-    console.log('Server listening at port ' + port);
-})
+  console.log("Server listening at port " + port);
+});
