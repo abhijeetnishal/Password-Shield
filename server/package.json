@@ -14,7 +14,7 @@
     "build",
     "add-build"
   ],
-  "author": "",
+  "author": "Abhijeet Kumar",
   "license": "ISC",
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
