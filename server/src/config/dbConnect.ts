@@ -2,8 +2,11 @@ import { Client } from "pg";
 
 require("dotenv").config();
 //Create a new PostgreSQL client instance:
-const connectionString = `postgres://${process.env.user}:${process.env.password}@${process.env.host}:${process.env.port}/${process.env.database}?sslmode=require`;
-const client = new Client(connectionString);
+const connectionString = `postgres://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`;
+const client = new Client({
+  connectionString: connectionString,
+  ssl: { rejectUnauthorized: false },
+});
 
 //Connect to the PostgreSQL server
 const connect = client.connect((err) => {
