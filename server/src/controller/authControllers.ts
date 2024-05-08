@@ -159,8 +159,4 @@ const logout = (req: Request, res: Response) => {
   res.clearCookie("auth_cookie").json("user logged out");
 };
 
-export default {
-  register,
-  login,
-  logout,
-};
+export { register, login, logout };

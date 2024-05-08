@@ -167,7 +167,7 @@ const deletePassword = async (req: Request, res: Response) => {
   }
 };
 
-export default {
+export {
   getAllPasswords,
   decryptPassword,
   createPassword,
