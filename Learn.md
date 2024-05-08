@@ -1,8 +1,10 @@
 # Password Manager Application
+
 This project is a password manager application that allows users to securely store their website names and passwords. The application provides a user interface for managing passwords, including adding, editing, and deleting website credentials. It also incorporates an authentication system to ensure that only authorized users can access their passwords.
 <br>
 
 ## Table of Contents
+
 - [**Technologies**](#technologies)
 - [**Application Setup**](#application-setup)
 - [**How to Contribute**](#how-to-contribute)
@@ -10,9 +12,11 @@ This project is a password manager application that allows users to securely sto
   <br>
 
 ## Technologies
+
 The project utilizes the following technologies:
 
 - Backend:
+
   - Node.js: A JavaScript runtime for server-side development.
   - Express.js: A web application framework for Node.js.
   - PostgreSQL: A powerful open-source relational database management system.
@@ -27,7 +31,8 @@ The project utilizes the following technologies:
 ## Application Setup
 
 To setup the application locally, follow these steps:
-1. Star this repo to support my work and Fork this repo to create your own copy to work from.
+
+1. Star and Fork this repo to create your own copy to work from.
 2. Clone the repository you forked to your local machine using:
 
    ```bash
@@ -104,6 +109,7 @@ Contributions are welcome! If you would like to contribute to the project, pleas
 <br>
 
 ## Code Style
+
 - Please make sure to follow the existing code style and formatting conventions when making contributions to the project.
 
 <br>
