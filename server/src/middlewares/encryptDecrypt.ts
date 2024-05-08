@@ -46,4 +46,4 @@ function decrypt(encryptedData: string, iv: string) {
   return decryptedData;
 }
 
-export default { encrypt, decrypt };
+export { encrypt, decrypt };

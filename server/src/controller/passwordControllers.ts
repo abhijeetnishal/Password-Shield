@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import encryptDecrypt from "../middlewares/encryptDecrypt";
+import { decrypt, encrypt } from "../middlewares/encryptDecrypt";
 import db from "../config/dbConnect";
 
 const getAllPasswords = async (req: Request, res: Response) => {
@@ -43,7 +43,7 @@ const decryptPassword = async (req: Request, res: Response) => {
       const id = rows[0]._id;
 
       //decrypt the password
-      const decryptedPassword = encryptDecrypt.decrypt(password, iv);
+      const decryptedPassword = decrypt(password, iv);
 
       //return the password
       res.status(200).json({ decryptedPassword, id });
@@ -67,7 +67,7 @@ const createPassword = async (req: Request, res: Response) => {
       const userId = req.cookies.auth_cookie._id;
 
       //encrypt the password before storing to db
-      const data = encryptDecrypt.encrypt(password);
+      const data = encrypt(password);
       const encryptedPassword = data.encryptedData;
       const base64data = data.base64data;
 
@@ -113,7 +113,7 @@ const updatePassword = async (req: Request, res: Response) => {
         const userId = req.cookies.auth_cookie._id;
 
         //encrypt the password before storing to db
-        const data = encryptDecrypt.encrypt(password);
+        const data = encrypt(password);
         const encryptedPassword = data.encryptedData;
         const base64data = data.base64data;
 
