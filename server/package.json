@@ -9,6 +9,9 @@
     "ts.check": "tsc --project tsconfig.json",
     "add-build": "git add dist"
   },
+  "engines": {
+    "node": ">=14 <20"
+  },
   "pre-commit": [
     "ts.check",
     "build",
