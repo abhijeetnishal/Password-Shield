@@ -30,7 +30,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //using try catch for error handling
     try {
         //connect the DB
-        dbConnect_1.default.connect;
+        // await db.connect;
         //validate input
         if (!userName || !email || !password) {
             //Bad request (400)
@@ -44,7 +44,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             // Execute a SELECT query to check if the email exists
             //The rows property typically represents the result of the query, containing the returned rows from the database.
-            const { rows } = yield dbConnect_1.default.client.query("SELECT email FROM users WHERE email = $1", [email]);
+            const { rows } = yield dbConnect_1.default.pool.query("SELECT email FROM users WHERE email = $1", [email]);
             //check if rows length is zero or not, if zero means no data is present
             const emailExists = rows.length;
             //check if user already registered or not
@@ -56,7 +56,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 //hash the password
                 const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
                 //create a user data in DB
-                yield dbConnect_1.default.client.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [userName, email, hashedPassword]);
+                yield dbConnect_1.default.pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3)", [userName, email, hashedPassword]);
                 //created(201)
                 res.status(201).json("User Registered Successfully");
             }
@@ -82,7 +82,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
         //connect the DB
-        dbConnect_1.default.connect;
+        // db.connect;
         //validate input
         if (!email || !password) {
             //Bad request (400)
@@ -95,7 +95,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else {
             // Execute a SELECT query to check if the email exists
-            const { rows } = yield dbConnect_1.default.client.query("SELECT email FROM users WHERE email = $1", [email]);
+            const { rows } = yield dbConnect_1.default.pool.query("SELECT email FROM users WHERE email = $1", [email]);
             // The result.rows[0].exists value will be true if the email exists, false otherwise
             const emailExists = rows.length;
             //check if user registered or not
@@ -104,7 +104,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             }
             else {
                 // Execute a SELECT query to get the password of the user with the given email
-                const result = yield dbConnect_1.default.client.query("SELECT password FROM users WHERE email = $1", [email]);
+                const result = yield dbConnect_1.default.pool.query("SELECT password FROM users WHERE email = $1", [email]);
                 // Return the password if a matching user is found, otherwise return null
                 const dbPassword = (yield ((_a = result.rows[0]) === null || _a === void 0 ? void 0 : _a.password)) || null;
                 //compare the password saved in DB and entered by user.
@@ -116,7 +116,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 }
                 else {
                     // Execute a SELECT query to get the id of the user with the given email
-                    const { rows } = yield dbConnect_1.default.client.query("SELECT * FROM users WHERE email = $1", [email]);
+                    const { rows } = yield dbConnect_1.default.pool.query("SELECT * FROM users WHERE email = $1", [email]);
                     const userId = rows[0]._id;
                     const userName = rows[0].username;
                     //create a jwt token

@@ -4,10 +4,10 @@ import db from "../config/dbConnect";
 const createSchemas = async(req: Request, res: Response)=> {
     try {
         //Connect to the PostgreSQL server
-        db.connect;
+        // db.connect;
 
         // Create the schemas
-        await db.client.query(
+        await db.pool.query(
             `
             CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
             
@@ -30,6 +30,7 @@ const createSchemas = async(req: Request, res: Response)=> {
             `
         );
         res.status(200).json('Schemas created successfully!');
+        
     } 
     catch(error) {
       console.error('Error creating schemas:', error);

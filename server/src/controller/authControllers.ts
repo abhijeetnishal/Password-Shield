@@ -18,7 +18,7 @@ const register = async (req: Request, res: Response) => {
   //using try catch for error handling
   try {
     //connect the DB
-    db.connect;
+    // await db.connect;
     //validate input
     if (!userName || !email || !password) {
       //Bad request (400)
@@ -31,7 +31,7 @@ const register = async (req: Request, res: Response) => {
     } else {
       // Execute a SELECT query to check if the email exists
       //The rows property typically represents the result of the query, containing the returned rows from the database.
-      const { rows } = await db.client.query(
+      const { rows } = await db.pool.query(
         "SELECT email FROM users WHERE email = $1",
         [email]
       );
@@ -48,7 +48,7 @@ const register = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         //create a user data in DB
-        await db.client.query(
+        await db.pool.query(
           "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)",
           [userName, email, hashedPassword]
         );
@@ -58,6 +58,7 @@ const register = async (req: Request, res: Response) => {
       }
     }
   } catch (error) {
+
     console.log(error);
     res.status(500).json("Internal Server Error");
   }
@@ -77,7 +78,7 @@ const login = async (req: Request, res: Response) => {
 
   try {
     //connect the DB
-    db.connect;
+    // db.connect;
 
     //validate input
     if (!email || !password) {
@@ -90,7 +91,7 @@ const login = async (req: Request, res: Response) => {
       res.status(400).json({ message: "Invalid Email Address" });
     } else {
       // Execute a SELECT query to check if the email exists
-      const { rows } = await db.client.query(
+      const { rows } = await db.pool.query(
         "SELECT email FROM users WHERE email = $1",
         [email]
       );
@@ -103,7 +104,7 @@ const login = async (req: Request, res: Response) => {
         res.status(404).json({ message: "Email Not Registered" });
       } else {
         // Execute a SELECT query to get the password of the user with the given email
-        const result = await db.client.query(
+        const result = await db.pool.query(
           "SELECT password FROM users WHERE email = $1",
           [email]
         );
@@ -120,7 +121,7 @@ const login = async (req: Request, res: Response) => {
           res.status(401).json({ message: "Incorrect password" });
         } else {
           // Execute a SELECT query to get the id of the user with the given email
-          const { rows } = await db.client.query(
+          const { rows } = await db.pool.query(
             "SELECT * FROM users WHERE email = $1",
             [email]
           );
@@ -145,8 +146,8 @@ const login = async (req: Request, res: Response) => {
               userName: userName,
               message: "User logged-in successfully",
             });
+          }
         }
-      }
     }
   } catch (error) {
     console.log(error);

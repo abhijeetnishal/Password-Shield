@@ -8,6 +8,13 @@ const client = new pg_1.Client({
     connectionString: connectionString,
     ssl: { rejectUnauthorized: false },
 });
+const pool = new pg_1.Pool({
+    host: `${process.env.DATABASE_HOST}`,
+    user: `${process.env.DATABASE_USER}`,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
+});
 //Connect to the PostgreSQL server
 const connect = client.connect((err) => {
     if (err)
@@ -15,5 +22,5 @@ const connect = client.connect((err) => {
     else
         console.log("Connected to PostgreSQL database");
 });
-exports.default = { client, connect };
+exports.default = { client, connect, pool };
 //# sourceMappingURL=dbConnect.js.map

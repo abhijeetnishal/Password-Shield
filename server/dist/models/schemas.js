@@ -16,9 +16,9 @@ const dbConnect_1 = __importDefault(require("../config/dbConnect"));
 const createSchemas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //Connect to the PostgreSQL server
-        dbConnect_1.default.connect;
+        // db.connect;
         // Create the schemas
-        yield dbConnect_1.default.client.query(`
+        yield dbConnect_1.default.pool.query(`
             CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
             
             CREATE TABLE IF NOT EXISTS users (
