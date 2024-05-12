@@ -19,7 +19,7 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         const cookie = req.cookies.auth_cookie;
         if (cookie) {
             //check user is authenticated or not
-            const isAuth = jsonwebtoken_1.default.verify(cookie.token, process.env.secretKey);
+            const isAuth = jsonwebtoken_1.default.verify(cookie.token, process.env.SECRET_KEY);
             if (isAuth) {
                 next();
             }
