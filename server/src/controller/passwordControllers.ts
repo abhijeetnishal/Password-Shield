@@ -79,16 +79,16 @@ const createPassword = async (req: Request, res: Response) => {
         iv: base64data,
       };
 
-      await db.pool.query(
-        `INSERT INTO passwords(websiteName, password, iv, createdBy) 
-                    VALUES($1, $2, $3, $4)`,
+      const result = await db.pool.query(
+        `INSERT INTO passwords(websiteName, password, iv, createdBy)
+         VALUES($1, $2, $3, $4)
+         RETURNING _id, websiteName, password, iv`, // Specify the columns you want to retrieve
         [websiteName, encryptedPassword, base64data, userId]
       );
-      
-      res.status(201).json(newPassword);
+
+      res.status(201).json(result.rows[0]);
     }
   } catch (error) {
-   
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -135,14 +135,11 @@ const updatePassword = async (req: Request, res: Response) => {
 
         res.status(200).json(newPassword);
       }
-      
     }
   } catch (error) {
-   
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-
 };
 
 const deletePassword = async (req: Request, res: Response) => {
@@ -162,10 +159,8 @@ const deletePassword = async (req: Request, res: Response) => {
       res.status(404).json("not found");
     } else {
       //delete password with id
-      await db.pool.query(`DELETE FROM passwords WHERE _id = $1`, [
-        passwordId,
-      ]);
-      
+      await db.pool.query(`DELETE FROM passwords WHERE _id = $1`, [passwordId]);
+
       res.status(200).json("Password Deleted With id: " + passwordId);
     }
   } catch (error) {
