@@ -6,9 +6,10 @@ const isAuthenticated = async(req: Request, res: Response, next: NextFunction)=>
         //get token from cookie 
         const cookie = req.cookies.auth_cookie;
 
+
         if(cookie){
             //check user is authenticated or not
-            const isAuth = jwt.verify(cookie.token, process.env.secretKey);
+            const isAuth = jwt.verify(cookie.token, process.env.SECRET_KEY);
             if(isAuth){
                 next();
             }
