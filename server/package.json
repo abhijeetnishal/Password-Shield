@@ -41,6 +41,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.11.5",
+    "postgres-pool": "^8.1.5",
     "validator": "^13.9.0"
   }
 }

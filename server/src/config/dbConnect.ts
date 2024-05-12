@@ -1,4 +1,5 @@
-import { Client,Pool } from "pg";
+import { Client } from "pg";
+import { Pool } from 'postgres-pool';
 
 require("dotenv").config();
 //Create a new PostgreSQL client instance:
@@ -9,11 +10,8 @@ const client = new Client({
 });
 
 const pool = new Pool({   
-  host: `${process.env.DATABASE_HOST}`,
-  user: `${process.env.DATABASE_USER}`,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionString:connectionString,
+  ssl: { rejectUnauthorized: false },
 })  
 //Connect to the PostgreSQL server
 const connect = client.connect((err) => {
