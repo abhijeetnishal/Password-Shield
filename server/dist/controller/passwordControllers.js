@@ -84,9 +84,11 @@ const createPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 password: encryptedPassword,
                 iv: base64data,
             };
-            yield dbConnect_1.default.pool.query(`INSERT INTO passwords(websiteName, password, iv, createdBy) 
-                    VALUES($1, $2, $3, $4)`, [websiteName, encryptedPassword, base64data, userId]);
-            res.status(201).json(newPassword);
+            const result = yield dbConnect_1.default.pool.query(`INSERT INTO passwords(websiteName, password, iv, createdBy)
+         VALUES($1, $2, $3, $4)
+         RETURNING _id, websiteName, password, iv`, // Specify the columns you want to retrieve
+            [websiteName, encryptedPassword, base64data, userId]);
+            res.status(201).json(result.rows[0]);
         }
     }
     catch (error) {
@@ -147,9 +149,7 @@ const deletePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         else {
             //delete password with id
-            yield dbConnect_1.default.pool.query(`DELETE FROM passwords WHERE _id = $1`, [
-                passwordId,
-            ]);
+            yield dbConnect_1.default.pool.query(`DELETE FROM passwords WHERE _id = $1`, [passwordId]);
             res.status(200).json("Password Deleted With id: " + passwordId);
         }
     }
