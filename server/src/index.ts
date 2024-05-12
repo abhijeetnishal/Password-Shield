@@ -25,6 +25,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const corsOptions = {
   origin: isProduction ? process.env.CLIENT_PROD_URL : "*",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 200,
 };
