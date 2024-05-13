@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../styles/EditPassword.css'
 import SaveBtn from '../../assets/save-btn.png'
 
@@ -9,6 +9,11 @@ const EditPassword = (props) => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  //only on first render
+  useEffect(()=>{
+    setWebsiteName(item);
+  },[])
+  
   function updateFunc(){
     if(websiteName && password){
       updateBtn(true);
@@ -18,12 +23,11 @@ const EditPassword = (props) => {
       setMessage('Enter All Details');
     }
   }
-
   return (
     <div onClick={onClose} className='editOverlay'>
       <div onClick={(e) => {e.stopPropagation();}} className='editModalContainer'>
           <div className='editDataText'>
-            Edit {item} Data
+            {`Edit ${item}`}
           </div>
           <div className='websiteNameContainer'>
             <div>

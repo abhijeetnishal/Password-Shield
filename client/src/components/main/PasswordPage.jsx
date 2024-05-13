@@ -203,7 +203,7 @@ const PasswordPage = () => {
                                     {
                                         (showPopUpEdit && editId===mainData._id) && (
                                             <EditPassword
-                                                item = {mainData.websiteName}
+                                                item = {mainData.websitename}
                                                 onClose={handleCloseDialogEdit}
                                                 editData = {setUpdateData}
                                                 updateBtn = {setUpdateBtnClick}
