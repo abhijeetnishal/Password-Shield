@@ -25,7 +25,6 @@ const EditPassword = (props) => {
     });
     
     const data = await response.json();
-    console.log(data);
     setPasswordType('text');
     setPassword(data.decryptedPassword);
   }else{
@@ -63,7 +62,7 @@ const EditPassword = (props) => {
               type="text"
               value={websiteName}
               onChange={(e) => setWebsiteName(e.target.value)}
-              placeholder="Google"
+              placeholder="Website Name"
             />
           </div>
         </div>
@@ -79,7 +78,7 @@ const EditPassword = (props) => {
               type={passwordType}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="1234567sdfgh"
+              placeholder="Password"
             />
             <button
               onClick={() => decrypt(item._id)}
@@ -95,7 +94,7 @@ const EditPassword = (props) => {
         </div>
         <div className="editBtnContainer">
           <button className="cancelBtn" onClick={onClose}>
-            cancel{" "}
+            cancel
           </button>
           <button className="saveBtn" onClick={updateFunc}>
             <img className="saveBtnImg" src={SaveBtn} alt="" />
