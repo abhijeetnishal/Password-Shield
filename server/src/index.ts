@@ -23,7 +23,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 // CORS Configuration
 const corsOptions = {
-  origin: isProduction ? process.env.CLIENT_PROD_URL : "*",
+  origin: process.env.CLIENT_PROD_URL,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
   preflightContinue: false,
