@@ -11,7 +11,6 @@ This project is a password manager application that allows users to securely sto
 - [**How to Contribute**](#how-to-contribute)
 - [**Code Style**](#code-style)
 - [**Usage**](#usage)
-- [**Contact**](#contact)
   <br>
 
 ## Features
@@ -122,12 +121,6 @@ Contributions are welcome! If you would like to contribute to the project, pleas
 
 <br>
 
-## Code Style
-
-- Please make sure to follow the existing code style and formatting conventions when making contributions to the project.
-
-<br>
-
 ## Usage
 
 To use the application, follow these steps:
@@ -141,6 +134,3 @@ To use the application, follow these steps:
 
 <br>
 
-## Contact
-
-- If you have any questions or suggestions with the app, please feel free to contact on LinkedIn: https://www.linkedin.com/in/abhijeetkumar7565/
