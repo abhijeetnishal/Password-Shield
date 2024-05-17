@@ -67,11 +67,7 @@ To setup the application locally, follow these steps:
 
 6. create a Table (schema) by making a **_POST_** request to API endpoint **_http://localhost:8080/schema_** API endpoint using Postman or other API testing tools.
 
-7. Now navigate to client directory of project using commands:
-
-   ```bash
-      cd ../client
-   ```
+7. Now Navigate to the client directory using command "cd client" and create a .env.local file and copy contents of .env.sample file to .env.local file and add server URL.
 
 8. Install dependencies in client directory of project:
 
@@ -133,4 +129,3 @@ To use the application, follow these steps:
 6. Edit or delete a website name and password entry by clicking the corresponding button in the main page.
 
 <br>
-
