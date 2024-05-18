@@ -83,6 +83,9 @@ const Login = () => {
           <input type="password" value={password}  onChange={(e)=>setPassword(e.target.value)} placeholder="Enter your password" />
         </form>
         <div>
+        <div className='forgetpassword'>
+        <Link className='forgetpasswordtext' to='/sendemail'>Forget Password?</Link>
+        </div>
         {
           (validateEmail(email) && password) ? (
             <input type='button' className='button' onClick={handleSubmit} disabled={isLoading} value='Login' />

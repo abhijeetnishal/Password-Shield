@@ -8,6 +8,8 @@ import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import ErrorPage from './components/errorPage/ErrorPage'
 import ProtectedRoute from './ProtectedRoute'
+import ResetPassword from './components/auth/ResetPassword'
+import SetPassword from './components/auth/SetPassword'
 
 function App() {
   return(
@@ -16,6 +18,8 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/sendemail' element={<ResetPassword />} />
+          <Route path='/resetpassword' element={<SetPassword />} />
           <Route path='/login' element={<Login />} />
           <Route path="/create" element={<ProtectedRoute> <CreatePassword /> </ProtectedRoute>}/>
           <Route path="/view" element={<ProtectedRoute> <PasswordPage /> </ProtectedRoute>} />
