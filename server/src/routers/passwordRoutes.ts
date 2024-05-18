@@ -2,28 +2,23 @@ import express from "express";
 import isAuthenticated from "../middlewares/auth";
 import {
   createPassword,
-  decryptPassword,
   deletePassword,
   getAllPasswords,
   updatePassword,
-} from "../controller/passwordControllers";
+} from "../controllers/passwordControllers";
 
-//create a router for password
 const passwordRouter = express.Router();
 
-//create an endpoint to get all website names with password for particular user
-passwordRouter.get("/all/:id", isAuthenticated, getAllPasswords);
+// Endpoint to retrieve all passwords for the authenticated user
+passwordRouter.get("/passwords/", isAuthenticated, getAllPasswords);
 
-//create an endpoint to decrypt specific encrypted password
-passwordRouter.get("/specific/:id", isAuthenticated, decryptPassword);
+// Endpoint to create a new password entry
+passwordRouter.post("/passwords/", isAuthenticated, createPassword);
 
-//create an endpoint to create an website name with password
-passwordRouter.post("/", isAuthenticated, createPassword);
+// Endpoint to update password entry
+passwordRouter.put("/passwords/:id", isAuthenticated, updatePassword);
 
-//create an endpoint to update website and password data
-passwordRouter.put("/:id", isAuthenticated, updatePassword);
-
-//create an endpoint to delete website and password data
-passwordRouter.delete("/:id", isAuthenticated, deletePassword);
+// Endpoint to delete password entry
+passwordRouter.delete("/passwords/:id", isAuthenticated, deletePassword);
 
 export default passwordRouter;

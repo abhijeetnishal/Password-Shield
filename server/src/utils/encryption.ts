@@ -2,7 +2,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
-// set encryption algorithm
+// Encryption algorithm
 const algorithm = "aes-256-cbc";
 
 function getKey() {
@@ -15,27 +15,27 @@ function getKey() {
 }
 
 function encrypt(message: string) {
-  // random 16 digit initialization vector
+  // Random 16 digit initialization vector
   const iv: Buffer = crypto.randomBytes(16);
 
-  // encrypt the string using encryption algorithm, private key and initialization vector
+  // Encrypt the string using encryption algorithm, private key and initialization vector
   const key = getKey();
   const cipher = crypto.createCipheriv(algorithm, key, iv);
 
   let encryptedData = cipher.update(message, "utf-8", "hex");
   encryptedData += cipher.final("hex");
 
-  // convert the initialization vector to base64 string
+  // Convert the initialization vector to base64 string
   const base64data = iv.toString("base64");
 
   return { encryptedData, base64data };
 }
 
 function decrypt(encryptedData: string, iv: string) {
-  // convert initialize vector from base64 to buffer
+  // Convert initialize vector from base64 to buffer
   const originalData = Buffer.from(iv, "base64");
 
-  // decrypt the string using encryption algorithm and private key
+  // Decrypt the string using encryption algorithm and private key
   const key = getKey();
   const decipher = crypto.createDecipheriv(algorithm, key, originalData);
 

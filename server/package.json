@@ -26,7 +26,6 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.3.3",
     "@types/pg": "^8.10.2",
-    "@types/validator": "^13.7.17",
     "nodemon": "^2.0.22",
     "pre-commit": "^1.2.2",
     "rimraf": "^5.0.1",
@@ -41,7 +40,6 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.11.5",
-    "postgres-pool": "^8.1.5",
-    "validator": "^13.9.0"
+    "postgres-pool": "^8.1.5"
   }
 }
