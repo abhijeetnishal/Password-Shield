@@ -8,32 +8,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const auth_1 = require("../utils/auth");
 const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        //get token from cookie 
-        const cookie = req.cookies.auth_cookie;
-        if (cookie) {
-            //check user is authenticated or not
-            const isAuth = jsonwebtoken_1.default.verify(cookie.token, process.env.SECRET_KEY);
-            if (isAuth) {
+        // Get access token from request header
+        const token = req.header("auth-token");
+        // Check token exists or not
+        if (!token) {
+            return res
+                .status(401)
+                .json({ message: "Authentication token is missing" });
+        }
+        else {
+            // Check user is authenticated or not
+            const decoded = (0, auth_1.verifyToken)(token);
+            if (decoded) {
+                req._id = decoded._id; // Assign the userId from the decoded token to req._id
                 next();
             }
             else {
-                return res.status(401).json({ message: 'user not authenticated' });
+                return res.status(401).json({ message: "Invalid token" });
             }
-        }
-        else {
-            return res.status(401).json({ message: 'user not authenticated' });
         }
     }
     catch (error) {
-        //console.log(error);
-        return res.status(401).json({ message: 'Internal server error' });
+        console.log(error);
+        return res.status(401).json({ message: "Internal server error" });
     }
 });
 exports.default = isAuthenticated;

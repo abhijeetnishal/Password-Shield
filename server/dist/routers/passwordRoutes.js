@@ -5,18 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const auth_1 = __importDefault(require("../middlewares/auth"));
-const passwordControllers_1 = require("../controller/passwordControllers");
-//create a router for password
+const passwordControllers_1 = require("../controllers/passwordControllers");
 const passwordRouter = express_1.default.Router();
-//create an endpoint to get all website names with password for particular user
-passwordRouter.get("/all/:id", auth_1.default, passwordControllers_1.getAllPasswords);
-//create an endpoint to decrypt specific encrypted password
-passwordRouter.get("/specific/:id", auth_1.default, passwordControllers_1.decryptPassword);
-//create an endpoint to create an website name with password
-passwordRouter.post("/", auth_1.default, passwordControllers_1.createPassword);
-//create an endpoint to update website and password data
-passwordRouter.put("/:id", auth_1.default, passwordControllers_1.updatePassword);
-//create an endpoint to delete website and password data
-passwordRouter.delete("/:id", auth_1.default, passwordControllers_1.deletePassword);
+// Endpoint to retrieve all passwords for the authenticated user
+passwordRouter.get("/passwords/", auth_1.default, passwordControllers_1.getAllPasswords);
+// Endpoint to create a new password entry
+passwordRouter.post("/passwords/", auth_1.default, passwordControllers_1.createPassword);
+// Endpoint to update password entry
+passwordRouter.put("/passwords/:id", auth_1.default, passwordControllers_1.updatePassword);
+// Endpoint to delete password entry
+passwordRouter.delete("/passwords/:id", auth_1.default, passwordControllers_1.deletePassword);
 exports.default = passwordRouter;
 //# sourceMappingURL=passwordRoutes.js.map

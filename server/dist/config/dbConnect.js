@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.pool = exports.connect = exports.client = void 0;
 const pg_1 = require("pg");
 const postgres_pool_1 = require("postgres-pool");
 require("dotenv").config();
@@ -9,10 +10,12 @@ const client = new pg_1.Client({
     connectionString: connectionString,
     ssl: { rejectUnauthorized: false },
 });
+exports.client = client;
 const pool = new postgres_pool_1.Pool({
     connectionString: connectionString,
     ssl: { rejectUnauthorized: false },
 });
+exports.pool = pool;
 //Connect to the PostgreSQL server
 const connect = client.connect((err) => {
     if (err)
@@ -20,5 +23,5 @@ const connect = client.connect((err) => {
     else
         console.log("Connected to PostgreSQL database");
 });
-exports.default = { client, connect, pool };
+exports.connect = connect;
 //# sourceMappingURL=dbConnect.js.map

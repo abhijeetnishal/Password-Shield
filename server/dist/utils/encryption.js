@@ -7,7 +7,7 @@ exports.decrypt = exports.encrypt = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// set encryption algorithm
+// Encryption algorithm
 const algorithm = "aes-256-cbc";
 function getKey() {
     const originalKey = process.env.PRIVATE_KEY; // Replace with your key
@@ -17,22 +17,22 @@ function getKey() {
     return key;
 }
 function encrypt(message) {
-    // random 16 digit initialization vector
+    // Random 16 digit initialization vector
     const iv = crypto_1.default.randomBytes(16);
-    // encrypt the string using encryption algorithm, private key and initialization vector
+    // Encrypt the string using encryption algorithm, private key and initialization vector
     const key = getKey();
     const cipher = crypto_1.default.createCipheriv(algorithm, key, iv);
     let encryptedData = cipher.update(message, "utf-8", "hex");
     encryptedData += cipher.final("hex");
-    // convert the initialization vector to base64 string
+    // Convert the initialization vector to base64 string
     const base64data = iv.toString("base64");
     return { encryptedData, base64data };
 }
 exports.encrypt = encrypt;
 function decrypt(encryptedData, iv) {
-    // convert initialize vector from base64 to buffer
+    // Convert initialize vector from base64 to buffer
     const originalData = Buffer.from(iv, "base64");
-    // decrypt the string using encryption algorithm and private key
+    // Decrypt the string using encryption algorithm and private key
     const key = getKey();
     const decipher = crypto_1.default.createDecipheriv(algorithm, key, originalData);
     let decryptedData = decipher.update(encryptedData, "hex", "utf-8");
@@ -40,4 +40,4 @@ function decrypt(encryptedData, iv) {
     return decryptedData;
 }
 exports.decrypt = decrypt;
-//# sourceMappingURL=encryptDecrypt.js.map
+//# sourceMappingURL=encryption.js.map
