@@ -29,6 +29,7 @@ const createSchemas = async(req: Request, res: Response)=> {
             )
             `
         );
+        console.log("helo")
         res.status(200).json('Schemas created successfully!');
         
     } 

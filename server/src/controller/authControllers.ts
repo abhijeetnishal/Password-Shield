@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+const nodemailer = require('nodemailer');
 
 /*
 1. Take user data: {first name, last name, email, phone(optional), password}
@@ -155,9 +156,74 @@ const login = async (req: Request, res: Response) => {
   }
 };
 
+const sendPasswordResetEmail = async (req: Request, res: Response) => {
+  try {
+    const {email}=req.body;
+    
+    const result = await db.pool.query(
+      "SELECT email FROM public.users WHERE email = $1",
+      [email]
+    );
+   
+    if(result.rowCount==0){
+      res.json({status:false,error:false});
+      console.log(result,"result");
+      return;
+    }
+    const resetLink=process.env.CLIENT_PROD_URL+`/resetpassword?email=${email}`;
+
+    // Create transporter
+    let transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_ADDRESS, // Your email address
+        pass: process.env.GOOGLE_APP_PASSWORD, // Your email password or application-specific password
+      },
+    });
+    
+    // Define email options
+    let mailOptions = {
+      from:process.env.EMAIL_ADDRESS, // Sender name and address
+      to: email, // Recipient email address
+      subject: 'Password Reset', // Email subject
+      html: `<p>You have requested a password reset. Click <a href="${resetLink}">here</a> to reset your password.</p>`,
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+    res.json({status:true,error:false})
+    console.log('Password reset email sent successfully.');
+  } catch (error) {
+  res.json({status:false,"error":true})
+    console.error('Error sending password reset email: ', error);
+  }
+};
+const resetpassword=async (req: Request, res: Response)=>{
+  const { email,password } = req.body;
+      // Execute a SELECT query to check if the email exists
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const result = await db.pool.query(
+          "UPDATE users SET password = $1 WHERE email = $2",
+          [hashedPassword, email]
+        );
+       
+        if (result.rowCount === 0) {
+          res.status(404).json({ message: "Email not found" ,status:false,error:false});
+          return;
+        }
+      
+        res.status(200).json({ message: "Password updated successfully",status:true,error:false });
+      } catch (error) {
+        console.error("Error updating password: ", error);
+        res.status(500).json({ message: "Internal Server Error",status:false,error:true });
+      }
+  
+}
+
 //Clear the cookie to logout
 const logout = (req: Request, res: Response) => {
   res.clearCookie("auth_cookie").json("user logged out");
 };
 
-export { register, login, logout };
+export { register, login, logout,resetpassword,sendPasswordResetEmail };

@@ -5,7 +5,7 @@ import express from "express";
 const userRouter = express.Router();
 
 //import methods from authController
-import { login, logout, register } from "../controller/authControllers";
+import { login, logout, register, sendPasswordResetEmail,resetpassword } from "../controller/authControllers";
 
 //create an endpoint for registering a user.
 userRouter.post("/register", register);
@@ -15,6 +15,8 @@ userRouter.post("/login", login);
 
 //create an endpoint for logout
 userRouter.post("/logout", logout);
+userRouter.post("/sendemail", sendPasswordResetEmail);
+userRouter.post("/resetpassword", resetpassword);
 
 //export to router to use in other files (index.js file)
 export default userRouter;
