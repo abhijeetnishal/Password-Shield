@@ -17,7 +17,7 @@ const Register = () => {
     setIsLoading(true);
     setBtnClick(true);
     e.preventDefault();
-    const response = await fetch(`http://localhost:8080/auth/register`,{
+    const response = await fetch(`${process.env.REACT_APP_HOST_URL}/auth/register`,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -62,7 +62,6 @@ const Register = () => {
   if(redirect){
     return <Navigate to={'/login'} />
   }
-  
 
   return (
     <div className='register'>
