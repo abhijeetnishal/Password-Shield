@@ -5,13 +5,27 @@ import db from "../config/dbConnect";
 const getAllPasswords = async (req: Request, res: Response) => {
   //get user Id whose data need to get
   const userId = req.params.id;
+  const {query,offset,limit}=req.query;
+  
+  const limitString=+limit,offsetString=+offset;
+  
   try {
     // db.connect;
     //get data from DB
-    const { rows } = await db.pool.query(
-      `SELECT * FROM passwords WHERE createdBy = $1`,
+
+      const { rows } =(query)?await db.pool.query(
+      `select * from passwords where 
+      createdBy=$1 and
+      websitename ilike '%' || $2 || '%' order by
+      timestamps offset $3 limit $4;`,
+      [userId,query,offsetString,limitString]
+    ):await db.pool.query(
+      `select * from passwords where 
+      createdBy=$1 order by
+      timestamps;`,
       [userId]
     );
+
     //check if data contains any value or not
     if (rows.length === 0) return res.status(200).json({});
     else {
