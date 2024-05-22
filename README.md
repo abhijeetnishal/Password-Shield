@@ -11,7 +11,6 @@ This project is a password manager application that allows users to securely sto
 - [**How to Contribute**](#how-to-contribute)
 - [**Code Style**](#code-style)
 - [**Usage**](#usage)
-- [**Contact**](#contact)
   <br>
 
 ## Features
@@ -68,11 +67,7 @@ To setup the application locally, follow these steps:
 
 6. create a Table (schema) by making a **_POST_** request to API endpoint **_http://localhost:8080/schema_** API endpoint using Postman or other API testing tools.
 
-7. Now navigate to client directory of project using commands:
-
-   ```bash
-      cd ../client
-   ```
+7. Now Navigate to the client directory using command "cd client" and create a .env.local file and copy contents of .env.sample file to .env.local file and add server URL.
 
 8. Install dependencies in client directory of project:
 
@@ -122,12 +117,6 @@ Contributions are welcome! If you would like to contribute to the project, pleas
 
 <br>
 
-## Code Style
-
-- Please make sure to follow the existing code style and formatting conventions when making contributions to the project.
-
-<br>
-
 ## Usage
 
 To use the application, follow these steps:
@@ -140,7 +129,3 @@ To use the application, follow these steps:
 6. Edit or delete a website name and password entry by clicking the corresponding button in the main page.
 
 <br>
-
-## Contact
-
-- If you have any questions or suggestions with the app, please feel free to contact on LinkedIn: https://www.linkedin.com/in/abhijeetkumar7565/
