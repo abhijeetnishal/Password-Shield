@@ -8,10 +8,11 @@ const updateUserProfile = (id: string, data: Object) => {
   });
 };
 
-const getUserProfile = (id: string) => {
+const getUserProfile = (token: string) => {
   return request({
-    url: `/v1/api/users/${id}`,
+    url: `/v1/api/users`,
     method: "GET",
+    headers: { "auth-token": token },
   });
 };
 

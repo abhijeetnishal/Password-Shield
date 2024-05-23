@@ -21,6 +21,7 @@ const request = async function (options: any) {
         method: options.method || "GET",
         headers: {
           "Content-Type": "application/json",
+          ...options?.headers,
         },
         body: options.body ? JSON.stringify(options.body) : undefined,
       }
