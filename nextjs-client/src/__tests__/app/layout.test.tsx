@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import RootLayout from "@/app/layout";
+import RootLayout from "@/src/app/layout";
 
 const mockProps = {
   children: <div data-testid="mock-children" />,

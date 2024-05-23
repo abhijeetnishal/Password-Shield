@@ -1,4 +1,4 @@
-import LandingPage from "@/app/main/landingPage";
+import LandingPage from "@/src/app/main/landingPage";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 

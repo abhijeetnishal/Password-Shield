@@ -1,4 +1,4 @@
-import ErrorPage from "@/app/error";
+import ErrorPage from "@/src/app/error";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
