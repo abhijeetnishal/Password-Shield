@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { pool } from "../config/dbConnect";
-import { getUserDetails } from "../services/user";
+import { getDetails } from "../services/user";
 import { encrypt } from "../utils/encryption";
 import { getPasswordDetails } from "../services/passwords";
 
@@ -14,7 +14,7 @@ const getAllPasswords = async (req: AuthenticatedRequest, res: Response) => {
   const id = req._id;
 
   try {
-    const user = await getUserDetails("_id", id);
+    const user = await getDetails("_id", id);
 
     if (user) {
       // Get data from DB
@@ -39,7 +39,7 @@ const getAllPasswords = async (req: AuthenticatedRequest, res: Response) => {
 const createPassword = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const id = req._id;
-    const user = await getUserDetails("_id", id);
+    const user = await getDetails("_id", id);
 
     if (user) {
       const { title, description, websiteName, password } = req.body;
@@ -75,7 +75,7 @@ const createPassword = async (req: AuthenticatedRequest, res: Response) => {
 const updatePassword = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const id = req._id;
-    const user = await getUserDetails("_id", id);
+    const user = await getDetails("_id", id);
 
     if (user) {
       const { id } = req.params;
@@ -144,7 +144,7 @@ const updatePassword = async (req: AuthenticatedRequest, res: Response) => {
 const deletePassword = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const id = req._id;
-    const user = await getUserDetails("_id", id);
+    const user = await getDetails("_id", id);
 
     if (user) {
       const { id } = req.params;

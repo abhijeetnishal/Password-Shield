@@ -1,9 +1,10 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import schemaRouter from "./routers/schemaRoute";
-import userRouter from "./routers/authRoutes";
-import passwordRouter from "./routers/passwordRoutes";
+import schemaRouter from "./routers/schema";
+import passwordRouter from "./routers/password";
+import authRouter from "./routers/auth";
+import { userRouter } from "./routers/user";
 
 // Configure env
 dotenv.config();
@@ -41,7 +42,10 @@ app.set("trust proxy", true);
 app.use(schemaRouter);
 
 // Auth Router
-app.use("/auth/v1/", userRouter);
+app.use("/auth/v1/", authRouter);
+
+// User Router
+app.use("/api/v1/", userRouter);
 
 // User router
 app.use("/api/v1/", passwordRouter);

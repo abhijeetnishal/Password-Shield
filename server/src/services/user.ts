@@ -1,6 +1,6 @@
 import { pool } from "../config/dbConnect";
 
-const getUserDetails = async (queryKey: string, queryValue: string) => {
+const getDetails = async (queryKey: string, queryValue: string) => {
   try {
     const { rows } = await pool.query(
       `SELECT * FROM users WHERE ${queryKey} = $1`,
@@ -15,4 +15,4 @@ const getUserDetails = async (queryKey: string, queryValue: string) => {
   }
 };
 
-export { getUserDetails };
+export { getDetails };

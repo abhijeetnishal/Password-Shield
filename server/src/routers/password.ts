@@ -5,7 +5,7 @@ import {
   deletePassword,
   getAllPasswords,
   updatePassword,
-} from "../controllers/passwordControllers";
+} from "../controllers/password";
 
 const passwordRouter = express.Router();
 

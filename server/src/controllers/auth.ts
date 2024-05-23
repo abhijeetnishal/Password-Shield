@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { Request, Response } from "express";
 import { generateToken, isValidEmail } from "../utils/auth";
-import { getUserDetails } from "../services/user";
+import { getDetails } from "../services/user";
 
 /*
 1. Take user data: {first name, last name, email, phone(optional), password}
@@ -26,7 +26,7 @@ const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid email address" });
     } else {
       // Check email registered or not
-      const emailExists = await getUserDetails("email", email);
+      const emailExists = await getDetails("email", email);
 
       if (emailExists) {
         return res.status(401).json({ message: "Email already registered" });
@@ -76,7 +76,7 @@ const login = async (req: Request, res: Response) => {
     else if (!isValidEmail(email)) {
       return res.status(400).json({ message: "Invalid email address" });
     } else {
-      const emailExists = await getUserDetails("email", email);
+      const emailExists = await getDetails("email", email);
 
       // Check if user registered or not
       if (!emailExists) {
