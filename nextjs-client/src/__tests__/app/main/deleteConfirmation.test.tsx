@@ -1,4 +1,4 @@
-import DeleteConfirmation from "@/src/app/main/deleteConfirmation";
+import DeleteConfirmation from "@/src/components/Passwords/deleteConfirmation";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 

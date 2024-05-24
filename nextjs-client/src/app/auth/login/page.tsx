@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import useFetch from "@/src/hooks/useFetch";
 import { AuthService } from "@/src/services/AuthService";
-import LoadingSpinner from "../../layout/loadingSpinner";
+import LoadingSpinner from "@/src/components/Loaders/LoadingSpinner";
 import { setCookie } from "cookies-next";
 import useAuthStore from "@/src/store/authStore";
 import useProfileStore from "@/src/store/profileStore";
@@ -106,7 +106,10 @@ const Login = () => {
           <p className="">
             Don&apos;t have an account?{" "}
             <span>
-              <Link className="text-teal-600 hover:underline" href="/register">
+              <Link
+                className="text-teal-600 hover:underline"
+                href="/auth/register"
+              >
                 Register
               </Link>
             </span>

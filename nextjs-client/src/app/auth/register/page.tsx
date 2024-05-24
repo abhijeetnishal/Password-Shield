@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import LoadingSpinner from "../../layout/loadingSpinner";
+import LoadingSpinner from "@/src/components/Loaders/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import useFetch from "@/src/hooks/useFetch";
@@ -41,7 +41,7 @@ const Register = () => {
   useEffect(() => {
     const { code } = registerData;
 
-    if (code === 200) {
+    if (code === 201) {
       const { data } = registerData;
       const token = data.token;
 
@@ -126,7 +126,10 @@ const Register = () => {
           <p className="">
             Already have an account?{" "}
             <span>
-              <Link className="text-teal-600 hover:underline" href="/login">
+              <Link
+                className="text-teal-600 hover:underline"
+                href="/auth/login"
+              >
                 Login
               </Link>
             </span>

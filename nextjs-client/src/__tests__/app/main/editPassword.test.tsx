@@ -1,4 +1,4 @@
-import EditPassword from "@/src/app/main/editPassword";
+import EditPassword from "@/src/components/Passwords/editPassword";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 

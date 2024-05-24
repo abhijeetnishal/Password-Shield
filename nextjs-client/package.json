@@ -13,7 +13,6 @@
     "cookies-next": "^4.2.1",
     "next": "14.2.3",
     "react": "^18",
-    "react-cookie": "^7.1.4",
     "react-dom": "^18",
     "zustand": "^4.5.2"
   },

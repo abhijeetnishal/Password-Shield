@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import DeleteConfirmation from "../main/deleteConfirmation";
-import LoadingSpinner from "../layout/loadingSpinner";
-import EditPassword from "../main/editPassword";
+import DeleteConfirmation from "../../components/Passwords/deleteConfirmation";
+import LoadingSpinner from "@/src/components/Loaders/LoadingSpinner";
+import EditPassword from "../../components/Passwords/editPassword";
 import CreatePassword from "../create/page";
 import commonWebsiteSymbolImg from "@/public/assets/commonWebsiteSymbol.png";
 import eye from "@/public/assets/eye-image.png";
@@ -13,7 +13,6 @@ import Image from "next/image";
 import AuthHoc from "@/src/components/AuthHoc";
 import useAuthStore from "@/src/store/authStore";
 import useFetch from "@/src/hooks/useFetch";
-import useProfileStore from "@/src/store/profileStore";
 import { PasswordsService } from "@/src/services/PasswordService";
 
 const PasswordPage = () => {
