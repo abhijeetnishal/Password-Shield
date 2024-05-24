@@ -1,4 +1,4 @@
-import Register from "@/src/app/register/page";
+import Register from "@/src/app/auth/register/page";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 

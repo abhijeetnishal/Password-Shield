@@ -1,4 +1,4 @@
-import Login from "@/src/app/login/page";
+import Login from "@/src/app/auth/login/page";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 

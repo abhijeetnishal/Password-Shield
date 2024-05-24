@@ -1,8 +1,8 @@
 import React from "react";
-import getStartedImage from "../../public/assets/getStartedImage.png";
-import rightArrow from "../../public/assets/rightArrow.png";
-import subMoreInfoImg1 from "../../public/assets/subMoreInfoImg1.png";
-import subMoreInfoImg2 from "../../public/assets/subMoreInfoImg2.png";
+import getStartedImage from "@/public/assets/getStartedImage.png";
+import rightArrow from "@/public/assets/rightArrow.png";
+import subMoreInfoImg1 from "@/public/assets/subMoreInfoImg1.png";
+import subMoreInfoImg2 from "@/public/assets/subMoreInfoImg2.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,7 +22,7 @@ const LandingPage = () => {
           </p>
           <Link
             data-testid="get-started-link"
-            href="/register"
+            href="/auth/register"
             className="bg-cyan-500 rounded text-white flex flex-row py-2 px-4"
           >
             <div className=""> Get Started </div>

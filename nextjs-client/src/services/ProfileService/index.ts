@@ -2,7 +2,7 @@ import request from "../request";
 
 const updateUserProfile = (id: string, data: Object) => {
   return request({
-    url: `/v1/api/users/${id}`,
+    url: `/api/v1/users/${id}`,
     method: "PUT",
     body: data,
   });
@@ -10,7 +10,7 @@ const updateUserProfile = (id: string, data: Object) => {
 
 const getUserProfile = (token: string) => {
   return request({
-    url: `/v1/api/users`,
+    url: `/api/v1/users`,
     method: "GET",
     headers: { "auth-token": token },
   });

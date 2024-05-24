@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useFetch from "./useFetch";
-import { ProfileService } from "@/src/services/ProfileServices";
+import { ProfileService } from "@/src/services/ProfileService";
 import { deleteCookie } from "cookies-next";
 import useAuthStore from "@/src/store/authStore";
 import useProfileStore from "@/src/store/profileStore";
@@ -12,13 +12,13 @@ interface userObject {
   token: string;
 }
 
-export default function useUser({ redirectTo = "", token }: userObject) {
+export default function useAuth({ redirectTo = "", token }: userObject) {
   const router = useRouter();
 
   const isAuth = useAuthStore((state) => state.authToken);
   const profile = useProfileStore((state) => state.profileDetails);
 
-  const setIsAuth = useAuthStore((state) => state.setAuthToken);
+  const setAuthToken = useAuthStore((state) => state.setAuthToken);
   const setProfile = useProfileStore((state) => state.setProfileDetails);
 
   let [{ data: user, isLoading, isError }, getMyDetails] = useFetch(null);
@@ -40,7 +40,7 @@ export default function useUser({ redirectTo = "", token }: userObject) {
         if (redirectTo !== "") {
           router.replace(redirectTo);
         }
-        setIsAuth(null);
+        setAuthToken(null);
       }
     } else if (isError) {
       // If the token was invalid we first remove it from cookie and then redirect
@@ -49,7 +49,7 @@ export default function useUser({ redirectTo = "", token }: userObject) {
       if (redirectTo !== "") {
         router.replace(redirectTo);
       }
-      setIsAuth(null);
+      setAuthToken(null);
     }
   }, [user, isError, redirectTo]);
 
@@ -58,7 +58,7 @@ export default function useUser({ redirectTo = "", token }: userObject) {
       router.replace(redirectTo);
     } else {
       if (!isAuth && token) {
-        setIsAuth(token);
+        setAuthToken(token);
       }
 
       if (!profile.length) {

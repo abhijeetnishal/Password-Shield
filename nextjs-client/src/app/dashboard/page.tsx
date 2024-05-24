@@ -2,28 +2,25 @@
 import React, { useEffect, useState } from "react";
 import DeleteConfirmation from "../main/deleteConfirmation";
 import LoadingSpinner from "../layout/loadingSpinner";
-import { Cookies } from "react-cookie";
 import EditPassword from "../main/editPassword";
 import CreatePassword from "../create/page";
-import commonWebsiteSymbolImg from "../../public/assets/commonWebsiteSymbol.png";
-import eye from "../../public/assets/eye-image.png";
-import cutEye from "../../public/assets/cut-eye-image.png";
-import editBtnImg from "../../public/assets/editBtnImg.png";
-import deleteBtn from "../../public/assets/deleteBtnblue.png";
+import commonWebsiteSymbolImg from "@/public/assets/commonWebsiteSymbol.png";
+import eye from "@/public/assets/eye-image.png";
+import cutEye from "@/public/assets/cut-eye-image.png";
+import editBtnImg from "@/public/assets/editBtnImg.png";
+import deleteBtn from "@/public/assets/deleteBtnblue.png";
 import Image from "next/image";
+import AuthHoc from "@/src/components/AuthHoc";
+import useAuthStore from "@/src/store/authStore";
+import useFetch from "@/src/hooks/useFetch";
+import useProfileStore from "@/src/store/profileStore";
+import { PasswordsService } from "@/src/services/PasswordService";
 
 const PasswordPage = () => {
-  const cookies = new Cookies();
-  const cookieValue = cookies.get("myCookie");
-  const [data, setData] = useState<
-    { websitename?: string; websiteName?: string; _id: string }[] | null
-  >(null);
-  const [decryptedPassword, setDecryptedPassword] = useState<{
-    decryptedPassword: string;
-    id: string;
-  } | null>(null);
+  const token = useAuthStore((state) => state.authToken);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [passwordsData, setPasswordsData] = useState([]);
+  const [decryptedPassword, setDecryptedPassword] = useState(null);
 
   const [showPopUpDelete, setShowPopUpDelete] = useState(false);
   const [showPopUpEdit, setShowPopUpEdit] = useState(false);
@@ -33,52 +30,31 @@ const PasswordPage = () => {
   const [editId, setEditId] = useState<string | null>(null);
 
   const [updateData, setUpdateData] = useState({
-    websiteName: "",
+    website_name: "",
     password: "",
   });
 
   const [updateBtnClick, setUpdateBtnClick] = useState(false);
 
-  const [dataLength, setDataLength] = useState(0);
-
-  const [containerHeight, setContainerHeight] = useState(0);
-
   const [isPasswordEyeBtnClicked, setIsPasswordEyeBtnClicked] = useState(false);
 
+  const [{ data, isLoading, isError }, getPasswordsAPI] = useFetch(null);
+
   useEffect(() => {
-    // declare the async data fetching function
-    setIsLoading(true);
-    const fetchData = async () => {
-      // get the data from the api
-      const response = await fetch(
-        `${process.env.REACT_APP_HOST_URL}/passwords/all/${cookieValue._id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+    if (token) {
+      getPasswordsAPI(() => () => PasswordsService.getUserPasswords(token));
+    }
+  }, [token]);
 
-      // convert the data to json
-      const data = await response.json();
-      setData(data);
+  useEffect(() => {
+    const { code } = data;
 
-      setDataLength(data.length);
+    if (code === 200) {
+      const { data: result } = data;
 
-      const height = data.length * 140; // Assuming each item is 50px tall
-      setContainerHeight(height);
-      //console.log(data);
-      setIsLoading(false);
-    };
-
-    // call the function
-    fetchData()
-      // make sure to catch any error
-      .catch(console.error);
-    //eslint-disable-next-line
-  }, []);
+      setPasswordsData(result);
+    }
+  }, [data, isError]);
 
   async function decrypt(passwordId: string) {
     setIsPasswordEyeBtnClicked(!isPasswordEyeBtnClicked);
@@ -103,7 +79,7 @@ const PasswordPage = () => {
     setUpdateData(updateData);
     //console.log(updateData);
 
-    const websiteName = updateData.websiteName;
+    const websiteName = updateData.website_name;
     const password = updateData.password;
     if (websiteName !== "" && password !== "" && updateBtnClick) {
       //console.log(updateData);
@@ -170,35 +146,22 @@ const PasswordPage = () => {
   }
 
   return (
-    <div
-      data-testid="password-page"
-      className=""
-      style={{ height: `${containerHeight}px` }}
-    >
-      <div className=" flex flex-row justify-between items-center px-2 py-4">
-        <h1 className="font-medium">Your Saved Passwords</h1>
-        <button
-          className="text-white bg-teal-500 p-1 rounded"
-          onClick={() => handleAddClick()}
-        >
-          <p className="">+Add New</p>
-        </button>
-        {showPopUpAdd && cookieValue._id && (
-          <CreatePassword onClose={handleCloseDialogAdd} />
-        )}
-      </div>
+    <AuthHoc>
+      <div data-testid="password-page" className="">
+        <div className=" flex flex-row justify-between items-center px-2 py-4">
+          <h1 className="font-medium">Your Saved Passwords</h1>
+          <button
+            className="text-white bg-teal-500 p-1 rounded"
+            onClick={() => handleAddClick()}
+          >
+            <p className="">+Add New</p>
+          </button>
+          {showPopUpAdd && <CreatePassword onClose={handleCloseDialogAdd} />}
+        </div>
 
-      <div className=" m-2 p-2 lg:w-1/2">
-        {data !== null && dataLength && !isLoading ? (
-          data.map(
-            (
-              mainData: {
-                websitename?: string;
-                websiteName?: string;
-                _id: any;
-              },
-              index: number
-            ) => (
+        <div className=" m-2 p-2 lg:w-1/2">
+          {passwordsData && passwordsData.length > 0 ? (
+            passwordsData.map((data: any, index: number) => (
               <div className="border rounded" key={index}>
                 <div className="flex flex-row items-center justify-start">
                   <div>
@@ -211,9 +174,9 @@ const PasswordPage = () => {
                     />
                   </div>
                   <div className="flex flex-col m-1 items-start  justify-center">
-                    <div className="">{mainData.websitename}</div>
+                    <div className="">{data.website_name}</div>
                     <div className="flex flex-row">
-                      <p className="text-sm text-gray-400">
+                      {/* <p className="text-sm text-gray-400">
                         Password:{" "}
                         {isPasswordEyeBtnClicked &&
                         decryptedPassword &&
@@ -230,7 +193,7 @@ const PasswordPage = () => {
                         ) : (
                           <Image src={eye} alt="" className="" />
                         )}
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
@@ -238,14 +201,14 @@ const PasswordPage = () => {
                   <div className="">
                     <button
                       className="flex border border-cyan-600 rounded p-1  flex-row items-center text-cyan-600"
-                      onClick={() => handleEditClick(mainData._id)}
+                      onClick={() => handleEditClick(data._id)}
                     >
                       <Image className="" src={editBtnImg} alt="" />
                       <p className="ml-1 text-sm">Edit</p>
                     </button>
-                    {showPopUpEdit && editId === mainData._id && (
+                    {showPopUpEdit && editId === data._id && (
                       <EditPassword
-                        item={mainData.websiteName || ""}
+                        item={data.website_name || ""}
                         onClose={handleCloseDialogEdit}
                         editData={setUpdateData}
                         updateBtn={setUpdateBtnClick}
@@ -255,30 +218,30 @@ const PasswordPage = () => {
                   <div className="">
                     <button
                       className="m-1 border rounded border-cyan-600  p-1 flex flex-row items-center text-cyan-600"
-                      onClick={() => handleDeleteClick(mainData._id)}
+                      onClick={() => handleDeleteClick(data._id)}
                     >
                       <Image className="" src={deleteBtn} alt="" />
                       <div className="ml-1 text-sm">Delete</div>
                     </button>
-                    {showPopUpDelete && deleteId === mainData._id && (
+                    {showPopUpDelete && deleteId === data._id && (
                       <DeleteConfirmation
-                        passwordId={mainData._id}
-                        item={mainData.websiteName || ""}
+                        passwordId={data._id}
+                        item={data.website_name || ""}
                         onClose={handleCloseDialogDelete}
                       />
                     )}
                   </div>
                 </div>
               </div>
-            )
-          )
-        ) : isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <div>You haven&apos;t saved any password.</div>
-        )}
+            ))
+          ) : isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <div>You haven&apos;t saved any password.</div>
+          )}
+        </div>
       </div>
-    </div>
+    </AuthHoc>
   );
 };
 
