@@ -37,7 +37,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else {
             // Check email registered or not
-            const emailExists = yield (0, user_1.getUserDetails)("email", email);
+            const emailExists = yield (0, user_1.getDetails)("email", email);
             if (emailExists) {
                 return res.status(401).json({ message: "Email already registered" });
             }
@@ -82,7 +82,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(400).json({ message: "Invalid email address" });
         }
         else {
-            const emailExists = yield (0, user_1.getUserDetails)("email", email);
+            const emailExists = yield (0, user_1.getDetails)("email", email);
             // Check if user registered or not
             if (!emailExists) {
                 return res.status(404).json({ message: "Email not registered" });
@@ -114,4 +114,4 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.login = login;
-//# sourceMappingURL=authControllers.js.map
+//# sourceMappingURL=auth.js.map

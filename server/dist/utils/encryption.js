@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decrypt = exports.encrypt = void 0;
+exports.encrypt = void 0;
 const crypto_1 = __importDefault(require("crypto"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -29,15 +29,4 @@ function encrypt(message) {
     return { encryptedData, base64data };
 }
 exports.encrypt = encrypt;
-function decrypt(encryptedData, iv) {
-    // Convert initialize vector from base64 to buffer
-    const originalData = Buffer.from(iv, "base64");
-    // Decrypt the string using encryption algorithm and private key
-    const key = getKey();
-    const decipher = crypto_1.default.createDecipheriv(algorithm, key, originalData);
-    let decryptedData = decipher.update(encryptedData, "hex", "utf-8");
-    decryptedData += decipher.final("utf-8");
-    return decryptedData;
-}
-exports.decrypt = decrypt;
 //# sourceMappingURL=encryption.js.map

@@ -18,7 +18,7 @@ const getAllPasswords = (req, res) => __awaiter(void 0, void 0, void 0, function
     const { limit, offset } = req.query;
     const id = req._id;
     try {
-        const user = yield (0, user_1.getUserDetails)("_id", id);
+        const user = yield (0, user_1.getDetails)("_id", id);
         if (user) {
             // Get data from DB
             const { rows } = yield dbConnect_1.pool.query(`SELECT * FROM passwords WHERE user_id = $1 ORDER BY $2 LIMIT $3 OFFSET $4`, [id, "created_at", limit || 10, offset || 0]);
@@ -40,7 +40,7 @@ exports.getAllPasswords = getAllPasswords;
 const createPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req._id;
-        const user = yield (0, user_1.getUserDetails)("_id", id);
+        const user = yield (0, user_1.getDetails)("_id", id);
         if (user) {
             const { title, description, websiteName, password } = req.body;
             if (!websiteName || !password) {
@@ -72,7 +72,7 @@ exports.createPassword = createPassword;
 const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req._id;
-        const user = yield (0, user_1.getUserDetails)("_id", id);
+        const user = yield (0, user_1.getDetails)("_id", id);
         if (user) {
             const { id } = req.params;
             const passwordExists = yield (0, passwords_1.getPasswordDetails)("_id", id);
@@ -106,10 +106,12 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 if (updateFields.length > 0) {
                     updateFields.push(`updated_at = $${updateValues.length + 1}`);
                     updateValues.push(new Date().toISOString());
-                    const updateQuery = `UPDATE passwords SET ${updateFields.join(", ")} WHERE _id = $${updateValues.length + 1}`;
+                    const updateQuery = `UPDATE passwords SET ${updateFields.join(", ")} WHERE _id = $${updateValues.length + 1} RETURNING *`;
                     updateValues.push(id);
-                    yield dbConnect_1.pool.query(updateQuery, updateValues);
-                    return res.status(200).json({ message: "Data updated successfully" });
+                    const { rows } = yield dbConnect_1.pool.query(updateQuery, updateValues);
+                    return res
+                        .status(200)
+                        .json({ data: rows[0], message: "Data updated successfully" });
                 }
                 else {
                     return res.status(200).json({ message: "No fields to update" });
@@ -132,7 +134,7 @@ exports.updatePassword = updatePassword;
 const deletePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req._id;
-        const user = yield (0, user_1.getUserDetails)("_id", id);
+        const user = yield (0, user_1.getDetails)("_id", id);
         if (user) {
             const { id } = req.params;
             const passwordExists = yield (0, passwords_1.getPasswordDetails)("_id", id);
@@ -156,4 +158,4 @@ const deletePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deletePassword = deletePassword;
-//# sourceMappingURL=passwordControllers.js.map
+//# sourceMappingURL=password.js.map

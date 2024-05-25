@@ -9,4 +9,4 @@ const schemaRouter = express_1.default.Router();
 // Endpoint for creating schemas.
 schemaRouter.post("/schema", schemas_1.default);
 exports.default = schemaRouter;
-//# sourceMappingURL=schemaRoute.js.map
+//# sourceMappingURL=schema.js.map

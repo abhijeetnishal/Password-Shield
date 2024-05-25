@@ -6,9 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-const schemaRoute_1 = __importDefault(require("./routers/schemaRoute"));
-const authRoutes_1 = __importDefault(require("./routers/authRoutes"));
-const passwordRoutes_1 = __importDefault(require("./routers/passwordRoutes"));
+const schema_1 = __importDefault(require("./routers/schema"));
+const password_1 = __importDefault(require("./routers/password"));
+const auth_1 = __importDefault(require("./routers/auth"));
+const user_1 = require("./routers/user");
 // Configure env
 dotenv_1.default.config();
 // Create an express instance
@@ -33,11 +34,13 @@ app.use((0, cors_1.default)(corsOptions));
 app.disable("x-powered-by");
 app.set("trust proxy", true);
 // Schema router - to create schemas
-app.use(schemaRoute_1.default);
+app.use(schema_1.default);
 // Auth Router
-app.use("/auth/v1/", authRoutes_1.default);
+app.use("/auth/v1/", auth_1.default);
+// User Router
+app.use("/api/v1/", user_1.userRouter);
 // User router
-app.use("/api/v1/", passwordRoutes_1.default);
+app.use("/api/v1/", password_1.default);
 app.get("/", (req, res) => {
     res.status(200).json("Server is Live");
 });
