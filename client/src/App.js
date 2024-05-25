@@ -7,6 +7,7 @@ import { Routes, Route, BrowserRouter as Router } from "react-router-dom"
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 import ErrorPage from './components/errorPage/ErrorPage'
+import ContactPage from './components/main/ContactPage'
 import ProtectedRoute from './ProtectedRoute'
 
 function App() {

@@ -52,6 +52,9 @@ const Header = () => {
             <button className="headerLoginBtn">
               <Link to='/' className="headerLogoutIcon" onClick={logout}>Logout</Link>
             </button>
+            <button className="headerContactBtn">
+              <Link to='/' className="headerContactIcon" onClick={contact}>Contact us</Link>
+            </button>
           </div>
         </div>
       )}
