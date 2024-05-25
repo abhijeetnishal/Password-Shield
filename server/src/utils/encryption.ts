@@ -31,18 +31,4 @@ function encrypt(message: string) {
   return { encryptedData, base64data };
 }
 
-function decrypt(encryptedData: string, iv: string) {
-  // Convert initialize vector from base64 to buffer
-  const originalData = Buffer.from(iv, "base64");
-
-  // Decrypt the string using encryption algorithm and private key
-  const key = getKey();
-  const decipher = crypto.createDecipheriv(algorithm, key, originalData);
-
-  let decryptedData = decipher.update(encryptedData, "hex", "utf-8");
-  decryptedData += decipher.final("utf-8");
-
-  return decryptedData;
-}
-
-export { encrypt, decrypt };
+export { encrypt };

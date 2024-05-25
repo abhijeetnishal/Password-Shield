@@ -121,11 +121,13 @@ const updatePassword = async (req: AuthenticatedRequest, res: Response) => {
 
           const updateQuery = `UPDATE passwords SET ${updateFields.join(
             ", "
-          )} WHERE _id = $${updateValues.length + 1}`;
+          )} WHERE _id = $${updateValues.length + 1} RETURNING *`;
           updateValues.push(id);
 
-          await pool.query(updateQuery, updateValues);
-          return res.status(200).json({ message: "Data updated successfully" });
+          const { rows } = await pool.query(updateQuery, updateValues);
+          return res
+            .status(200)
+            .json({ data: rows[0], message: "Data updated successfully" });
         } else {
           return res.status(200).json({ message: "No fields to update" });
         }
