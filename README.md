@@ -37,7 +37,9 @@ The project utilizes the following technologies:
     <br>
 
 - Frontend:
-  - React.js: A JavaScript library for building ui components.
+  - Next.js: A React framework for building server-side rendered and statically generated web applications.
+  - TypeScript: TypeScript is used throughout the project to ensure strong type safety and enhance the development process.
+  - Tailwind CSS: Tailwind CSS is used for styling the frontend, offering a utility-first approach and speeding up the design process.
 
 <br>
 
@@ -65,7 +67,7 @@ To setup the application locally, follow these steps:
       npm start
    ```
 
-6. create a Table (schema) by making a **_POST_** request to API endpoint **_http://localhost:8080/schema_** API endpoint using Postman or other API testing tools.
+6. create a Table (schema) by making a **_POST_** request to API endpoint **_http://localhost:8080/schema_** using Postman or other API testing tools.
 
 7. Now Navigate to the client directory using command "cd client" and create a .env.local file and copy contents of .env.sample file to .env.local file and add server URL.
 
@@ -78,7 +80,7 @@ To setup the application locally, follow these steps:
 9. Start the application using command:
 
    ```bash
-      npm start
+      npm run dev
    ```
 
 10. Open http://localhost:3000 in your browser to see the application.
