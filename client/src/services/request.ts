@@ -3,7 +3,12 @@
  */
 const request = async function (options: any) {
   const onSuccess = async function (response: Response) {
-    if (response.ok) {
+    if (
+      response.ok ||
+      response.status === 400 ||
+      response.status === 401 ||
+      response.status === 404
+    ) {
       const responseData = await response.json();
       return { code: response.status, ...responseData };
     }
@@ -24,7 +29,7 @@ const request = async function (options: any) {
           "Content-Type": "application/json",
           ...options?.headers,
         },
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body: options.body ? JSON.stringify(options.body) : null,
       }
     );
 

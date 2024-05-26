@@ -34,7 +34,7 @@ const Login = () => {
   ] = useFetch(null);
 
   useEffect(() => {
-    const { code } = loginData;
+    const { code, message } = loginData;
 
     if (code === 200) {
       const { data } = loginData;
@@ -44,6 +44,8 @@ const Login = () => {
       setAuthToken(token);
 
       getUserDetailsAPI(() => () => ProfileService.getUserProfile(token));
+    } else {
+      setErrorMessage(message);
     }
   }, [loginData, isLoginError]);
 
@@ -64,6 +66,7 @@ const Login = () => {
     } else if (password === "") {
       setErrorMessage("Enter Password");
     } else {
+      setErrorMessage("");
       getLoginAPI(
         () => () => AuthService.emailLogin({ email: email, password: password })
       );
@@ -101,9 +104,15 @@ const Login = () => {
               Submit
             </button>
 
-            {isLoginLoading ? <LoadingSpinner /> : null}
+            {isLoginLoading ? (
+              <div className="w-full flex justify-center">
+                <LoadingSpinner />
+              </div>
+            ) : null}
 
-            <div className="">{errorMessage}</div>
+            <div className="text-red-500 font-semibold w-full flex justify-center">
+              {errorMessage ? errorMessage : ""}
+            </div>
           </div>
           <div className="flex flex-col items-center mt-12">
             <p className="">

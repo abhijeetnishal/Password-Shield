@@ -78,6 +78,7 @@ const useFetch = (
               }
               case -111:
               case 401:
+              case 404:
               case -222: {
                 dispatch({ type: "FETCH_SUCCESS", payload: result });
                 break;

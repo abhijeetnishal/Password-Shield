@@ -6,8 +6,16 @@ import subMoreInfoImg2 from "@/public/assets/subMoreInfoImg2.png";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "../components/Headers/Header";
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 const LandingPage = () => {
+  const token = cookies().get("token")?.value;
+
+  if (token) {
+    redirect("/dashboard");
+  }
+
   return (
     <div data-testid="landing-page" className="">
       <div className="flex flex-col">

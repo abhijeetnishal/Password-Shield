@@ -40,7 +40,7 @@ const Register = () => {
   ] = useFetch(null);
 
   useEffect(() => {
-    const { code } = registerData;
+    const { code, message } = registerData;
 
     if (code === 201) {
       const { data } = registerData;
@@ -50,6 +50,8 @@ const Register = () => {
       setAuthToken(token);
 
       getUserDetailsAPI(() => () => ProfileService.getUserProfile(token));
+    } else {
+      setErrorMessage(message);
     }
   }, [registerData, isRegisterError]);
 
@@ -77,6 +79,7 @@ const Register = () => {
     } else if (password === "") {
       setErrorMessage("Enter Password");
     } else {
+      setErrorMessage("");
       getRegisterAPI(
         () => () =>
           AuthService.emailSignUp({ name: name, email, password: password })
@@ -121,9 +124,15 @@ const Register = () => {
               Submit
             </button>
 
-            {errorMessage ? <div>{errorMessage}</div> : null}
+            {isRegisterLoading ? (
+              <div className="w-full flex justify-center">
+                <LoadingSpinner />
+              </div>
+            ) : null}
 
-            {isRegisterLoading ? <LoadingSpinner /> : null}
+            <div className="text-red-500 font-semibold w-full flex justify-center">
+              {errorMessage ? errorMessage : ""}
+            </div>
           </div>
           <div className="flex flex-col items-center mt-12">
             <p className="">

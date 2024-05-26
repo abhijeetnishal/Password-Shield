@@ -1,7 +1,6 @@
 "use client";
 import headerLock from "@/public/assets/lockHeader.png";
 import profilePhoto from "@/public/assets/user-profile.png";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import useAuthStore from "@/src/store/authStore";
@@ -32,13 +31,11 @@ export default function AuthHeader() {
         <div className="flex flex-row w-full justify-between items-center">
           <div className="flex flew-row items-end">
             <Image className="w-6 h-8" src={headerLock} alt="" />
-            <Link className="ml-2" href="/">
-              Key Safe
-            </Link>
+            <div className="ml-2">Key Safe</div>
           </div>
           {profile && profile.name ? (
             <div className="flex flex-row">
-              <div className="">
+              <div className="flex items-center mr-4">
                 <Image className="" src={profilePhoto} alt="" />
                 <div className=""> {profile.name} </div>
               </div>
