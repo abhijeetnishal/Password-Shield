@@ -1,7 +1,5 @@
-"use client";
-
 import React from 'react'
-import {Link as ScrollLink } from 'react-scroll'
+import { Link as ScrollLink } from 'react-scroll'
 import Link from 'next/link';
 export default function Footer() {
   return (
@@ -16,7 +14,7 @@ export default function Footer() {
             </a>
             <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
               <li>
-              <ScrollLink to='about' smooth duration={500}>
+                <ScrollLink to='about' smooth duration={500}>
                   <p className="hover:underline me-4 md:me-6">About</p>
                 </ScrollLink>
               </li>
