@@ -73,13 +73,13 @@ export default function LandingPages() {
             <div className='p-3 md:w-96 '>
               <Image src={icon2} alt='' />
               <h2 className='font-bold py-5'>Unmatched Security</h2>
-              <p className='text-[#595a61]'>Real-time problem solving is not just about time, it's about time. This allows you to solve problems within a specified time problem has a solution.</p>
+              <p className='text-[#595a61]'>Security is paramount, and we take it seriously. Our platform employs state-of-the-art encryption techniques to safeguard your sensitive data.  </p>
             </div>
 
             <div className='p-3 md:w-96 '>
               <Image src={icon3} alt='' />
               <h2 className='font-bold py-5'>Open Source Transparency</h2>
-              <p className='text-[#595a61]'>Real-time problem solving is not just about time, it's about time. This allows you to solve problems within a specified time problem has a solution.</p>
+              <p className='text-[#595a61]'>Transparency is at the core of our values. As an open-source platform, we believe in fostering trust and collaboration within our community. </p>
             </div>
           </div>
         </section>
@@ -142,7 +142,7 @@ export default function LandingPages() {
                 <h2 className={`text-3xl  ${spaceGrotesk.className} font-bold`}>Ready to get started?</h2>
               </div>
               <div>
-                <h2 className='text-left md:mr-40 pt-5 pb-3 text-[#595a61] text-base'>Save all your password at one place within minutes. And you don't have to crack your head to remember them.</h2>
+                <h2 className='text-left md:mr-40 pt-5 pb-3 text-[#595a61] text-base'>Dive into a world where password management is no longer a headache. Our platform welcomes you to streamline your digital security effortlessly.</h2>
                 <Link href='/auth/login'>
                   <button className='bg-[#ef4444] shadow-md hover:bg-[#e04747] text-white py-3 px-8'>
                     Login
@@ -156,12 +156,12 @@ export default function LandingPages() {
               <div className='md:mx-10 px-5 my-2 w-72 border-2 rounded py-5 bg-white'>
                 <Image src={icon5} alt='' />
                 <h2 className='font-bold py-3'>Store data on cloud</h2>
-                <p className='text-[#595a61]'>Create beautiful landing pages with Rareblocks that converts. </p>
+                <p className='text-[#595a61]'>Safeguard your sensitive information with confidence on our platform, where data protection is our top priority.  </p>
               </div>
               <div className='md:mx-10 px-5 w-72 my-2 border-2 rounded py-5 bg-white'>
                 <Image src={icon4} alt='' />
                 <h2 className='font-bold py-3'>Connect dots smartly</h2>
-                <p className='text-[#595a61]'>Real-time problem solving is not just about time, it's about time. </p>
+                <p className='text-[#595a61]'>Experience the efficiency of smart solutions that anticipate your needs, empowering you to conquer any obstacle with ease.</p>
               </div>
             </div>
 
