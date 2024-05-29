@@ -4,7 +4,13 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
 
-export default function Navbar() {
+
+interface NavbarProps {
+  landingPage: boolean;
+}
+
+
+const Navbar: React.FC<NavbarProps> = ({ landingPage }) => {
   const { theme, toggleTheme } = useThemeContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -13,7 +19,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={` ${theme === 'light' ? 'bg-white text-black' : 'bg-[#12141d] text-white'} `}>
+    <nav className={`shadow-md  ${theme === 'light' && landingPage ? 'bg-[#fffcd7]  text-black' : theme === 'light'  ? 'bg-white  text-black' : 'bg-[#12141d] text-white'} `}>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           {/* <img src="" className="h-8" alt="KeySafe Logo" /> */}
@@ -33,7 +39,11 @@ export default function Navbar() {
           </svg>
         </button>
         <div className={`w-full md:block md:w-auto ${isMenuOpen ? '' : 'hidden'}`} id="navbar-default">
+          
           <ul className={`font-medium flex items-center flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg ${theme === 'light' ? 'bg-gray-50 md:bg-transparent' : 'bg-[#12141d] md:bg-transparent'} md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0`}>
+          {
+            landingPage &&
+            <>
             <li>
               <ScrollLink to='/' smooth duration={500}>
                 <p className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0" aria-current="page">Home</p>
@@ -47,8 +57,8 @@ export default function Navbar() {
             {/* <li>
               <ScrollLink to='' smooth duration={500}>
                 <p className={`block py-2 px-3 ${theme === 'light' ? 'text-gray-900' : 'text-white'} rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}>Services</p>
-              </ScrollLink>
-            </li> */}
+                </ScrollLink>
+              </li> */}
             <li>
               <ScrollLink to='contact' smooth duration={500}>
                 <p className={`block py-2 px-3 ${theme === 'light' ? 'text-gray-900' : 'text-white'} rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}>Contact</p>
@@ -66,6 +76,7 @@ export default function Navbar() {
                 </button>
               </Link>
             </li>
+              </>}
             <li>
               <button className='p-1 md:mt-0 mt-2' onClick={toggleTheme}>
                 {
@@ -79,8 +90,10 @@ export default function Navbar() {
               </button>
             </li>
           </ul>
+          
         </div>
       </div>
     </nav>
   );
 }
+export default Navbar;
