@@ -40,7 +40,7 @@ const DeleteConfirmation = (props: DeleteConfProps) => {
                 </button>
                 <button
                   className="flex flex-row items-center justify-center border border-teal-600  bg-teal-600 m-1 rounded p-1 text-white w-full"
-                  onClick={() => onSubmit(item._id)}
+                  onClick={() => onSubmit("delete", item)}
                 >
                   <Image className="" src={deleteBtn} alt="" />
                   <p className="">Delete</p>
