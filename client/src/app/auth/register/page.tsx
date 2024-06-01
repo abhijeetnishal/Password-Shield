@@ -17,8 +17,15 @@ import { setCookie } from "cookies-next";
 import useAuthStore from "@/src/store/authStore";
 import useProfileStore from "@/src/store/profileStore";
 import { ProfileService } from "@/src/services/ProfileService";
+import useTitleStore from "@/src/store/titleStore";
 
 export default function Register() {
+
+  const setTitle = useTitleStore((state) => state.setTitle);
+  useEffect(() => {
+    setTitle("KeySafe | Register");
+  }, [setTitle]);
+
 
   const router = useRouter();
   const setAuthToken = useAuthStore((state) => state.setAuthToken);

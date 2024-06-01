@@ -1,7 +1,7 @@
 // import Header from '@/src/components/Headers/Header'
 "use client"; // Mark the file as a client component
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Image from "next/image";
 import { Space_Grotesk } from "next/font/google";
 import Ribbon1 from "@/public/assets/Ribbon-1.png"
@@ -24,14 +24,16 @@ import Navbar from '@/src/components/Headers/Navbar';
 import Link from "next/link";
 import Github from '../components/Icons/Github';
 import LinkedIn from '../components/Icons/LinkedIn';
-
-
+import useTitleStore from '../store/titleStore';
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
-
-
 export default function LandingPages() {
+  const setTitle = useTitleStore((state) => state.setTitle);
+  useEffect(() => {
+    setTitle("KeySafe | Home");
+  }, [setTitle]);
+
   const theme = useThemeStore((state) => state.theme);
   // const toggleTheme = useThemeStore((state) => state.toggleTheme);
   return (

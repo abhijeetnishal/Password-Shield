@@ -17,8 +17,16 @@ import { ProfileService } from "@/src/services/ProfileService";
 import Header from "@/src/components/Headers/Header";
 import Navbar from "@/src/components/Headers/Navbar";
 import Footer from "@/src/components/Footer/Footer";
+import useTitleStore from "@/src/store/titleStore";
 
 const Login = () => {
+
+  const setTitle = useTitleStore((state) => state.setTitle);
+  useEffect(() => {
+    setTitle("KeySafe | Login");
+  }, [setTitle]);
+
+
   const router = useRouter();
   const setAuthToken = useAuthStore((state) => state.setAuthToken);
   const setProfile = useProfileStore((state) => state.setProfileDetails);
