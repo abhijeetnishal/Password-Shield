@@ -17,13 +17,29 @@ const getAllPasswords = async (req: AuthenticatedRequest, res: Response) => {
     const user = await getDetails("_id", id);
 
     if (user) {
-      // Get data from DB
-      const { rows } = await pool.query(
-        `select * from passwords where 
-        user_id=$1 and
-        website_name ilike '%' || $2 || '%' ORDER BY
-        $3 offset $4 limit $5;`,
-        [id,search || "","created_at",offset || 10,limit || 10]);
+      const queryParams = [id];
+      let queryStr = "SELECT * FROM passwords WHERE user_id = $1";
+
+      if (search) {
+        queryParams.push(`%${search}%`);
+        queryStr += " AND website_name ILIKE $" + queryParams.length;
+      }
+
+      queryStr += " ORDER BY created_at";
+
+      if (limit) {
+        queryParams.push(limit.toString());
+        queryStr += " LIMIT $" + queryParams.length;
+      }
+
+      if (offset) {
+        queryParams.push(offset.toString());
+        queryStr += " OFFSET $" + queryParams.length;
+      }
+
+      queryStr += ";";
+
+      const { rows } = await pool.query(queryStr, queryParams);
 
       return res
         .status(200)
