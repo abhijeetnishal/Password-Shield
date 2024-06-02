@@ -67,7 +67,7 @@ const CreatePassword = (props: CreatePasswordProps) => {
                 </button>
                 <button
                   className="flex flex-row items-center justify-center border border-teal-600  bg-teal-600 m-1 rounded p-1 text-white w-full"
-                  onClick={() => onSubmit("add", { websiteName, password })}
+                  onClick={() => onSubmit({ websiteName, password })}
                 >
                   <Image className="" src={SaveBtn} alt="" />
                   <div className="">Save</div>

@@ -71,7 +71,7 @@ const EditPassword = (props: EditPasswordProps) => {
                 <button
                   className="flex flex-row items-center justify-center border border-teal-600  bg-teal-600 m-1 rounded p-1 text-white w-full"
                   onClick={() =>
-                    onSubmit("edit", {
+                    onSubmit({
                       _id: item._id,
                       websiteName: websiteName,
                       password: password,
