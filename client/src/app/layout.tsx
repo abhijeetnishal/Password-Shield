@@ -1,10 +1,10 @@
-"use client"; 
+"use client";
 
 import { Inter } from "next/font/google";
-import { ReactNode, FC } from 'react';
+import { ReactNode, FC } from "react";
 import "./globals.css";
-import useThemeStore from '../store/themeStore';
-import useTitleStore from '../store/titleStore';
+import useThemeStore from "../store/themeStore";
+import useTitleStore from "../store/titleStore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +19,12 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <head>
-      <title>{title}</title>
+        <title>{title}</title>
       </head>
-      <body className={`${inter.className} ${theme === 'dark' ? 'dark' : 'light'}`}>
-        <main className="min-h-[85vh] bg-white">
-          {children}
-        </main>
+      <body
+        className={`${inter.className} ${theme === "dark" ? "dark" : "light"}`}
+      >
+        <main className="min-h-[85vh] bg-white">{children}</main>
       </body>
     </html>
   );
