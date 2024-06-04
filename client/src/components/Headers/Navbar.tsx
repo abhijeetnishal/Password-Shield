@@ -79,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ landingPage }) => {
                 <li>
                   <ScrollLink to="/" smooth duration={500}>
                     <p
-                      className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                      className="cursor-pointer block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
                       aria-current="page"
                     >
                       Home
@@ -91,23 +91,18 @@ const Navbar: React.FC<NavbarProps> = ({ landingPage }) => {
                     <p
                       className={`block py-2 px-3 ${
                         theme === "light" ? "text-gray-900" : "text-white"
-                      } rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}
+                      } cursor-pointer rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}
                     >
                       About
                     </p>
                   </ScrollLink>
                 </li>
-                {/* <li>
-              <ScrollLink to='' smooth duration={500}>
-                <p className={`block py-2 px-3 ${theme === 'light' ? 'text-gray-900' : 'text-white'} rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}>Services</p>
-                </ScrollLink>
-              </li> */}
                 <li>
                   <ScrollLink to="contact" smooth duration={500}>
                     <p
                       className={`block py-2 px-3 ${
                         theme === "light" ? "text-gray-900" : "text-white"
-                      } rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}
+                      } cursor-pointer rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0`}
                     >
                       Contact
                     </p>
