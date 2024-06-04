@@ -7,8 +7,8 @@ import useAuthStore from "@/src/store/authStore";
 import useFetch from "@/src/hooks/useFetch";
 import { PasswordsService } from "@/src/services/PasswordService";
 import AuthHeader from "@/src/components/Headers/AuthHeader";
-import decryptPassword from "@/src/utils/Decrypt";
 import useTitleStore from "@/src/store/titleStore";
+import PasswordItem from "@/src/components/Passwords/PasswordItem";
 
 const PasswordPage = () => {
   const token = useAuthStore((state) => state.authToken);
