@@ -7,16 +7,10 @@ import useAuthStore from "@/src/store/authStore";
 import useFetch from "@/src/hooks/useFetch";
 import { PasswordsService } from "@/src/services/PasswordService";
 import AuthHeader from "@/src/components/Headers/AuthHeader";
-import useTitleStore from "@/src/store/titleStore";
 import PasswordItem from "@/src/components/Passwords/PasswordItem";
 
 const PasswordPage = () => {
   const token = useAuthStore((state) => state.authToken);
-
-  const setTitle = useTitleStore((state) => state.setTitle);
-  useEffect(() => {
-    setTitle("KeySafe | Dashboard");
-  }, [setTitle]);
 
   const [passwordsData, setPasswordsData] = useState<any>([]);
   const [showPopUp, setShowPopUp] = useState({

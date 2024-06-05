@@ -1,8 +1,5 @@
 "use client";
-
-import React, { useEffect } from "react";
 import Image from "next/image";
-import { Space_Grotesk } from "next/font/google";
 import Ribbon1 from "@/public/assets/Ribbon-1.png";
 import illustration3 from "@/public/assets/Illustration3.png";
 import Illustration1 from "@/src/components/Icons/Illustration1";
@@ -14,24 +11,14 @@ import Icon2 from "@/src/components/Icons/Icon2";
 import Icon3 from "@/src/components/Icons/Icon3";
 import Icon4 from "@/src/components/Icons/Icon4";
 import Icon5 from "@/src/components/Icons/Icon5";
-
 import useThemeStore from "@/src/store/themeStore";
-
 import Footer from "@/src/components/Footer/Footer";
 import Navbar from "@/src/components/Headers/Navbar";
 import Link from "next/link";
 import Github from "../components/Icons/Github";
 import LinkedIn from "../components/Icons/LinkedIn";
-import useTitleStore from "../store/titleStore";
-
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function LandingPages() {
-  const setTitle = useTitleStore((state) => state.setTitle);
-  useEffect(() => {
-    setTitle("KeySafe | Home");
-  }, [setTitle]);
-
   const theme = useThemeStore((state) => state.theme);
   // const toggleTheme = useThemeStore((state) => state.toggleTheme);
   return (
@@ -54,9 +41,7 @@ export default function LandingPages() {
                 <p>Ensuring maximum security</p>
               </div>
               <div className="md:pt-8 pt-3">
-                <h2
-                  className={`md:text-7xl text-3xl  ${spaceGrotesk.className} font-bold`}
-                >
+                <h2 className={`md:text-7xl text-3xl font-bold`}>
                   Secure your digital life with the power of open source.
                 </h2>
               </div>
@@ -98,7 +83,6 @@ export default function LandingPages() {
             </div>
 
             <div className="p-3 md:w-96 ">
-              {/* <Image src={icon2} alt='' /> */}
               <div>
                 <Icon2></Icon2>
               </div>
@@ -111,7 +95,6 @@ export default function LandingPages() {
             </div>
 
             <div className="p-3 md:w-96 ">
-              {/* <Image src={icon3} alt='' /> */}
               <div>
                 <Icon3></Icon3>
               </div>
@@ -135,9 +118,7 @@ export default function LandingPages() {
           >
             <div className="md:px-5 px-11 py-4 md:py-36 flex-col flex align-middle">
               <div className="xl:mr-56  ">
-                <h2
-                  className={`md:text-5xl text-2xl  ${spaceGrotesk.className} font-bold`}
-                >
+                <h2 className={`md:text-5xl text-2xl font-bold`}>
                   Key Safe takes care of your credentials.
                 </h2>
               </div>
@@ -165,9 +146,7 @@ export default function LandingPages() {
 
             <div className="px-11 xl:py-24 py-11 flex-col flex align-middle">
               <div className="xl:ml-52 ">
-                <h2
-                  className={`md:text-5xl text-2xl ${spaceGrotesk.className} font-bold`}
-                >
+                <h2 className={`md:text-5xl text-2xl font-bold`}>
                   All password within a reach
                 </h2>
               </div>
@@ -183,9 +162,7 @@ export default function LandingPages() {
 
         <section id="contact">
           <div className="text-center p-10 py-20 section4 bg-[#18181b]">
-            <h2
-              className={`text-5xl ${spaceGrotesk.className} font-bold text-white py-5`}
-            >
+            <h2 className={`text-5xl font-bold text-white py-5`}>
               Join Our Community
             </h2>
             <p className="text-white text-pretty xl:text-center py-5 xl:px-80  px-0">
@@ -212,9 +189,7 @@ export default function LandingPages() {
           <div className="xl:flex py-5 md:py-10 items-center md:px-20 xl:px-24  bg-[#fafafa]">
             <div className="px-5 flex-col py-5 justify-center flex align-middle">
               <div className="">
-                <h2
-                  className={`text-3xl  text-balance xl:text-left  ${spaceGrotesk.className} font-bold`}
-                >
+                <h2 className={`text-3xl  text-balance xl:text-left font-bold`}>
                   Ready to get started?
                 </h2>
               </div>

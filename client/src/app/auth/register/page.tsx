@@ -16,13 +16,10 @@ import { setCookie } from "cookies-next";
 import useAuthStore from "@/src/store/authStore";
 import useProfileStore from "@/src/store/profileStore";
 import { ProfileService } from "@/src/services/ProfileService";
-import useTitleStore from "@/src/store/titleStore";
 
 export default function Register() {
-  const setTitle = useTitleStore((state) => state.setTitle);
-  useEffect(() => {
-    setTitle("KeySafe | Register");
-  }, [setTitle]);
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
 
   const router = useRouter();
   const setAuthToken = useAuthStore((state) => state.setAuthToken);
@@ -99,8 +96,6 @@ export default function Register() {
     }
   };
 
-  const theme = useThemeStore((state) => state.theme);
-  const toggleTheme = useThemeStore((state) => state.toggleTheme);
   return (
     <>
       <Navbar landingPage={false} />
@@ -139,7 +134,7 @@ export default function Register() {
             <p className="mt-6 text-center font-medium md:text-left">
               Create your account below.
             </p>
-            <form className="flex flex-col items-stretch pt-3 md:pt-8">
+            <div className="flex flex-col items-stretch pt-3 md:pt-8">
               <div className="flex flex-col pt-4">
                 <div className="relative flex overflow-hidden rounded-md border border-gray-500 transition focus-within:border-blue-600">
                   <input
@@ -191,10 +186,13 @@ export default function Register() {
               </div>
               <a
                 href="#"
-                className="mb-6 text-center text-sm font-medium text-gray-600 md:text-left"
+                className="text-center text-sm font-medium text-gray-600 md:text-left"
               >
                 Forgot password?
               </a>
+
+              <div className="my-2 text-red-500 flex">{errorMessage}</div>
+
               <button
                 onClick={onHandleSubmit}
                 disabled={isRegisterLoading}
@@ -203,7 +201,7 @@ export default function Register() {
               >
                 Sign Up
               </button>
-            </form>
+            </div>
             <div className="py-12 text-center">
               <p className="text-gray-600">
                 Already have an account?

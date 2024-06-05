@@ -12,7 +12,7 @@ interface NavbarProps {
   landingPage: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ landingPage }) => {
+const Navbar = (props: NavbarProps) => {
   const theme = useThemeStore((state) => state.theme);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,7 +24,7 @@ const Navbar: React.FC<NavbarProps> = ({ landingPage }) => {
   return (
     <nav
       className={`shadow-md  ${
-        theme === "light" && landingPage
+        theme === "light" && props.landingPage
           ? "bg-[#f7f6ee]  text-black"
           : theme === "light"
           ? "bg-white  text-black"
@@ -74,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = ({ landingPage }) => {
                 : "bg-[#12141d] md:bg-transparent"
             } md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0`}
           >
-            {landingPage && (
+            {props.landingPage && (
               <>
                 <li>
                   <ScrollLink to="/" smooth duration={500}>
