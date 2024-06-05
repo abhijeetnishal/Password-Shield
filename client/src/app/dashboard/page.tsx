@@ -9,12 +9,13 @@ import useAuthStore from '@/src/store/authStore';
 import useTitleStore from '@/src/store/titleStore';
 import useFetch from '@/src/hooks/useFetch';
 import decryptPassword from '@/src/utils/Decrypt';
-import DeleteConfirmation from '@/src/components/Passwords/deleteConfirmation';
-import EditPassword from '@/src/components/Passwords/editPassword';
+
 import LoadingSpinner from '@/src/components/Loaders/LoadingSpinner';
 import useThemeStore from '@/src/store/themeStore';
 import AuthHoc from '@/src/components/AuthHoc';
 import CreatePassword from '@/src/components/Passwords/CreatePassword';
+import EditPassword from '@/src/components/Passwords/EditPassword';
+import DeleteConfirmation from '@/src/components/Passwords/DeleteConfirmation';
 
 export default function Page() {
   const token = useAuthStore((state) => state.authToken);

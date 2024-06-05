@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import DeleteConfirmation from "../../components/Passwords/deleteConfirmation";
 import LoadingSpinner from "@/src/components/Loaders/LoadingSpinner";
-import EditPassword from "../../components/Passwords/editPassword";
-import CreatePassword from "../../components/Passwords/page";
+
 import commonWebsiteSymbolImg from "@/public/assets/commonWebsiteSymbol.png";
 import eye from "@/public/assets/eye-image.png";
 import cutEye from "@/public/assets/cut-eye-image.png";
@@ -17,6 +15,9 @@ import { PasswordsService } from "@/src/services/PasswordService";
 import AuthHeader from "@/src/components/Headers/AuthHeader";
 import decryptPassword from "@/src/utils/Decrypt";
 import useTitleStore from "@/src/store/titleStore";
+import CreatePassword from "@/src/components/Passwords/CreatePassword";
+import EditPassword from "@/src/components/Passwords/EditPassword";
+import DeleteConfirmation from "@/src/components/Passwords/DeleteConfirmation";
 
 const PasswordPage = () => {
   const token = useAuthStore((state) => state.authToken);
