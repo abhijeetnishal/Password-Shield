@@ -64,7 +64,7 @@ const PasswordPage = () => {
     );
   };
 
-  const onUpdatePassword = (type: string, newPassword: any) => {
+  const onUpdateData = (type: string, newPassword: any) => {
     let updatedPasswords = [];
     if (type === "edit") {
       updatedPasswords = passwordsData.map((item: any) => {
@@ -110,11 +110,7 @@ const PasswordPage = () => {
         <div className="m-2 p-2 lg:w-1/2">
           {passwordsData && passwordsData.length > 0 ? (
             passwordsData.map((item: any, index: number) => (
-              <PasswordItem
-                key={index}
-                item={item}
-                onUpdate={onUpdatePassword}
-              />
+              <PasswordItem key={index} item={item} onUpdate={onUpdateData} />
             ))
           ) : isLoading ? (
             <LoadingSpinner />

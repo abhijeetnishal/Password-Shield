@@ -42,10 +42,15 @@ const PasswordItem = ({ item, onUpdate }: Props) => {
     }
   }, [editData, isEditDataError]);
 
-  const onEditPassword = (item: any) => {
-    getPasswordEditAPI(
-      () => () => PasswordsService.UpdateUserPassword(item._id, item, token)
-    );
+  const onUpdateData = (type: string, item: any) => {
+    if (type === "edit") {
+      getPasswordEditAPI(
+        () => () => PasswordsService.UpdateUserPassword(item._id, item, token)
+      );
+    } else {
+      onUpdate("delete", item);
+      setShowPopUp((prev) => ({ ...prev, status: false }));
+    }
   };
 
   return (
@@ -101,7 +106,7 @@ const PasswordItem = ({ item, onUpdate }: Props) => {
                 onClose={() =>
                   setShowPopUp((prev) => ({ ...prev, status: false }))
                 }
-                onSubmit={onEditPassword}
+                onSubmit={onUpdateData}
               />
             ) : null}
           </div>
@@ -121,7 +126,7 @@ const PasswordItem = ({ item, onUpdate }: Props) => {
                 onClose={() =>
                   setShowPopUp((prev) => ({ ...prev, status: false }))
                 }
-                onSubmit={onUpdate}
+                onSubmit={onUpdateData}
               />
             ) : null}
           </div>
