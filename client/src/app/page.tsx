@@ -77,7 +77,7 @@ export default function LandingPages() {
                 <Icon1></Icon1>
               </div>
               <h2 className='font-bold py-5'>Easy & Convenient</h2>
-              <p className='text-[#595a61]'>Real-time problem solving is not just about time, it's about time. This allows you to solve problems within a specified time problem has a solution.</p>
+              <p className='text-[#595a61]'>Real-time problem solving is not just about time, it&apos;s about time. This allows you to solve problems within a specified time problem has a solution.</p>
             </div>
 
             <div className='p-3 md:w-96 '>
@@ -133,7 +133,7 @@ export default function LandingPages() {
                 <h2 className={`md:text-5xl text-2xl ${spaceGrotesk.className} font-bold`}>All password within a reach</h2>
               </div>
               <div className='xl:ml-52' >
-                <h2 className=' xl:mr-20 text-left pt-7 text-[#595a61] text-base'>Save all your password at one place within minutes. And you don't have to crack your head to remember them.</h2>
+              <h2 className='xl:mr-20 text-left pt-7 text-[#595a61] text-base'>Save all your password at one place within minutes. And you don&apos;t have to crack your head to remember them.</h2>
               </div>
             </div>
           </div>
@@ -142,7 +142,7 @@ export default function LandingPages() {
         <section id='contact'>
           <div className='text-center p-10 py-20 section4 bg-[#18181b]'>
             <h2 className={`text-5xl ${spaceGrotesk.className} font-bold text-white py-5`}>Join Our Community</h2>
-            <p className='text-white text-pretty xl:text-center py-5 xl:px-80  px-0'>Key Safe thrives on community support and contributions. Whether you're a developer, a security enthusiast, or simply someone who values secure password management, we welcome you to join us. Contribute to the project, report issues, or share your feedback.</p>
+            <p className='text-white text-pretty xl:text-center py-5 xl:px-80 px-0'>Key Safe thrives on community support and contributions. Whether you&apos;re a developer, a security enthusiast, or simply someone who values secure password management, we welcome you to join us. Contribute to the project, report issues, or share your feedback.</p>
             <div className='flex mx-auto justify-center font-semibold  text-white'>
               <Github />
               <Link href='https://github.com/abhijeetnishal/Password-Shield'>

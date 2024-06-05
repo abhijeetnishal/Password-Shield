@@ -146,7 +146,7 @@ const Login = () => {
         <div className="relative hidden px-10 select-none bg-blue-600 bg-gradient-to-br md:block md:w-1/2">
           <div className="pt-9 py-4 px-8 text-white xl:w-[40rem]">
             <p className="mb-6 mt-1 text-3xl font-semibold leading-10">Never Forget Your Passwords Again!<span className="abg-white whitespace-nowrap py-2 text-cyan-300"> Safe & Secure</span>.</p>
-            <p className="mb-4">Managing passwords can be tough, but with KeySafe, you don't have to worry about forgetting them anymore.</p>
+            <p className="mb-4">Managing passwords can be tough, but with KeySafe, you don&apos;t have to worry about forgetting them anymore.</p>
           </div>
           <Image alt='login illustration' src={LoginSvg} className="ml-8 w-11/12 max-w-lg py-5 rounded-lg object-cover" />
         </div>

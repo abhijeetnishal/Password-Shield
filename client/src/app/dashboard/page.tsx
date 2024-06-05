@@ -1,50 +1,40 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import DeleteConfirmation from "../../components/Passwords/deleteConfirmation";
-import LoadingSpinner from "@/src/components/Loaders/LoadingSpinner";
-import EditPassword from "../../components/Passwords/editPassword";
-import CreatePassword from "../../components/Passwords/page";
-import commonWebsiteSymbolImg from "@/public/assets/commonWebsiteSymbol.png";
-import eye from "@/public/assets/eye-image.png";
-import cutEye from "@/public/assets/cut-eye-image.png";
-import editBtnImg from "@/public/assets/editBtnImg.png";
-import deleteBtn from "@/public/assets/deleteBtnblue.png";
-import Image from "next/image";
-import AuthHoc from "@/src/components/AuthHoc";
-import useAuthStore from "@/src/store/authStore";
-import useFetch from "@/src/hooks/useFetch";
+
+import AuthNavbar from '@/src/components/Headers/AuthNavbar';
+import React, { useEffect, useState } from 'react';
+import PasswordStrengthIndicator from '@/src/components/Passwords/PasswordStrength';
+import SiteIcon from '@/src/components/Icons/SiteIcon';
 import { PasswordsService } from "@/src/services/PasswordService";
-import AuthHeader from "@/src/components/Headers/AuthHeader";
-import decryptPassword from "@/src/utils/Decrypt";
-import useTitleStore from "@/src/store/titleStore";
+import useAuthStore from '@/src/store/authStore';
+import useTitleStore from '@/src/store/titleStore';
+import useFetch from '@/src/hooks/useFetch';
+import decryptPassword from '@/src/utils/Decrypt';
+import DeleteConfirmation from '@/src/components/Passwords/deleteConfirmation';
+import EditPassword from '@/src/components/Passwords/editPassword';
+import CreatePassword from '@/src/components/Passwords/page';
+import LoadingSpinner from '@/src/components/Loaders/LoadingSpinner';
+import useThemeStore from '@/src/store/themeStore';
+import AuthHoc from '@/src/components/AuthHoc';
 
-const PasswordPage = () => {
+export default function Page() {
   const token = useAuthStore((state) => state.authToken);
-
   const setTitle = useTitleStore((state) => state.setTitle);
+
   useEffect(() => {
     setTitle("KeySafe | Dashboard");
   }, [setTitle]);
 
-
+  const theme = useThemeStore((state) => state.theme);
   const [passwordsData, setPasswordsData] = useState<any>([]);
   const [showPopUp, setShowPopUp] = useState({
     type: "",
     status: false,
   });
 
-  const [isPasswordEyeBtnClicked, setIsPasswordEyeBtnClicked] = useState(false);
-
   const [{ data, isLoading, isError }, getPasswordsAPI] = useFetch(null);
-  const [
-    { data: addData, isLoading: isAddDataLoading, isError: isAddDataError },
-    getPasswordAddAPI,
-  ] = useFetch(null);
-  const [
-    { data: editData, isLoading: isEditDataLoading, isError: isEditDataError },
-    getPasswordEditAPI,
-  ] = useFetch(null);
-  const [{}, getPasswordDeleteAPI] = useFetch(null);
+  const [{ data: addData, isLoading: isAddDataLoading, isError: isAddDataError }, getPasswordAddAPI] = useFetch(null);
+  const [{ data: editData, isLoading: isEditDataLoading, isError: isEditDataError }, getPasswordEditAPI] = useFetch(null);
+  const [{ }, getPasswordDeleteAPI] = useFetch(null);
 
   useEffect(() => {
     if (token) {
@@ -54,20 +44,16 @@ const PasswordPage = () => {
 
   useEffect(() => {
     const { code } = data;
-
     if (code === 200) {
       const { data: result } = data;
-
       setPasswordsData(result);
     }
   }, [data, isError]);
 
   useEffect(() => {
     const { code } = addData;
-
     if (code === 201) {
       const result = addData.data;
-
       setPasswordsData([...passwordsData, result]);
       setShowPopUp((prev) => ({ ...prev, status: false }));
     }
@@ -75,160 +61,266 @@ const PasswordPage = () => {
 
   useEffect(() => {
     const { code } = editData;
-
     if (code === 200) {
       const result = editData.data;
-
       const updatedPasswords = passwordsData.map((item: any) => {
         if (item._id === result._id) {
           return result;
         }
         return item;
       });
-
       setPasswordsData(updatedPasswords);
       setShowPopUp((prev) => ({ ...prev, status: false }));
     }
   }, [editData, isEditDataError]);
 
   const onDeletePassword = (id: string) => {
-    getPasswordDeleteAPI(
-      () => () => PasswordsService.DeleteUserPassword(id, token)
-    );
-
+    getPasswordDeleteAPI(() => () => PasswordsService.DeleteUserPassword(id, token));
     const updatedPasswords = passwordsData.filter((obj: any) => obj._id !== id);
-
     setPasswordsData(updatedPasswords);
     setShowPopUp((prev) => ({ ...prev, status: false }));
   };
 
   const handleSubmit = (type: string, item: any) => {
     if (type === "add") {
-      getPasswordAddAPI(
-        () => () => PasswordsService.addUserPassword(item, token)
-      );
+      getPasswordAddAPI(() => () => PasswordsService.addUserPassword(item, token));
     } else {
-      getPasswordEditAPI(
-        () => () => PasswordsService.UpdateUserPassword(item._id, item, token)
-      );
+      getPasswordEditAPI(() => () => PasswordsService.UpdateUserPassword(item._id, item, token));
     }
   };
 
+  const [isExpanded, setIsExpanded] = useState<boolean[]>(Array(passwordsData.length).fill(false));
+  const [passwords, setPasswords] = useState<string[]>(passwordsData.map((item: any, index: number) => item.password));
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  const toggleExpand = (index: number) => {
+    setIsExpanded(prevState => {
+      const newExpandedCards = [...prevState];
+      newExpandedCards[index] = !newExpandedCards[index];
+      return newExpandedCards;
+    });
+  };
+
+  const handlePasswordChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPasswords = [...passwords];
+    newPasswords[index] = e.target.value;
+    setPasswords(newPasswords);
+  };
+
+  const handleCopy = async (index: number) => {
+    try {
+      await navigator.clipboard.writeText(passwords[index]);
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 3000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
+  // Split the data into two columns
+  const column1Data = passwordsData.filter((item: any, index: number) => index % 2 === 0);
+  const column2Data = passwordsData.filter((item: any, index: number) => index % 2 !== 0);
+
   return (
     <AuthHoc>
-      <AuthHeader />
-      <div data-testid="password-page" className="">
-        <div className=" flex flex-row justify-between items-center px-2 py-4">
-          <h1 className="font-medium">Your Saved Passwords</h1>
-          <button
-            className="text-white bg-teal-500 p-1 rounded"
-            onClick={() => setShowPopUp({ type: "add", status: true })}
-          >
-            <p className="">+Add New</p>
-          </button>
-        </div>
-
-        {showPopUp.type === "add" && showPopUp.status ? (
-          <CreatePassword
-            onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
-            onSubmit={handleSubmit}
-          />
-        ) : null}
-
-        <div className="m-2 p-2 lg:w-1/2">
-          {passwordsData && passwordsData.length > 0 ? (
-            passwordsData.map((item: any, index: number) => (
-              <div className="border rounded" key={index}>
-                <div className="flex flex-row items-center justify-start">
-                  <div>
-                    <Image
-                      className="m-1"
-                      width={60}
-                      height={60}
-                      src={commonWebsiteSymbolImg}
-                      alt=""
-                    />
-                  </div>
-                  <div className="flex flex-col m-1 items-start  justify-center">
-                    <div className="">{item.website_name}</div>
-                    <div className="flex flex-row">
-                      <p className="text-sm text-gray-400">
-                        Password:{" "}
-                        {isPasswordEyeBtnClicked
-                          ? decryptPassword(item.password, item.iv)
-                          : "***********"}
-                      </p>
-                      <button
-                        onClick={() =>
-                          setIsPasswordEyeBtnClicked(!isPasswordEyeBtnClicked)
-                        }
-                        className="ml-1"
-                      >
-                        {isPasswordEyeBtnClicked ? (
-                          <Image src={cutEye} alt="" className="" />
-                        ) : (
-                          <Image src={eye} alt="" className="" />
-                        )}
-                      </button>
+      <div className={`mx-auto min-h-screen ${theme === 'light' ? 'bg-[#e3edf3]' : 'bg-black'}`}>
+        {/*  NavBar  */}
+        <AuthNavbar landingPage={false} />
+        {passwordsData && passwordsData.length > 0 ?
+          <>
+            {/* Flex For Add Button */}
+            <div className='flex justify-end m-2 mt-5 px-5'>
+              <button onClick={() => setShowPopUp({ type: "add", status: true })} className={`px-5 ${theme === 'dark' ? 'bg-[#292929c3] text-[#73D285]' : 'bg-[#ffffff] text-[#33ac49] font-semibold'} hover:ring-1  ring-gray-600 rounded-md py-1`}>
+                + Add
+              </button>
+            </div>
+            {showPopUp.type === "add" && showPopUp.status ? (
+              <CreatePassword
+                onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                onSubmit={handleSubmit}
+              />
+            ) : null}
+            {/* Main Page */}
+            <div className='md:flex justify-center  md:mx-48'>
+              {/* Column 1  */}
+              <div className='flex flex-col px-4'>
+                {column1Data.map((item: any, index: number) => (
+                  <div key={index} className={`cursor-pointer transition-all duration-300 ease-in-out md:w-96 my-3 rounded-xl shadow-lg pt-3 px-1 ${isExpanded[index * 2] ? `h-auto ${theme === 'light' ? 'bg-white' : 'bg-[black]'} border border-gray-500` : `h-16  ${theme === 'light' ? 'bg-white' : 'bg-[#1b1b1b]'}  `}`}>
+                    <div onClick={() => toggleExpand(index * 2)} className='flex p-0 justify-between items-center'>
+                      <div className="flex justify-start items-center">
+                        <SiteIcon />
+                        <h2 className={`text-xl font-bold ${theme === 'light' ? 'test-black' : 'text-[#a0a0a1]'}`}>{item.website_name}</h2>
+                      </div>
+                      <p className={`${theme === 'light' ? 'test-black' : 'text-white'} mx-5`}>{isExpanded[index * 2] ? '▲' : '▼'}</p>
                     </div>
-                  </div>
-                </div>
-                <div className="border-t flex flex-row items-center justify-end">
-                  <div className="">
-                    <button
-                      className="flex border border-cyan-600 rounded p-1  flex-row items-center text-cyan-600"
-                      onClick={() =>
-                        setShowPopUp({ type: "edit", status: true })
-                      }
-                    >
-                      <Image className="" src={editBtnImg} alt="" />
-                      <p className="ml-1 text-sm">Edit</p>
-                    </button>
+                    {isExpanded[index * 2] && (
+                      <div className="p-6 pt-3">
+                        <div onClick={() => toggleExpand(index * 2)} className="flex justify-between items-center text-[#CECECE]">
+                          <h2 className='text-xl'>{item.website_name}</h2>
+                          <p>Mar 06, 2023</p>
+                        </div>
+                        <div className="flex justify-between items-center my-2 text-[#CECECE]">
+                          <p className='mr-4 text-sm'>Password Strength</p>
+                          <PasswordStrengthIndicator password={decryptPassword(item.password[index * 2], item.iv)} />
+                        </div>
+                        <div className="mt-6 flex justify-between items-center">
+                          <input
+                            type="password"
+                            readOnly
+                            value={decryptPassword(item.password[index * 2], item.iv)}
+                            onChange={(e) => handlePasswordChange(index * 2, e)}
+                            className="bg-[#292929] border border-gray-700 text-[#7a7a7a] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full mr-1 p-2"
+                          />
+                          <button
+                            className="px-4 py-2 ml-1 bg-violet-600 text-white rounded-lg hover:bg-violet-500"
+                            onClick={() => handleCopy(index * 2)}
+                          >
+                            {copiedIndex === index * 2 ? 'Copied' : 'Copy'}
+                          </button>
+                        </div>
+                        <div className="mt-5 flex justify-between items-center">
+                          <button
+                            onClick={() => setShowPopUp({ type: "edit", status: true })}
+                            className="px-3 w-28 py-2 mr-1 bg-[#292929] text-white rounded-lg hover:bg-violet-500"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setShowPopUp({ type: "delete", status: true })}
+                            className="px-3 w-28 py-2 mx-1 bg-[#292929] text-[#E74C3C] hover:text-white rounded-lg hover:bg-[#E74C3C]"
+                          >
+                            Delete
+                          </button>
 
-                    {showPopUp.type === "edit" && showPopUp.status ? (
-                      <EditPassword
-                        item={item}
-                        onClose={() =>
-                          setShowPopUp((prev) => ({ ...prev, status: false }))
-                        }
-                        onSubmit={handleSubmit}
-                      />
-                    ) : null}
-                  </div>
+                          {showPopUp.type === "edit" && showPopUp.status ? (
+                            <EditPassword
+                              item={item}
+                              onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                              onSubmit={handleSubmit}
+                            />
+                          ) : null}
 
-                  <div className="">
-                    <button
-                      className="m-1 border rounded border-cyan-600  p-1 flex flex-row items-center text-cyan-600"
-                      onClick={() =>
-                        setShowPopUp({ type: "delete", status: true })
-                      }
-                    >
-                      <Image className="" src={deleteBtn} alt="" />
-                      <div className="ml-1 text-sm">Delete</div>
-                    </button>
+                          {showPopUp.type === "delete" && showPopUp.status ? (
+                            <DeleteConfirmation
+                              item={item}
+                              onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                              onSubmit={onDeletePassword}
+                            />
+                          ) : null}
 
-                    {showPopUp.type === "delete" && showPopUp.status ? (
-                      <DeleteConfirmation
-                        item={item}
-                        onClose={() =>
-                          setShowPopUp((prev) => ({ ...prev, status: false }))
-                        }
-                        onSubmit={onDeletePassword}
-                      />
-                    ) : null}
+                          <button
+                            onClick={() => toggleExpand(index * 2)}
+                            className="px-3 w-28 py-2 ml-1 bg-[#292929] text-white rounded-lg hover:bg-violet-500"
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
+                ))}
               </div>
-            ))
-          ) : isLoading ? (
+
+              {/* Column 2 */}
+              <div className='flex flex-col px-4'>
+                {column2Data.map((item: any, index: number) => (
+                  <div key={index} className={`cursor-pointer transition-all duration-300 ease-in-out md:w-96 my-3 rounded-xl shadow-lg pt-3 px-1 ${isExpanded[index * 2 + 1] ? `h-auto ${theme === 'light' ? 'bg-white' : 'bg-[black]'} border border-gray-500` : `h-16 ${theme === 'light' ? 'bg-white' : 'bg-[#1b1b1b]'}`}`}>
+                    <div onClick={() => toggleExpand(index * 2 + 1)} className='flex p-0 justify-between items-center'>
+                      <div className="flex justify-start items-center">
+                        <SiteIcon />
+                        <h2 className={`text-xl font-bold ${theme === 'light' ? 'text-black' : 'text-[#a0a0a1]'}`}>{item.website_name}</h2>
+                      </div>
+                      <p className={`${theme === 'light' ? 'text-black' : 'text-white'} mx-5`}>{isExpanded[index * 2 + 1] ? '▲' : '▼'}</p>
+                    </div>
+                    {isExpanded[index * 2 + 1] && (
+                      <div className="p-6 pt-3">
+                        <div onClick={() => toggleExpand(index * 2 + 1)} className="flex justify-between items-center text-[#CECECE]">
+                          <h2 className='text-xl'>{item.website_name}</h2>
+                          <p>Mar 06, 2023</p>
+                        </div>
+                        <div className="flex justify-between items-center my-2 text-[#CECECE]">
+                          <p className='mr-4 text-sm'>Password Strength</p>
+                          <PasswordStrengthIndicator password={decryptPassword(item.password[index * 2 + 1], item.iv)} />
+                        </div>
+                        <div className="mt-6 flex justify-between items-center">
+                          <input
+                            type="password"
+                            readOnly
+                            value={decryptPassword(item.password[index * 2 + 1], item.iv)}
+                            onChange={(e) => handlePasswordChange(index * 2 + 1, e)}
+                            className="bg-[#292929] border border-gray-700 text-[#7a7a7a] text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full mr-1 p-2"
+                            placeholder="********"
+                          />
+                          <button
+                            className="px-4 py-2 ml-1 bg-violet-600 text-white rounded-lg hover:bg-violet-500"
+                            onClick={() => handleCopy(index * 2 + 1)}
+                          >
+                            {copiedIndex === index * 2 + 1 ? 'Copied' : 'Copy'}
+                          </button>
+                        </div>
+                        <div className="mt-5 flex justify-between items-center">
+                          <button
+                            onClick={() => setShowPopUp({ type: "edit", status: true })}
+                            className="px-3 w-28 py-2 mr-1 bg-[#292929] text-white rounded-lg hover:bg-violet-500"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setShowPopUp({ type: "delete", status: true })}
+                            className="px-3 w-28 py-2 mx-1 bg-[#292929] text-[#E74C3C] hover:text-white rounded-lg hover:bg-[#E74C3C]"
+                          >
+                            Delete
+                          </button>
+
+                          {showPopUp.type === "edit" && showPopUp.status ? (
+                            <EditPassword
+                              item={item}
+                              onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                              onSubmit={handleSubmit}
+                            />
+                          ) : null}
+
+                          {showPopUp.type === "delete" && showPopUp.status ? (
+                            <DeleteConfirmation
+                              item={item}
+                              onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                              onSubmit={onDeletePassword}
+                            />
+                          ) : null}
+
+                          <button
+                            onClick={() => toggleExpand(index * 2 + 1)}
+                            className="px-3 w-28 py-2 ml-1 bg-[#292929] text-white rounded-lg hover:bg-violet-500"
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+          : isLoading ?
             <LoadingSpinner />
-          ) : (
-            <div>You haven&apos;t saved any password.</div>
-          )}
-        </div>
+            :
+            <>
+              <h2 className={`text-center mt-40 text-2xl ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Aww Snap! You Dont Have Any Saved Passwords Yet</h2>
+              <div className='flex justify-center m-2 mt-4 px-5'>
+                <button onClick={() => setShowPopUp({ type: "add", status: true })} className={`px-5 ${theme === 'dark' ? 'bg-[#292929c3] text-[#73D285]' : 'bg-[#ffffff] text-[#33ac49] font-semibold'} hover:ring-1  ring-gray-600 rounded-md py-1`}>
+                  + Add
+                </button>
+              </div>
+              {showPopUp.type === "add" && showPopUp.status ? (
+                <CreatePassword
+                  onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                  onSubmit={handleSubmit}
+                />
+              ) : null}
+            </>
+        }
       </div>
     </AuthHoc>
   );
-};
-
-export default PasswordPage;
+}
