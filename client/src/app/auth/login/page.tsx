@@ -145,7 +145,7 @@ const Login = () => {
         </div>
         <div className="relative hidden px-10 select-none bg-blue-600 bg-gradient-to-br md:block md:w-1/2">
           <div className="pt-9 py-4 px-8 text-white xl:w-[40rem]">
-          <p className="mb-6 mt-1 text-3xl font-semibold leading-10">
+            <p className="mb-6 mt-1 text-3xl font-semibold leading-10">
               Never Forget Your Passwords Again!
               <span className="abg-white whitespace-nowrap py-2 text-cyan-300">
                 {" "}
