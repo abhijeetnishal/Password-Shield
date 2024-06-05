@@ -5,10 +5,15 @@ import React, { useEffect, useState } from 'react';
 import PasswordStrengthIndicator from '@/src/components/Passwords/PasswordStrength';
 import SiteIcon from '@/src/components/Icons/SiteIcon';
 import { PasswordsService } from "@/src/services/PasswordService";
+
 import useAuthStore from '@/src/store/authStore';
 import useTitleStore from '@/src/store/titleStore';
 import useFetch from '@/src/hooks/useFetch';
 import decryptPassword from '@/src/utils/Decrypt';
+
+import AuthHeader from "@/src/components/Headers/AuthHeader";
+import PasswordItem from "@/src/components/Passwords/PasswordItem";
+ 
 
 import LoadingSpinner from '@/src/components/Loaders/LoadingSpinner';
 import useThemeStore from '@/src/store/themeStore';
@@ -17,6 +22,7 @@ import CreatePassword from '@/src/components/Passwords/CreatePassword';
 import EditPassword from '@/src/components/Passwords/EditPassword';
 import DeleteConfirmation from '@/src/components/Passwords/DeleteConfirmation';
 
+ 
 export default function Page() {
   const token = useAuthStore((state) => state.authToken);
   const setTitle = useTitleStore((state) => state.setTitle);
@@ -26,6 +32,7 @@ export default function Page() {
   }, [setTitle]);
 
   const theme = useThemeStore((state) => state.theme);
+
   const [passwordsData, setPasswordsData] = useState<any>([]);
   const [showPopUp, setShowPopUp] = useState({
     type: "",
@@ -67,6 +74,7 @@ export default function Page() {
       const updatedPasswords = passwordsData.map((item: any) => {
         if (item._id === result._id) {
           return result;
+
         }
         return item;
       });
@@ -304,6 +312,7 @@ export default function Page() {
             </div>
           </>
           : isLoading ?
+
             <LoadingSpinner />
             :
             <>
