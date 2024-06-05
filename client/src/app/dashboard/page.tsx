@@ -11,10 +11,10 @@ import useFetch from '@/src/hooks/useFetch';
 import decryptPassword from '@/src/utils/Decrypt';
 import DeleteConfirmation from '@/src/components/Passwords/deleteConfirmation';
 import EditPassword from '@/src/components/Passwords/editPassword';
-import CreatePassword from '@/src/components/Passwords/page';
 import LoadingSpinner from '@/src/components/Loaders/LoadingSpinner';
 import useThemeStore from '@/src/store/themeStore';
 import AuthHoc from '@/src/components/AuthHoc';
+import CreatePassword from '@/src/components/Passwords/CreatePassword';
 
 export default function Page() {
   const token = useAuthStore((state) => state.authToken);

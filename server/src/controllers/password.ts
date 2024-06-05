@@ -10,18 +10,36 @@ interface AuthenticatedRequest extends Request {
 }
 
 const getAllPasswords = async (req: AuthenticatedRequest, res: Response) => {
-  const { limit, offset } = req.query;
+  const { search, limit, offset } = req.query;
   const id = req._id;
 
   try {
     const user = await getDetails("_id", id);
 
     if (user) {
-      // Get data from DB
-      const { rows } = await pool.query(
-        `SELECT * FROM passwords WHERE user_id = $1 ORDER BY $2 LIMIT $3 OFFSET $4`,
-        [id, "created_at", limit || 10, offset || 0]
-      );
+      const queryParams = [id];
+      let queryStr = "SELECT * FROM passwords WHERE user_id = $1";
+
+      if (search) {
+        queryParams.push(`%${search}%`);
+        queryStr += " AND website_name ILIKE $" + queryParams.length;
+      }
+
+      queryStr += " ORDER BY created_at";
+
+      if (limit) {
+        queryParams.push(limit.toString());
+        queryStr += " LIMIT $" + queryParams.length;
+      }
+
+      if (offset) {
+        queryParams.push(offset.toString());
+        queryStr += " OFFSET $" + queryParams.length;
+      }
+
+      queryStr += ";";
+
+      const { rows } = await pool.query(queryStr, queryParams);
 
       return res
         .status(200)
