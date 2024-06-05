@@ -17,10 +17,19 @@ import Navbar from "@/src/components/Headers/Navbar";
 import Link from "next/link";
 import Github from "../components/Icons/Github";
 import LinkedIn from "../components/Icons/LinkedIn";
+import { useRouter } from "next/navigation";
+import { getCookie } from "cookies-next";
 
 export default function LandingPages() {
+  const token = getCookie("token");
+  const router = useRouter();
+
+  if (token) {
+    router.push("/dashboard");
+  }
+
   const theme = useThemeStore((state) => state.theme);
-  // const toggleTheme = useThemeStore((state) => state.toggleTheme);
+
   return (
     <>
       <Navbar landingPage={true} />
@@ -70,7 +79,6 @@ export default function LandingPages() {
           <div className=" "></div>
           <div className=" md:flex px-5 xl:px-24 py-16 justify-between">
             <div className="p-3 md:w-96 ">
-              {/* <Image src={icon1} alt='' /> */}
               <div>
                 <Icon1></Icon1>
               </div>
@@ -130,7 +138,6 @@ export default function LandingPages() {
                 </h2>
               </div>
             </div>
-            {/* <Image  src={theme ==='light'? illustration2 : illustration2Dark} className='hidden md:block w-[35rem] px-5' alt="" /> */}
 
             <div>
               {theme === "light" ? <Illustration2 /> : <Illustration2Dark />}
@@ -211,7 +218,6 @@ export default function LandingPages() {
 
             <div className="md:flex py-10  align-middle justify-center">
               <div className="xl:mx-10 mx-auto px-5 my-2 w-72 border-2 rounded py-5 bg-white">
-                {/* <Image src={icon5} alt='' /> */}
                 <div>
                   <Icon5></Icon5>
                 </div>
@@ -222,7 +228,6 @@ export default function LandingPages() {
                 </p>
               </div>
               <div className="xl:mx-10 mx-auto px-5 w-72 my-2 border-2 rounded py-5 bg-white">
-                {/* <Image src={icon4} alt='' /> */}
                 <div>
                   <Icon4></Icon4>
                 </div>

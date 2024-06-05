@@ -1,7 +1,6 @@
 "use client";
 
 import useThemeStore from "@/src/store/themeStore";
-
 import Link from "next/link";
 import React, { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
