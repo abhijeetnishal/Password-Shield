@@ -1,10 +1,10 @@
-import Header from "@/src/components/Headers/Header";
+import Navbar from "@/src/components/Navbar/Navbar";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
 describe("<Header />", () => {
   beforeEach(() => {
-    render(<Header />);
+    render(<Navbar landingPage={false} />);
   });
   it("header is in the document", () => {
     const header = screen.getByTestId("header");

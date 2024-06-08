@@ -13,7 +13,6 @@ import useAuthStore from "@/src/store/authStore";
 import useProfileStore from "@/src/store/profileStore";
 import { useRouter } from "next/navigation";
 import { ProfileService } from "@/src/services/ProfileService";
-import Header from "@/src/components/Headers/Header";
 import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
 

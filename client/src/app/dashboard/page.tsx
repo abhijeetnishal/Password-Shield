@@ -92,9 +92,7 @@ const PasswordPage = () => {
         }`}
       >
         <AuthNavbar />
-        {/* <AuthNavbar landingPage={false} /> */}
         <div>
-          {/* <div className="m-2 p-2 lg:w-1/2"> */}
           <div className="mx-auto">
             {passwordsData && passwordsData.length > 0 ? (
               <>
