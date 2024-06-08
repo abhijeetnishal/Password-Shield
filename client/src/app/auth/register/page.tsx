@@ -3,7 +3,7 @@ import { LoginSvg } from "@/src/components/Icons/LoginSvg";
 
 import useThemeStore from "@/src/store/themeStore";
 
-import Navbar from "@/src/components/Headers/Navbar";
+import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
 
 import { useEffect, useState } from "react";

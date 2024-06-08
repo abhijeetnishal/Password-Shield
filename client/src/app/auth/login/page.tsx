@@ -13,8 +13,7 @@ import useAuthStore from "@/src/store/authStore";
 import useProfileStore from "@/src/store/profileStore";
 import { useRouter } from "next/navigation";
 import { ProfileService } from "@/src/services/ProfileService";
-import Header from "@/src/components/Headers/Header";
-import Navbar from "@/src/components/Headers/Navbar";
+import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
 
 const Login = () => {
@@ -83,7 +82,7 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div data-testid="login">
       <Navbar landingPage={false} />
       <div
         className={`flex w-screen  flex-wrap ${
@@ -189,7 +188,7 @@ const Login = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-"use client";
 import { Link as ScrollLink } from "react-scroll";
 
 export default function Footer() {
@@ -9,7 +8,7 @@ export default function Footer() {
           <div className="sm:flex sm:items-center sm:justify-between">
             <a
               href=""
-              className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
+              className="flex items-center cursor-pointer mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
             >
               <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
                 KeySafe
@@ -18,7 +17,9 @@ export default function Footer() {
             <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0">
               <li>
                 <ScrollLink to="about" smooth duration={500}>
-                  <p className="hover:underline me-4 md:me-6">About</p>
+                  <p className="cursor-pointer hover:underline me-4 md:me-6">
+                    About
+                  </p>
                 </ScrollLink>
               </li>
               <li>
@@ -31,7 +32,9 @@ export default function Footer() {
               </li>
               <li>
                 <ScrollLink to="contact" smooth duration={500}>
-                  <p className="hover:underline me-4 md:me-6">Contact</p>
+                  <p className="hover:underline cursor-pointer me-4 md:me-6">
+                    Contact
+                  </p>
                 </ScrollLink>
               </li>
               <li>

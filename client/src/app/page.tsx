@@ -13,7 +13,7 @@ import Icon4 from "@/src/components/Icons/Icon4";
 import Icon5 from "@/src/components/Icons/Icon5";
 import useThemeStore from "@/src/store/themeStore";
 import Footer from "@/src/components/Footer/Footer";
-import Navbar from "@/src/components/Headers/Navbar";
+import Navbar from "@/src/components/Navbar/Navbar";
 import Link from "next/link";
 import Github from "../components/Icons/Github";
 import LinkedIn from "../components/Icons/LinkedIn";

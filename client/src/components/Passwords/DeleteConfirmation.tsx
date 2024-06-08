@@ -1,5 +1,6 @@
-import deleteBtn from "@/public/assets/delete-btn.png";
-import Image from "next/image";
+import useThemeStore from "@/src/store/themeStore";
+import CrossIcon from "../Icons/CrossIcon";
+import DisclaimerIcon from "../Icons/DisclaimerIcon";
 
 export type DeleteConfProps = {
   item: any;
@@ -10,42 +11,57 @@ export type DeleteConfProps = {
 const DeleteConfirmation = (props: DeleteConfProps) => {
   const { item, onClose, onSubmit } = props;
 
+  const theme = useThemeStore((state) => state.theme);
+
   return (
     <section className="fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-40">
       <div className="flex items-end sm:items-center justify-center min-h-full md:p-4 text-center sm:p-0">
-        <div className="relative bg-white rounded-lg m text-left shadow-xl transform transition-all sm:my-8">
+        <div className="relative p-4 w-full max-w-md max-h-full">
           <div
-            data-testid="delete-confirmation"
-            className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 rounded-lg"
+            className={`relative rounded-lg shadow ${
+              theme === "dark" ? "bg-[#1c1c1c]" : "bg-[white] text-gray-800"
+            }`}
           >
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className="flex flex-col w-full p-4 justify-evenly"
+            <button
+              onClick={onClose}
+              type="button"
+              className="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="popup-modal"
             >
-              <h1 className="text-lg self-center font-medium">
-                Are you sure you want to delete {item.website_name} Data?
-              </h1>
-              <div className="w-2/3 self-center my-2">
-                Once you delete we will not be able to undo it. Delete only if
-                you are sure about it.
-              </div>
-              <div className="flex flex-row items-center justify-evenly">
-                <button
-                  className="border border-teal-600 w-full text-teal-600 bg-gray-300 m-1 rounded p-1"
-                  onClick={onClose}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="flex flex-row items-center justify-center border border-teal-600  bg-teal-600 m-1 rounded p-1 text-white w-full"
-                  onClick={() => onSubmit("delete", item)}
-                >
-                  <Image className="" src={deleteBtn} alt="" />
-                  <p className="">Delete</p>
-                </button>
-              </div>
+              <CrossIcon />
+              <span className="sr-only">Close modal</span>
+            </button>
+            <div className="p-4 md:p-5 text-center">
+              <DisclaimerIcon theme={theme} />
+              <h3
+                className={`mb-5 text-lg font-normal ${
+                  theme === "light" ? "text-gray-500" : "text-gray-400"
+                }`}
+              >
+                Are you sure you want to delete {item.website_name}&apos;s
+                password?
+              </h3>
+              <button
+                onClick={() => onSubmit("delete", item)}
+                data-modal-hide="popup-modal"
+                type="button"
+                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+              >
+                Yes, I&apos;m sure
+              </button>
+              <button
+                onClick={onClose}
+                data-modal-hide="popup-modal"
+                type="button"
+                className={`py-2.5 px-5 ms-3 text-sm font-medium  focus:outline-none 
+                            ${
+                              theme === "dark"
+                                ? "bg-[#292929] text-white "
+                                : "bg-[#f8f8ff] text-black "
+                            }rounded-lg border border-gray-600 hover:bg-gray-100  focus:z-10 focus:ring-4 focus:ring-gray-100`}
+              >
+                No, cancel
+              </button>
             </div>
           </div>
         </div>
