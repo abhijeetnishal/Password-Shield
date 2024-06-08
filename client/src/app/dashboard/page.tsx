@@ -8,6 +8,8 @@ import useFetch from "@/src/hooks/useFetch";
 import { PasswordsService } from "@/src/services/PasswordService";
 import AuthHeader from "@/src/components/Headers/AuthHeader";
 import PasswordItem from "@/src/components/Passwords/PasswordItem";
+import AuthNavbar from "@/src/components/Headers/AuthNavbar";
+import useThemeStore from "@/src/store/themeStore";
 
 const PasswordPage = () => {
   const token = useAuthStore((state) => state.authToken);
@@ -18,12 +20,15 @@ const PasswordPage = () => {
     status: false,
   });
 
+  const theme = useThemeStore((state) => state.theme);
+
+
   const [{ data, isLoading, isError }, getPasswordsAPI] = useFetch(null);
   const [
     { data: addData, isLoading: isAddDataLoading, isError: isAddDataError },
     getPasswordAddAPI,
   ] = useFetch(null);
-  const [{}, getPasswordDeleteAPI] = useFetch(null);
+  const [{ }, getPasswordDeleteAPI] = useFetch(null);
 
   useEffect(() => {
     if (token) {
@@ -82,38 +87,64 @@ const PasswordPage = () => {
 
   return (
     <AuthHoc>
-      <AuthHeader />
-      <div data-testid="password-page" className="">
-        <div className=" flex flex-row justify-between items-center px-2 py-4">
-          <h1 className="font-medium">Your Saved Passwords</h1>
-          <button
-            className="text-white bg-teal-500 p-1 rounded"
-            onClick={() => setShowPopUp({ type: "add", status: true })}
-          >
-            <p className="">+Add New</p>
-          </button>
+      <div  data-testid="password-page" className={`h-auto pb-10 min-h-screen ${theme === 'dark' ? 'bg-black text-white' : 'bg-[#F8F7F4] text-black'}`}>
+
+
+        <AuthHeader />
+        {/* <AuthNavbar landingPage={false} /> */}
+        <div >
+          {/* <div className="m-2 p-2 lg:w-1/2"> */}
+          <div className="mx-auto">
+            {passwordsData && passwordsData.length > 0 ?
+              <>
+                <div className=" flex justify-end px-2 py-4 mx-10">
+                  <h1 className="font-medium"></h1>
+                  <button onClick={() => setShowPopUp({ type: "add", status: true })} className={`px-5 shadow border border-gray-500 ${theme === 'dark' ? 'bg-[#292929c3] text-[#73D285]' : 'bg-[#ffffff] text-[#33ac49] font-semibold'} hover:ring-1  ring-gray-600 rounded-md py-1`}>
+                    + Add
+                  </button>
+                </div>
+                {showPopUp.type === "add" && showPopUp.status ? (
+                  <CreatePassword
+                    onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                    onSubmit={onAddPassword}
+                  />
+                ) : null}
+              </>
+              : null}
+
+            <div className=" mx-auto min-w-fit">
+              {passwordsData && passwordsData.length > 0 ?
+                (passwordsData.map((item: any, index: number) => (
+                  <PasswordItem key={index} index={index} item={item} onUpdate={onUpdateData} />
+                )))
+
+                : isLoading ? (
+                  <LoadingSpinner />
+                ) : <>
+
+
+                  <div className="text-center   ">
+                    <h2 className="text-2xl pt-40 pb-10">
+                      It looks like you have not saved any passwords yet
+                    </h2>
+                    <button onClick={() => setShowPopUp({ type: "add", status: true })} className={`px-5 ${theme === 'dark' ? 'bg-[#292929c3] text-[#73D285]' : 'bg-[#ffffff] text-[#33ac49] font-semibold'} hover:ring-1  ring-gray-600 rounded-md py-1`}>
+                      + Add
+                    </button>
+
+                    {showPopUp.type === "add" && showPopUp.status ? (
+                      <CreatePassword
+                        onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
+                        onSubmit={onAddPassword}
+                      />
+                    ) : null}
+                  </div>
+                </>}
+            </div>
+          </div>
         </div>
 
-        {showPopUp.type === "add" && showPopUp.status ? (
-          <CreatePassword
-            onClose={() => setShowPopUp((prev) => ({ ...prev, status: false }))}
-            onSubmit={onAddPassword}
-          />
-        ) : null}
-
-        <div className="m-2 p-2 lg:w-1/2">
-          {passwordsData && passwordsData.length > 0 ? (
-            passwordsData.map((item: any, index: number) => (
-              <PasswordItem key={index} item={item} onUpdate={onUpdateData} />
-            ))
-          ) : isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <div>You haven&apos;t saved any password.</div>
-          )}
-        </div>
       </div>
-    </AuthHoc>
+    </AuthHoc >
   );
 };
 
