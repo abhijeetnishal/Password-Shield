@@ -3,7 +3,7 @@ import { Pool } from "postgres-pool";
 
 require("dotenv").config();
 //Create a new PostgreSQL client instance:
-const connectionString = `postgres://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`;
+const connectionString = `postgres://password_shield_user:HDK3lsHW2ltLyeoQ48eoZRjbAmBqdsKK@dpg-cpe5155ds78s73eqfkj0-a.singapore-postgres.render.com/password_shield?ssl=true`;
 const client = new Client({
   connectionString: connectionString,
   ssl: { rejectUnauthorized: false },

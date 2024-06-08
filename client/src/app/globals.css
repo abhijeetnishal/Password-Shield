@@ -57,3 +57,24 @@ body {
 .section4{
   clip-path: ellipse(150% 80%  at 60% 20%);
 }
+
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2e2e2e; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #555; /* Dark color for thumb */
+  border-radius: 10px; /* Rounded corners */
+  border: 3px solid #2e2e2e; /* Space around the thumb */
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #555 #2e2e2e; /* thumb and track color */
+}
