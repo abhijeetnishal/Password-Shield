@@ -14,7 +14,7 @@ import useProfileStore from "@/src/store/profileStore";
 import { useRouter } from "next/navigation";
 import { ProfileService } from "@/src/services/ProfileService";
 import Header from "@/src/components/Headers/Header";
-import Navbar from "@/src/components/Headers/Navbar";
+import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
 
 const Login = () => {
@@ -83,7 +83,7 @@ const Login = () => {
   };
 
   return (
-    <div data-testid='login'>
+    <div data-testid="login">
       <Navbar landingPage={false} />
       <div
         className={`flex w-screen  flex-wrap ${
@@ -98,8 +98,10 @@ const Login = () => {
               Welcome back <br />
               to <span className="text-blue-600">KeySafe.</span>
             </p>
-            <p className="mt-6 text-center font-medium md:text-left">Sign in to your account below.</p>
-            <div className="flex flex-col items-stretch pt-3 md:pt-8" >
+            <p className="mt-6 text-center font-medium md:text-left">
+              Sign in to your account below.
+            </p>
+            <div className="flex flex-col items-stretch pt-3 md:pt-8">
               <div className="flex flex-col pt-4">
                 <div className="relative flex overflow-hidden rounded-md border border-gray-500 transition focus-within:border-blue-600">
                   <input
@@ -142,14 +144,12 @@ const Login = () => {
               <div className="my-2 text-red-500">{errorMessage}</div>
 
               <button
-              
                 disabled={isLoginLoading}
                 onClick={onHandleSubmit}
                 className="rounded-lg bg-blue-600 px-4 py-2 text-center text-base font-semibold text-white shadow-md outline-none ring-blue-500 ring-offset-2 transition hover:bg-blue-700 focus:ring-2 md:w-32"
               >
                 Sign in
               </button>
-
             </div>
             <div className="py-12 text-center">
               <p className="text-gray-600">

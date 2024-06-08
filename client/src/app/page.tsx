@@ -13,7 +13,7 @@ import Icon4 from "@/src/components/Icons/Icon4";
 import Icon5 from "@/src/components/Icons/Icon5";
 import useThemeStore from "@/src/store/themeStore";
 import Footer from "@/src/components/Footer/Footer";
-import Navbar from "@/src/components/Headers/Navbar";
+import Navbar from "@/src/components/Navbar/Navbar";
 import Link from "next/link";
 import Github from "../components/Icons/Github";
 import LinkedIn from "../components/Icons/LinkedIn";
@@ -82,14 +82,12 @@ export default function LandingPages() {
               <div>
                 <Icon1></Icon1>
               </div>
-
               <h2 className="font-bold py-5">Easy & Convenient</h2>
               <p className="text-[#595a61]">
                 Real-time problem solving is not just about time, it&apos;s
                 about time. This allows you to solve problems within a specified
                 time problem has a solution.
               </p>
-
             </div>
 
             <div className="p-3 md:w-96 ">
@@ -159,18 +157,15 @@ export default function LandingPages() {
                   All password within a reach
                 </h2>
               </div>
-
               <div className="xl:ml-52">
                 <h2 className=" xl:mr-20 text-left pt-7 text-[#595a61] text-base">
                   Save all your password at one place within minutes. And you
                   don&apos;t have to crack your head to remember them.
                 </h2>
-
               </div>
             </div>
           </div>
         </section>
-
 
         <section id="contact">
           <div className="text-center p-10 py-20 section4 bg-[#18181b]">
@@ -184,7 +179,6 @@ export default function LandingPages() {
               Contribute to the project, report issues, or share your feedback.
             </p>
             <div className="flex mx-auto justify-center font-semibold  text-white">
-
               <Github />
               <Link href="https://github.com/abhijeetnishal/Password-Shield">
                 <p className="px-3 hover:underline">Github</p>

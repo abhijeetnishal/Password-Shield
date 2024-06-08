@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
 import "@/src/styles/LoadingSpinner.css";
 
-
-const LoadingSpinner: React.FC = () => {
+export default function LoadingSpinner() {
   return (
     <div data-testid="loading-spinner">
-      <div className="text-center pt-64 font-medium text-xl">
+      <div className="scanner">
         <span>Loading...</span>
       </div>
     </div>
   );
-};
-
-export default LoadingSpinner;
+}

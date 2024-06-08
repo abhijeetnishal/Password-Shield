@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import Light from "../Icons/Light";
 import Dark from "../Icons/Dark";
+import Hamburger from "../Icons/Hamburger";
 
 interface NavbarProps {
   landingPage: boolean;
@@ -32,7 +33,6 @@ const Navbar = (props: NavbarProps) => {
     >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          {/* <img src="" className="h-8" alt="KeySafe Logo" /> */}
           <span className="self-center text-2xl font-semibold whitespace-nowrap">
             KeySafe.
           </span>
@@ -46,21 +46,7 @@ const Navbar = (props: NavbarProps) => {
           aria-expanded={isMenuOpen ? "true" : "false"}
         >
           <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M1 1h15M1 7h15M1 13h15"
-            />
-          </svg>
+          <Hamburger />
         </button>
         <div
           className={`w-full md:block md:w-auto ${isMenuOpen ? "" : "hidden"}`}
@@ -138,4 +124,5 @@ const Navbar = (props: NavbarProps) => {
     </nav>
   );
 };
+
 export default Navbar;
