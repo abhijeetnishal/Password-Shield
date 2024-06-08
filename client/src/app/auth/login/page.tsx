@@ -75,11 +75,11 @@ const Login = () => {
 
   return (
     <div data-testid="login" className=" ">
-      <div className="flex flex-col">
+      <div className="flex flex-col ">
         <Header />
-        <div className="flex flex-col items-center justify-center">
-          <div className="bg-white p-5 rounded shadow m-2 flex flex-col w-4/5 lg:w-1/3 mt-16">
-            <h1 className="text-3xl self-center">Login</h1>
+        <div style={{height:"90vh"}} className="flex flex-col items-center justify-center ">
+          <div className="bg-white p-5 rounded shadow m-2 flex flex-col w-4/5 lg:w-1/3 mt-5">
+            <h1 className="text-3xl self-center mb-4">Login</h1>
 
             <input
               className="border rounded m-2 h-12 p-2 shadow-sm"
@@ -95,7 +95,17 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
             />
-
+            <p className="mt-4 ml-4">
+              Forgot your password?{" "}
+              <span>
+                <Link
+                  className="text-teal-600 hover:underline"
+                  href="/auth/forgot-password"
+                >
+                  Reset it here
+                </Link>
+              </span>
+            </p>
             <button
               onClick={onHandleSubmit}
               disabled={isLoginLoading}
@@ -114,7 +124,7 @@ const Login = () => {
               {errorMessage ? errorMessage : ""}
             </div>
           </div>
-          <div className="flex flex-col items-center mt-12">
+          <div className="flex flex-col items-center mt-8">
             <p className="">
               Don&apos;t have an account?{" "}
               <span>
