@@ -44,7 +44,7 @@ const ForgotPassword = () => {
             : "text-white border-t-2 border-gray-600 bg-[#12141D]"
         }`}
       >
-        <div className="flex w-full h-auto flex-col md:w-1/2">
+        <div className="flex w-full h-lvh flex-col md:w-1/2">
           <div className="my-3 mx-auto flex flex-col justify-center px-6 pt-8 md:justify-start lg:w-[28rem]">
             <p className="text-center text-3xl font-bold md:leading-tight md:text-left md:text-5xl">
               Forgot your <br />
