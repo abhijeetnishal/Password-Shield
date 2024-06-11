@@ -16,19 +16,21 @@ const emailLogin = (payload: Object) => {
   });
 };
 
-const forgotPassword = (payload: Object) => {
+const forgotPassword = (payload: Object, token: string) => {
   return request({
-    url: `/auth/v1/forgot-password`,
+    url: `/api/v1/forgot-password`,
     method: "POST",
     body: payload,
+    headers: { "auth-token": token },
   });
 };
 
-const resetPassword = (payload: Object) => {
+const resetPassword = (payload: Object, token: string) => {
   return request({
     url: `/auth/v1/reset-password`,
     method: "POST",
     body: payload,
+    headers: { "auth-token": token },
   });
 };
 

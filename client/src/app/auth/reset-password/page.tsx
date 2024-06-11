@@ -20,7 +20,7 @@ const ResetPassword = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [{ isLoading }, resetPasswordAPI] = useFetch(null);
+  const [{ isLoading, data, isError, error }, resetPasswordAPI] = useFetch(null);
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -29,6 +29,20 @@ const ResetPassword = () => {
     }
   }, [searchParams]);
 
+  useEffect(() => {
+    if (data) {
+      const { code, message } = data;
+      if (code === 200) {
+        setSuccessMessage("Password has been reset successfully");
+        router.push("/auth/login");
+      } else {
+        setErrorMessage(message);
+      }
+    } else if (isError) {
+      setErrorMessage(error.message);
+    }
+  }, [data, isError, error, router]);
+
   const onHandleSubmit = () => {
     if (!password) {
       setErrorMessage("Enter Password");
@@ -36,20 +50,12 @@ const ResetPassword = () => {
       setErrorMessage("Enter Confirm Password");
     } else if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
+    } else if (!token) {
+      setErrorMessage("Invalid token");
     } else {
       setErrorMessage("");
-      resetPasswordAPI(() =>
-        AuthService.resetPassword({ token, password }).then((response) => {
-          if (response.code === 200) {
-            setSuccessMessage("Password has been reset successfully");
-            setTimeout(() => {
-              router.push("/auth/login");
-            }, 2000);
-          } else {
-            setErrorMessage(response.message);
-          }
-        })
-      );
+      setSuccessMessage("");
+      resetPasswordAPI(() => AuthService.resetPassword({ password }, token));
     }
   };
 

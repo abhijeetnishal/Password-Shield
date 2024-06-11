@@ -134,11 +134,11 @@ const forgotPassword = async (req: Request, res: Response) => {
 
     const user = await getDetails("email", email);
     if (!user) {
-      return res.status(404).json({ message: "Email not registered" });
+      return res.status(401).json({ message: "Email not registered" });
     }
 
-    const token = generateToken({ _id: user._id, email: user.email }, '1h'); // Token expires in 1 hour
-    const resetLink = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
+    const token = generateToken({ _id: user._id, email: user.email }); 
+    const resetLink = `${process.env.RESET_PASSWORD_URL}/reset-password?token=${token}`;
 
     // Send email
     await transporter.sendMail({

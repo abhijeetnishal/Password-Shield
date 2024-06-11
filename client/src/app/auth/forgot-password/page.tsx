@@ -1,36 +1,43 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useFetch from "@/src/hooks/useFetch";
 import { AuthService } from "@/src/services/AuthService";
 import Link from "next/link";
 import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
 import useThemeStore from "@/src/store/themeStore";
+import useAuthStore from "@/src/store/authStore";
 import Image from "next/image";
 import ForgotPasswordSvg from "@/public/assets/Login.svg";
 
 const ForgotPassword = () => {
   const theme = useThemeStore((state) => state.theme);
+  const authToken = useAuthStore((state) => state.authToken);
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [{ isLoading }, forgotPasswordAPI] = useFetch(null);
+  const [{ isLoading, data, isError, error }, forgotPasswordAPI] = useFetch(null);
+
+  useEffect(() => {
+    if (data) {
+      const { code, message } = data;
+      if (code === 200) {
+        setSuccessMessage("Reset link has been sent to your email");
+      } else {
+        setErrorMessage(message);
+      }
+    } else if (isError) {
+      setErrorMessage(error.message);
+    }
+  }, [data, isError, error]);
 
   const onHandleSubmit = () => {
     if (email === "") {
       setErrorMessage("Enter Email");
     } else {
       setErrorMessage("");
-      forgotPasswordAPI(() =>
-        AuthService.forgotPassword({ email }).then((response) => {
-          if (response.code === 200) {
-            setSuccessMessage("Reset link has been sent to your email");
-          } else {
-            setErrorMessage(response.message);
-          }
-        })
-      );
+      forgotPasswordAPI(() => AuthService.forgotPassword({ email }, authToken));
     }
   };
 
