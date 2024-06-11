@@ -11,9 +11,9 @@ authRouter.post("/register", register);
 authRouter.post("/login", login);
 
 //forgot-password
-authRouter.post("/forgot-password",isAuthenticated, forgotPassword);
+authRouter.post("/forgot-password", forgotPassword);
 
 // Endpoint to reset password.
-authRouter.post("/reset-password",isAuthenticated, resetPassword);
+authRouter.post("/reset-password", resetPassword);
 
 export default authRouter;

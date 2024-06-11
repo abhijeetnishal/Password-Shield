@@ -6,12 +6,12 @@ require("dotenv").config();
 const connectionString = `postgres://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`;
 const client = new Client({
   connectionString: connectionString,
- // ssl: { rejectUnauthorized: false },
+ ssl: { rejectUnauthorized: false },
 });
 
 const pool = new Pool({
   connectionString: connectionString,
- // ssl: { rejectUnauthorized: false },
+ ssl: { rejectUnauthorized: false },
 });
 
 //Connect to the PostgreSQL server

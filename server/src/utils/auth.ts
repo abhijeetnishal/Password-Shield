@@ -4,9 +4,9 @@ import jwt from "jsonwebtoken";
 interface DecodedToken {
   _id?: string;
 }
-
-const generateToken = (userDetails: any) => {
-  return jwt.sign(userDetails, process.env.JWT_SECRET_KEY);
+//updated so that reset password token can get expired by certain time 
+const generateToken = (userDetails: any, options: jwt.SignOptions = {}) => {
+  return jwt.sign(userDetails, process.env.JWT_SECRET_KEY, options);
 };
 
 const verifyToken = (token: string) => {

@@ -127,7 +127,7 @@ const forgotPassword = async (req: Request, res: Response) => {
   try {
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
-    } 
+    }
     if (!isValidEmail(email)) {
       return res.status(400).json({ message: "Invalid email address" });
     }
@@ -137,8 +137,9 @@ const forgotPassword = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Email not registered" });
     }
 
-    const token = generateToken({ _id: user._id, email: user.email }); 
-    const resetLink = `${process.env.RESET_PASSWORD_URL}/reset-password?token=${token}`;
+    // Generate a reset token with 1-hour expiry
+    const resetToken = generateToken({ _id: user._id, email: user.email }, { expiresIn: '1h' });
+    const resetLink = `${process.env.RESET_PASSWORD_URL}/reset-password?token=${resetToken}`;
 
     // Send email
     await transporter.sendMail({
@@ -148,13 +149,12 @@ const forgotPassword = async (req: Request, res: Response) => {
       html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
     });
 
-    return res.status(200).json({ message: "Password reset link sent" });
+    return res.status(200).json({  message: "Password reset link sent" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
 /*
 1. Take token and new password
 2. Validate token

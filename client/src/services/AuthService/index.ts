@@ -18,7 +18,7 @@ const emailLogin = (payload: Object) => {
 
 const forgotPassword = (payload: Object, token: string) => {
   return request({
-    url: `/api/v1/forgot-password`,
+    url: `/auth/v1/forgot-password`,
     method: "POST",
     body: payload,
     headers: { "auth-token": token },
