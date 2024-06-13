@@ -12,7 +12,8 @@ import ForgotPasswordSvg from "@/public/assets/Login.svg";
 
 const ForgotPassword = () => {
   const theme = useThemeStore((state) => state.theme);
-  const authToken = useAuthStore((state) => state.authToken);
+   const authToken = useAuthStore((state) => state.authToken);
+  
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -37,6 +38,7 @@ const ForgotPassword = () => {
       setErrorMessage("Enter Email");
     } else {
       setErrorMessage("");
+      console.log(authToken);
       forgotPasswordAPI(() => AuthService.forgotPassword({ email }, authToken));
     }
   };
