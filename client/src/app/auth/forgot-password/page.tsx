@@ -12,13 +12,13 @@ import ForgotPasswordSvg from "@/public/assets/Login.svg";
 
 const ForgotPassword = () => {
   const theme = useThemeStore((state) => state.theme);
-   const authToken = useAuthStore((state) => state.authToken);
+  
   
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [{ isLoading, data, isError, error }, forgotPasswordAPI] = useFetch(null);
+  const [{ isLoading, data, isError }, forgotPasswordAPI] = useFetch(null);
 
   useEffect(() => {
     if (data) {
@@ -29,17 +29,17 @@ const ForgotPassword = () => {
         setErrorMessage(message);
       }
     } else if (isError) {
-      setErrorMessage(error.message);
+      setErrorMessage(isError.message);
     }
-  }, [data, isError, error]);
+  }, [data, isError]);
 
   const onHandleSubmit = () => {
     if (email === "") {
       setErrorMessage("Enter Email");
     } else {
       setErrorMessage("");
-      console.log(authToken);
-      forgotPasswordAPI(() => AuthService.forgotPassword({ email }, authToken));
+     
+      forgotPasswordAPI(() => AuthService.forgotPassword({ email }));
     }
   };
 

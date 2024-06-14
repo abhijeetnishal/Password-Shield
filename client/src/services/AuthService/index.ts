@@ -16,12 +16,12 @@ const emailLogin = (payload: Object) => {
   });
 };
 
-const forgotPassword = (payload: Object, token: string) => {
+const forgotPassword = (payload: Object) => {
   return request({
     url: `/auth/v1/forgot-password`,
     method: "POST",
     body: payload,
-    headers: { "auth-token": token },
+   
   });
 };
 

@@ -20,14 +20,17 @@ const ResetPassword = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [{ isLoading, data, isError, error }, resetPasswordAPI] = useFetch(null);
+  const [{ isLoading, data, isError}, resetPasswordAPI] = useFetch(null);
 
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
       setToken(token);
     }
-  }, [searchParams]);
+    else{
+      router.push("/auth/login");
+    }
+  }, [searchParams,router]);
 
   useEffect(() => {
     if (data) {
@@ -39,9 +42,9 @@ const ResetPassword = () => {
         setErrorMessage(message);
       }
     } else if (isError) {
-      setErrorMessage(error.message);
+      setErrorMessage(isError.message);
     }
-  }, [data, isError, error, router]);
+  }, [data, isError, router]);
 
   const onHandleSubmit = () => {
     if (!password) {
@@ -51,7 +54,7 @@ const ResetPassword = () => {
     } else if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else if (!token) {
-      setErrorMessage("Invalid token");
+      setErrorMessage("Token Is Missing")
     } else {
       setErrorMessage("");
       setSuccessMessage("");
