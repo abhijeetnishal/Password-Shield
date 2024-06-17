@@ -92,9 +92,9 @@ export default function LandingPages() {
 
             <div className="p-3 md:w-96 ">
               <div>
-                <Icon2></Icon2>
+                <Icon2 />
               </div>
-              <h2 className="font-bold py-5">Unmatched Security</h2>
+              <h2 className="font-bold py-5">Top-Notch Security</h2>
               <p className="text-[#595a61]">
                 Security is paramount, and we take it seriously. Our platform
                 employs state-of-the-art encryption techniques to safeguard your
