@@ -12,106 +12,133 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.register = void 0;
+exports.resetPassword = exports.forgotPassword = exports.login = exports.register = void 0;
 const dbConnect_1 = require("../config/dbConnect");
+const path_1 = __importDefault(require("path"));
+const promises_1 = __importDefault(require("fs/promises"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const auth_1 = require("../utils/auth");
 const user_1 = require("../services/user");
-/*
-1. Take user data: {first name, last name, email, phone(optional), password}
-2. Now implement input validation.
-3. Check user is already registered or not using email
-4. If not registered then save data (with password encrypted) to DB.
-5. Else return user already registered.
-*/
+const emailConfig_1 = require("../config/emailConfig");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
     try {
-        // Validate input
         if (!name || !email || !password) {
             return res.status(400).json({ message: "Required fields missing" });
         }
-        // Validate email
-        else if (!(0, auth_1.isValidEmail)(email)) {
+        if (!(0, auth_1.isValidEmail)(email)) {
             return res.status(400).json({ message: "Invalid email address" });
         }
-        else {
-            // Check email registered or not
-            const emailExists = yield (0, user_1.getDetails)("email", email);
-            if (emailExists) {
-                return res.status(401).json({ message: "Email already registered" });
-            }
-            else {
-                // Hash the password
-                const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
-                // Create a user data in DB
-                const { rows } = yield dbConnect_1.pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING _id, email", [name, email, hashedPassword]);
-                // Create a jwt token
-                const newUser = rows[0];
-                const token = (0, auth_1.generateToken)({ _id: newUser._id, email: newUser.email });
-                return res.status(201).json({
-                    data: { token: token },
-                    message: "User registered successfully",
-                });
-            }
+        const emailExists = yield (0, user_1.getDetails)("email", email);
+        if (emailExists) {
+            return res.status(401).json({ message: "Email already registered" });
         }
+        const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
+        // Create new user
+        const { rows } = yield dbConnect_1.pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING _id, email", [name, email, hashedPassword]);
+        const newUser = rows[0];
+        const token = (0, auth_1.generateJWTToken)({ _id: newUser._id, email: newUser.email });
+        return res.status(201).json({
+            data: { token: token },
+            message: "User registered successfully",
+        });
     }
     catch (error) {
-        console.log(error);
-        return res.status(500).json("Internal Server Error");
+        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
 exports.register = register;
-/*
-1. Take user data:{email, password}
-2. Now implement input validation
-3. Check if email is present or not in DB.
-4. If not present, return user doesn't exist.
-5. If present, then check password is matched or not if matched logged in, else password doesn't match.
-6. Create a token using jwt for authentication and authorization.
-*/
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        // Validate input
         if (!email || !password) {
             return res.status(400).json({ message: "Required fields missing" });
         }
-        // Validate email
-        else if (!(0, auth_1.isValidEmail)(email)) {
+        if (!(0, auth_1.isValidEmail)(email)) {
             return res.status(400).json({ message: "Invalid email address" });
         }
-        else {
-            const emailExists = yield (0, user_1.getDetails)("email", email);
-            // Check if user registered or not
-            if (!emailExists) {
-                return res.status(404).json({ message: "Email not registered" });
-            }
-            else {
-                // Compare the password saved in DB and entered by user.
-                const matchPassword = yield bcryptjs_1.default.compare(password, emailExists.password);
-                // If password doesn't match
-                if (!matchPassword) {
-                    return res.status(401).json({ message: "Incorrect password" });
-                }
-                else {
-                    // Create a jwt token
-                    const token = (0, auth_1.generateToken)({
-                        _id: emailExists._id,
-                        email: emailExists.email,
-                    });
-                    return res.status(200).json({
-                        data: { token: token },
-                        message: "User logged-in successfully",
-                    });
-                }
-            }
+        const emailExists = yield (0, user_1.getDetails)("email", email);
+        if (!emailExists) {
+            return res.status(404).json({ message: "Email not registered" });
         }
+        const matchPassword = yield bcryptjs_1.default.compare(password, emailExists.password);
+        if (!matchPassword) {
+            return res.status(401).json({ message: "Incorrect password" });
+        }
+        const token = (0, auth_1.generateJWTToken)({
+            _id: emailExists._id,
+            email: emailExists.email,
+        });
+        return res.status(200).json({
+            data: { token: token },
+            message: "User logged-in successfully",
+        });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).json({ message: "Internal server error" });
     }
 });
 exports.login = login;
+const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    try {
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+        if (!(0, auth_1.isValidEmail)(email)) {
+            return res.status(400).json({ message: "Invalid email address" });
+        }
+        const emailExists = yield (0, user_1.getDetails)("email", email);
+        if (!emailExists) {
+            return res.status(401).json({ message: "Email not registered" });
+        }
+        const resetPasswordToken = (0, auth_1.generateJWTToken)({ _id: emailExists._id, email: emailExists.email }, { expiresIn: "1h" });
+        const resetPasswordLink = `${process.env.CLIENT_PROD_URL}/auth/reset-password?token=${resetPasswordToken}`;
+        // Read the email template
+        const templatePath = path_1.default.join(__dirname, "..", "templates", "passwordReset.html");
+        const emailTemplate = yield promises_1.default.readFile(templatePath, { encoding: "utf8" });
+        // Replace the placeholder with the actual reset link
+        const htmlContent = emailTemplate.replace(/{{resetPasswordLink}}/g, resetPasswordLink);
+        // Send the email
+        yield emailConfig_1.transporter.sendMail({
+            to: email,
+            subject: "Password Reset Request",
+            html: htmlContent,
+        });
+        return res.status(200).json({ message: "Reset password link sent" });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.forgotPassword = forgotPassword;
+const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { password } = req.body;
+    const id = req._id;
+    try {
+        if (!password) {
+            return res.status(400).json({ message: "Password is required" });
+        }
+        const userExists = yield (0, user_1.getDetails)("_id", id);
+        if (userExists) {
+            const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
+            yield dbConnect_1.pool.query("UPDATE users SET password = $1 WHERE _id = $2", [
+                hashedPassword,
+                id,
+            ]);
+            return res.status(200).json({ message: "Password reset successful" });
+        }
+        else {
+            return res.status(401).json({ message: "User doesn't exist" });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.resetPassword = resetPassword;
 //# sourceMappingURL=auth.js.map
