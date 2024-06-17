@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "../utils/auth";
+import { verifyJWTToken } from "../utils/auth";
 
 // Define a custom interface that extends the Request interface with the _id property
 interface AuthenticatedRequest extends Request {
@@ -22,7 +22,7 @@ const isAuthenticated = async (
         .json({ message: "Authentication token is missing" });
     } else {
       // Check user is authenticated or not
-      const decoded = verifyToken(token);
+      const decoded = verifyJWTToken(token);
       if (decoded) {
         req._id = decoded._id; // Assign the userId from the decoded token to req._id
         next();
