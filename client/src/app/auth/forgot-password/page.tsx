@@ -6,19 +6,17 @@ import Link from "next/link";
 import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
 import useThemeStore from "@/src/store/themeStore";
-import useAuthStore from "@/src/store/authStore";
 import Image from "next/image";
 import ForgotPasswordSvg from "@/public/assets/Login.svg";
 
 const ForgotPassword = () => {
   const theme = useThemeStore((state) => state.theme);
-  
-  
+
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [{ isLoading, data, isError }, forgotPasswordAPI] = useFetch(null);
+  const [{ data, isLoading, isError }, forgotPasswordAPI] = useFetch(null);
 
   useEffect(() => {
     if (data) {
@@ -38,8 +36,8 @@ const ForgotPassword = () => {
       setErrorMessage("Enter Email");
     } else {
       setErrorMessage("");
-     
-      forgotPasswordAPI(() => AuthService.forgotPassword({ email }));
+
+      forgotPasswordAPI(() => () => AuthService.forgotPassword({ email }));
     }
   };
 
@@ -117,7 +115,8 @@ const ForgotPassword = () => {
               .
             </p>
             <p className="mb-4">
-              No worries! Just enter your email and we&apos;ll send you a link to reset your password.
+              No worries! Just enter your email and we&apos;ll send you a link
+              to reset your password.
             </p>
           </div>
           <Image

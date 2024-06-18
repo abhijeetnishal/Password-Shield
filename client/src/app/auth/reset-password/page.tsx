@@ -14,23 +14,23 @@ const ResetPassword = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const theme = useThemeStore((state) => state.theme);
+
   const [token, setToken] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const [{ isLoading, data, isError}, resetPasswordAPI] = useFetch(null);
+  const [{ data, isLoading, isError }, resetPasswordAPI] = useFetch(null);
 
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
       setToken(token);
-    }
-    else{
+    } else {
       router.push("/auth/login");
     }
-  }, [searchParams,router]);
+  }, [searchParams, router]);
 
   useEffect(() => {
     if (data) {
@@ -54,11 +54,13 @@ const ResetPassword = () => {
     } else if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
     } else if (!token) {
-      setErrorMessage("Token Is Missing")
+      setErrorMessage("Token Is Missing");
     } else {
       setErrorMessage("");
       setSuccessMessage("");
-      resetPasswordAPI(() => AuthService.resetPassword({ password }, token));
+      resetPasswordAPI(
+        () => () => AuthService.resetPassword({ password }, token)
+      );
     }
   };
 
