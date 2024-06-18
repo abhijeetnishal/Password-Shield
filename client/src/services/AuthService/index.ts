@@ -16,7 +16,27 @@ const emailLogin = (payload: Object) => {
   });
 };
 
+const forgotPassword = (payload: Object) => {
+  return request({
+    url: `/auth/v1/forgot-password`,
+    method: "POST",
+    body: payload,
+   
+  });
+};
+
+const resetPassword = (payload: Object, token: string) => {
+  return request({
+    url: `/auth/v1/reset-password`,
+    method: "POST",
+    body: payload,
+    headers: { "auth-token": token },
+  });
+};
+
 export const AuthService = {
   emailSignUp,
   emailLogin,
+  forgotPassword,
+  resetPassword,
 };

@@ -1,114 +1,171 @@
 import { pool } from "../config/dbConnect";
+import path from "path";
+import fs from "fs/promises";
 import bcrypt from "bcryptjs";
-
 import { Request, Response } from "express";
-import { generateToken, isValidEmail } from "../utils/auth";
+import { isValidEmail, generateJWTToken } from "../utils/auth";
 import { getDetails } from "../services/user";
+import { transporter } from "../config/emailConfig";
+import { getHtmlTemplate } from "../utils/template";
 
-/*
-1. Take user data: {first name, last name, email, phone(optional), password}
-2. Now implement input validation.
-3. Check user is already registered or not using email
-4. If not registered then save data (with password encrypted) to DB.
-5. Else return user already registered.
-*/
+// Define a custom interface that extends the Request interface with the _id property
+interface AuthenticatedRequest extends Request {
+  _id?: string; // Make it optional or provide a default value if needed
+}
+
 const register = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 
   try {
-    // Validate input
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Required fields missing" });
     }
 
-    // Validate email
-    else if (!isValidEmail(email)) {
+    if (!isValidEmail(email)) {
       return res.status(400).json({ message: "Invalid email address" });
-    } else {
-      // Check email registered or not
-      const emailExists = await getDetails("email", email);
-
-      if (emailExists) {
-        return res.status(401).json({ message: "Email already registered" });
-      } else {
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create a user data in DB
-        const { rows } = await pool.query(
-          "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING _id, email",
-          [name, email, hashedPassword]
-        );
-
-        // Create a jwt token
-        const newUser = rows[0];
-        const token = generateToken({ _id: newUser._id, email: newUser.email });
-
-        return res.status(201).json({
-          data: { token: token },
-          message: "User registered successfully",
-        });
-      }
     }
+
+    const emailExists = await getDetails("email", email);
+    if (emailExists) {
+      return res.status(401).json({ message: "Email already registered" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const { rows } = await pool.query(
+      "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING _id, email",
+      [name, email, hashedPassword]
+    );
+
+    const newUser = rows[0];
+    const token = generateJWTToken({ _id: newUser._id, email: newUser.email });
+
+    return res.status(201).json({
+      data: { token: token },
+      message: "User registered successfully",
+    });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json("Internal Server Error");
-  }
-};
-
-/*
-1. Take user data:{email, password}
-2. Now implement input validation
-3. Check if email is present or not in DB.
-4. If not present, return user doesn't exist.
-5. If present, then check password is matched or not if matched logged in, else password doesn't match.
-6. Create a token using jwt for authentication and authorization.
-*/
-const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  try {
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).json({ message: "Required fields missing" });
-    }
-    // Validate email
-    else if (!isValidEmail(email)) {
-      return res.status(400).json({ message: "Invalid email address" });
-    } else {
-      const emailExists = await getDetails("email", email);
-
-      // Check if user registered or not
-      if (!emailExists) {
-        return res.status(404).json({ message: "Email not registered" });
-      } else {
-        // Compare the password saved in DB and entered by user.
-        const matchPassword = await bcrypt.compare(
-          password,
-          emailExists.password
-        );
-
-        // If password doesn't match
-        if (!matchPassword) {
-          return res.status(401).json({ message: "Incorrect password" });
-        } else {
-          // Create a jwt token
-          const token = generateToken({
-            _id: emailExists._id,
-            email: emailExists.email,
-          });
-
-          return res.status(200).json({
-            data: { token: token },
-            message: "User logged-in successfully",
-          });
-        }
-      }
-    }
-  } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export { register, login };
+const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  try {
+    if (!email || !password) {
+      return res.status(400).json({ message: "Required fields missing" });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email address" });
+    }
+
+    const emailExists = await getDetails("email", email);
+
+    if (!emailExists) {
+      return res.status(404).json({ message: "Email not registered" });
+    }
+
+    const matchPassword = await bcrypt.compare(password, emailExists.password);
+    if (!matchPassword) {
+      return res.status(401).json({ message: "Incorrect password" });
+    }
+
+    const token = generateJWTToken({
+      _id: emailExists._id,
+      email: emailExists.email,
+    });
+
+    return res.status(200).json({
+      data: { token: token },
+      message: "User logged-in successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email address" });
+    }
+
+    const emailExists = await getDetails("email", email);
+    if (!emailExists) {
+      return res.status(401).json({ message: "Email not registered" });
+    }
+
+    const resetPasswordToken = generateJWTToken(
+      { _id: emailExists._id, email: emailExists.email },
+      { expiresIn: "1h" }
+    );
+
+    const resetPasswordLink = `${process.env.CLIENT_PROD_URL}/auth/reset-password?token=${resetPasswordToken}`;
+
+    // Read the email template
+    const templatePath = path.join(
+      __dirname,
+      "..",
+      "templates",
+      "passwordReset.html"
+    );
+    const emailTemplate = await fs.readFile(templatePath, { encoding: "utf8" });
+
+    // Replace the placeholder with the actual reset link
+    const htmlContent = emailTemplate.replace(
+      /{{resetPasswordLink}}/g,
+      resetPasswordLink
+    );
+
+    // Send the email
+    await transporter.sendMail({
+      to: email,
+      subject: "Password Reset Request",
+      html: htmlContent,
+    });
+
+    return res.status(200).json({ message: "Reset password link sent" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const resetPassword = async (req: AuthenticatedRequest, res: Response) => {
+  const { password } = req.body;
+  const id = req._id;
+
+  try {
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
+    const userExists = await getDetails("_id", id);
+    if (userExists) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await pool.query("UPDATE users SET password = $1 WHERE _id = $2", [
+        hashedPassword,
+        id,
+      ]);
+
+      return res.status(200).json({ message: "Password reset successful" });
+    } else {
+      return res.status(401).json({ message: "User doesn't exist" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export { register, login, forgotPassword, resetPassword };

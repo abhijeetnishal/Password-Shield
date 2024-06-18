@@ -22,7 +22,7 @@ const isAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         }
         else {
             // Check user is authenticated or not
-            const decoded = (0, auth_1.verifyToken)(token);
+            const decoded = (0, auth_1.verifyJWTToken)(token);
             if (decoded) {
                 req._id = decoded._id; // Assign the userId from the decoded token to req._id
                 next();

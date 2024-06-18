@@ -44,10 +44,10 @@ app.use(schemaRouter);
 // Auth Router
 app.use("/auth/v1/", authRouter);
 
-// User Router
+// Users Router
 app.use("/api/v1/", userRouter);
 
-// User router
+// Passwords router
 app.use("/api/v1/", passwordRouter);
 
 app.get("/", (req: Request, res: Response) => {

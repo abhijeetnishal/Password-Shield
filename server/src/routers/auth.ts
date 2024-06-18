@@ -1,12 +1,20 @@
 import express from "express";
-import { login, register } from "../controllers/auth";
+import {
+  register,
+  login,
+  forgotPassword,
+  resetPassword,
+} from "../controllers/auth";
+import isAuthenticated from "../middlewares/auth";
 
 const authRouter = express.Router();
 
-// Endpoint to register a user.
 authRouter.post("/register", register);
 
-// Endpoint to login a user.
 authRouter.post("/login", login);
+
+authRouter.post("/forgot-password", forgotPassword);
+
+authRouter.post("/reset-password", isAuthenticated, resetPassword);
 
 export default authRouter;

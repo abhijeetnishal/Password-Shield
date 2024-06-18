@@ -37,9 +37,9 @@ app.set("trust proxy", true);
 app.use(schema_1.default);
 // Auth Router
 app.use("/auth/v1/", auth_1.default);
-// User Router
+// Users Router
 app.use("/api/v1/", user_1.userRouter);
-// User router
+// Passwords router
 app.use("/api/v1/", password_1.default);
 app.get("/", (req, res) => {
     res.status(200).json("Server is Live");
