@@ -19,6 +19,7 @@ import Github from "../components/Icons/Github";
 import LinkedIn from "../components/Icons/LinkedIn";
 import { useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
+import ScrollerBlob from "../components/Navbar/ScrollerBlob";
 
 export default function LandingPages() {
   const token = getCookie("token");
@@ -242,6 +243,7 @@ export default function LandingPages() {
         </section>
       </div>
       <Footer />
+      <ScrollerBlob />
     </>
   );
 }

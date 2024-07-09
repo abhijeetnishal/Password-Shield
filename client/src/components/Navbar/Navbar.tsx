@@ -64,7 +64,7 @@ const Navbar = (props: NavbarProps) => {
                 <li>
                   <ScrollLink to="/" smooth duration={500}>
                     <p
-                      className="cursor-pointer block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0"
+                      className="cursor-pointer block py-2 px-3 text-white bg-[#ef4444] rounded md:bg-transparent md:text-[#ef4444] md:p-0"
                       aria-current="page"
                     >
                       Home
@@ -106,7 +106,7 @@ const Navbar = (props: NavbarProps) => {
                 </li>
                 <li>
                   <Link data-testid="Login-link" href="/auth/login">
-                    <button className="border-blue-700 border hover:bg-blue-700 hover:text-white hover:ring rounded px-3 py-1 text-blue-700 bg-transparent">
+                    <button className="border-[#ef4444] border hover:bg-[#ef4444] hover:text-white hover:ring rounded px-3 py-1 text-[ef4444] text-[#ef4444] bg-transparent">
                       Login
                     </button>
                   </Link>
