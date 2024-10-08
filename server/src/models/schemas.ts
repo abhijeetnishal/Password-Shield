@@ -28,6 +28,15 @@ const createSchemas = async (req: Request, res: Response) => {
             updated_at TIMESTAMP DEFAULT NOW(),
             user_id UUID REFERENCES users(_id)
         );
+
+        CREATE TABLE IF NOT EXISTS tokens (
+            _id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+            user_id UUID NOT NULL UNIQUE, -- UUID type matching the _id from users table
+            token VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            expires_at TIMESTAMP GENERATED ALWAYS AS (created_at + INTERVAL '1 hour') STORED, -- Token expires after 1 hour
+            FOREIGN KEY (user_id) REFERENCES users(_id) ON DELETE CASCADE -- References _id in the users table
+        );
       `
     );
 

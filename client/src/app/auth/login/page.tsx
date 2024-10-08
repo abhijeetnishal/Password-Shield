@@ -15,6 +15,8 @@ import { useRouter } from "next/navigation";
 import { ProfileService } from "@/src/services/ProfileService";
 import Navbar from "@/src/components/Navbar/Navbar";
 import Footer from "@/src/components/Footer/Footer";
+import Eye from "@/src/components/Icons/Eye";
+
 
 const Login = () => {
   const theme = useThemeStore((state) => state.theme);
@@ -25,8 +27,14 @@ const Login = () => {
   const setProfile = useProfileStore((state) => state.setProfileDetails);
 
   const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const [
     { data: loginData, isLoading: isLoginLoading, isError: isLoginError },
@@ -132,6 +140,12 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+                <button
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 "
+                    onClick={togglePasswordVisibility}
+
+                  ><Eye /></button>
               </div>
               <a
                 href="/auth/forgot-password"

@@ -7,6 +7,7 @@ import { isValidEmail, generateJWTToken } from "../utils/auth";
 import { getDetails } from "../services/user";
 import { transporter } from "../config/emailConfig";
 import { getHtmlTemplate } from "../utils/template";
+import crypto from "crypto";
 
 // Define a custom interface that extends the Request interface with the _id property
 interface AuthenticatedRequest extends Request {
@@ -40,9 +41,33 @@ const register = async (req: Request, res: Response) => {
 
     const newUser = rows[0];
     const token = generateJWTToken({ _id: newUser._id, email: newUser.email });
+    
+
+    const tokenEmail = crypto.randomBytes(32).toString("hex");
+
+    // Insert the token into the token table with an expiry time (e.g., 1 hour)
+    const insertTokenQuery = `
+      INSERT INTO tokens (user_id, token, created_at)
+      VALUES ($1, $2, NOW())
+    `;
+    await pool.query(insertTokenQuery, [newUser._id, tokenEmail]);
+
+    // Generate verification URL
+    const url = `http://localhost:8080/auth/v1/${newUser._id}/verify/${tokenEmail}`;
+    console.log(url);
+
+    // Send verification email
+    await transporter.sendMail({
+      to: newUser.email,
+      subject: "Verification request",
+      text: `Click on the link to verify your email: ${url}`,
+    });
 
     return res.status(201).json({
-      data: { token: token },
+      data: { token: token ,
+        newUser: newUser,
+
+      },
       message: "User registered successfully",
     });
   } catch (error) {

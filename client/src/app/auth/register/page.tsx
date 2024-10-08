@@ -1,5 +1,6 @@
 "use client";
 import { LoginSvg } from "@/src/components/Icons/LoginSvg";
+import Eye from "@/src/components/Icons/Eye";
 
 import useThemeStore from "@/src/store/themeStore";
 
@@ -28,6 +29,11 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -70,8 +76,8 @@ export default function Register() {
     if (code === 200) {
       const { data } = userDetailsData;
       setProfile(data);
-
-      router.push("/dashboard");
+      console.log(data)
+      // router.push("/dashboard");
     }
   }, [userDetailsData, isUserDetailsError]);
 
@@ -171,7 +177,7 @@ export default function Register() {
               <div className="mb-4 flex flex-col pt-4">
                 <div className="relative flex overflow-hidden rounded-md border border-gray-500 transition focus-within:border-blue-600">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}  // Toggles between password and text
                     id="register-password"
                     className={`w-full flex-shrink appearance-none ${
                       theme === "light"
@@ -182,6 +188,12 @@ export default function Register() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 "
+                    onClick={togglePasswordVisibility}
+
+                  ><Eye /></button>
                 </div>
               </div>
               <a

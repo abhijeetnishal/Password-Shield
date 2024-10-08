@@ -37,7 +37,7 @@ const ResetPassword = () => {
       const { code, message } = data;
       if (code === 200) {
         setSuccessMessage("Password has been reset successfully");
-        router.push("/auth/login");
+        router.push("/login");
       } else {
         setErrorMessage(message);
       }
