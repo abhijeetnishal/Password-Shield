@@ -1,9 +1,9 @@
 import express from "express";
-import { getUserDetails } from "../controllers/user";
+import { getUserVerifyDetails } from "../controllers/user";
 import isAuthenticated from "../middlewares/auth";
 
 const userRouter = express.Router();
 
-userRouter.get("/users", isAuthenticated, getUserDetails);
+userRouter.get("/users/verify", isAuthenticated, getUserVerifyDetails);
 
 export { userRouter };
