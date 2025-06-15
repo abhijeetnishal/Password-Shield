@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserDetails = void 0;
+exports.getUserVerifyDetails = void 0;
 const user_1 = require("../services/user");
-const getUserDetails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserVerifyDetails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield (0, user_1.getDetails)("_id", req._id);
     return res.status(200).json({ data: data, message: "User details" });
 });
-exports.getUserDetails = getUserDetails;
+exports.getUserVerifyDetails = getUserVerifyDetails;
 //# sourceMappingURL=user.js.map
