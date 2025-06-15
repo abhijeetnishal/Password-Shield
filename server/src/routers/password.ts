@@ -9,9 +9,9 @@ import {
 
 const passwordRouter = express.Router();
 
-passwordRouter.get("/passwords/", isAuthenticated, getAllPasswords);
-
 passwordRouter.post("/passwords/", isAuthenticated, createPassword);
+
+passwordRouter.get("/passwords/", isAuthenticated, getAllPasswords);
 
 passwordRouter.put("/passwords/:id", isAuthenticated, updatePassword);
 

@@ -6,7 +6,6 @@ import { Request, Response } from "express";
 import { isValidEmail, generateJWTToken } from "../utils/auth";
 import { getDetails } from "../services/user";
 import { transporter } from "../config/emailConfig";
-import { getHtmlTemplate } from "../utils/template";
 
 // Define a custom interface that extends the Request interface with the _id property
 interface AuthenticatedRequest extends Request {

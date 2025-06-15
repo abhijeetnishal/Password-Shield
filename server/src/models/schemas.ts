@@ -19,10 +19,13 @@ const createSchemas = async (req: Request, res: Response) => {
         
         CREATE TABLE IF NOT EXISTS passwords (
             _id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-            title VARCHAR(255) NULL,
-            description VARCHAR(255) NULL,
-            website_name VARCHAR(255) NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            website VARCHAR(255) NULL,
+            username VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
+            category VARCHAR(255) NOT NULL,
+            notes TEXT NULL,
+            favorite BOOLEAN DEFAULT false,
             iv VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW(),
